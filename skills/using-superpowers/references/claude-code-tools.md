@@ -4,7 +4,7 @@ Claude Code 是参照 harness：技能使用的就是它的词汇——派发子
 
 ## 子代理驱动开发的更省成本编排
 
-在 superpowers:subagent-driven-development 的一次运行中，控制者会话是最昂贵的席位——席位指运行中的一个会话或子代理上下文，每个席位都要花一份 token：它要读取每一份派发结果和每一份报告，而且通常运行在会话的最强档模型上。Claude Code 支持嵌套子代理（默认在主会话之下三层；`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` 可调整该层数），所以整个循环可以下沉一层运行。
+在 superpowers:subagent-driven-development 的一次运行中，控制者会话是最昂贵的席位——一个会话或子代理上下文，它要读取每一份派发结果和每一份报告，而且通常运行在会话的最强档模型上。Claude Code 支持嵌套子代理（默认在主会话之下三层；`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` 可调整该层数），所以整个循环可以下沉一层运行。
 
 当需求方提出要求——或已表示会话模型花在协调上过于昂贵——就仅派发一个编排器子代理：使用中档模型，附上计划路径，以及要求它端到端使用 superpowers:subagent-driven-development 的指令。编排器按该技能的 Model Selection（模型选择）一节派发自己的实施者与审查者；工作区和台账都存放在磁盘上，所以多出的这一层不会丢失任何内容。它的最终消息必须逐字带上 "Rulings I made"（我做出的裁决）清单——这份清单是各项决定传达给需求方的途径，你要转达它，而不是总结它。
 
