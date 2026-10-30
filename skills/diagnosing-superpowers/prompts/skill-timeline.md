@@ -1,30 +1,16 @@
-Read `prompts/analyst-common.md` first; it gives your role, inputs,
-context-safety rules, and the return format. This file adds the dimension.
+先读 `prompts/analyst-common.md`；其中给出了你的角色、输入、上下文安全规则与返回格式。本文件在此之上补充要分析的维度。
 
-Dimension: Skill timeline
+维度：Skill timeline
 
-Build the per-human-turn record of skill and plugin use, then look for gaps.
+按人工轮次构建技能与插件的使用记录，然后查找缺口。
 
-1. List the human prompts with line numbers and timestamps.
-2. Using the skill-invocation and attribution meanings established in the case
-   file, list every explicit invocation, active-skill attribution, or read of a
-   file named `SKILL.md`. Record the line, the skill name, and the human turn it
-   happened in.
-3. List every non-superpowers plugin, skill, agent type, MCP server, or
-   hook used. Use only the evidenced tool, attribution, agent-dispatch, MCP,
-   and hook meanings recorded in the case file; identify values associated
-   with something other than `superpowers`.
-4. For each human turn, compare the request text against the trigger
-   descriptions of the superpowers skills installed (read
-   `<install root>/skills/*/SKILL.md` frontmatter `description` lines; the
-   install root is in the case file). Report as findings:
-   - a skill invoked, with the request that preceded it (one finding per
-     invocation is fine when there are few; group by skill when many);
-   - a turn whose request matches a skill's trigger description with no
-     invocation in that turn (state which description matched and quote
-     the request);
-   - a skill invoked one or more turns after the matching request (late);
-   - each non-superpowers plugin/skill/tool used, with where.
+1. 列出人工提示词，附行号与时间戳。
+2. 使用案件文件中确立的技能调用与归属（attribution）含义，列出每一次显式调用、活动技能归属，以及对名为 `SKILL.md` 的文件的读取。记录所在行、技能名称，以及它发生在哪个人工轮次中。
+3. 列出用到的每一个非 superpowers 插件、技能、agent 类型、MCP 服务器或 Hook。只使用案件文件中记录的、有证据支撑的工具、归属、agent 派发、MCP 与 Hook 含义；识别出与 `superpowers` 以外事物相关联的取值。
+4. 对每个人工轮次，将请求文本与已安装的 superpowers 技能的触发描述进行比对（读取 `<install root>/skills/*/SKILL.md` frontmatter 中的 `description` 行；安装根目录（install root）记录在案件文件中）。以发现项形式报告：
+   - 某技能被调用，并附其之前的那条请求（数量少时每次调用一条发现项即可；数量多时按技能分组）；
+   - 某轮次的请求匹配了某技能的触发描述，但该轮次内没有任何调用（说明匹配的是哪条描述，并引用该请求）；
+   - 某技能在匹配请求之后一轮或多轮才被调用（滞后）；
+   - 用到的每一个非 superpowers 插件/技能/工具，及其使用位置。
 
-Do not say whether a missed or late trigger was wrong. Report the match
-and the absence; the reader decides.
+不要评判漏掉的或滞后的触发是否错误。报告匹配与缺席，由读者判断。

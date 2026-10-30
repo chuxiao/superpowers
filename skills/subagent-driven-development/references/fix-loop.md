@@ -1,77 +1,30 @@
-# The Fix Loop
+# 修复循环
 
-Part of superpowers:subagent-driven-development. The task review reported
-spec ❌, a Critical or Important finding, or a ⚠️ item you confirmed as a real
-gap.
+本文是 superpowers:subagent-driven-development 的一部分。适用情形：任务审查报告了设计文档 ❌、一条 Critical（必须修复）或 Important（应当修复）发现项，或一个你确认为真实缺口的 ⚠️ 条目。
 
-Before the loop starts, two routes leave it immediately:
+在循环开始之前，有两条路会立即绕开它：
 
-- Record Minor findings in the progress ledger as you go
-  (`Task <N>: minor (deferred): <one-liner>`), and point the final
-  whole-branch review at that list so it can triage which must be fixed
-  before merge. A roll-up nobody reads is a silent discard. Minor findings
-  never enter the loop.
-- A finding labeled plan-mandated — or any finding that conflicts with
-  what the plan's text requires — is yours to rule on: weigh the finding
-  against the plan text, decide with the spec as the binding authority, and
-  ledger the ruling before you act on it. Do not dismiss the finding because
-  the plan mandates it, and do not dispatch a fix that contradicts the plan
-  without a recorded ruling.
-Everything else enters the loop. A fix round is one fix dispatch plus one
-scoped re-review. Five rounds maximum per task:
+- 一边推进一边把 Minor 发现项记入进度台账（`Task <N>: minor (deferred): <one-liner>`），并让最终整分支终审指向这份清单，由它甄别哪些必须在合并前修复。一份没人读的汇总就是一次静默丢弃。Minor 发现项绝不进入循环。
+- 标注为 plan-mandated（计划规定）的发现项——或任何与计划文本要求相冲突的发现项——由你裁决：把发现项与计划文本对照权衡——设计文档是具有约束力的权威——做出决定，并在据此行动之前先把裁决记入台账。不要因为计划有此规定就驳回发现项，也不要在没有已记录裁决的情况下派发与计划相矛盾的修复。
 
-**Rounds 1-3 — resume the original implementer.** Send it the open findings
-verbatim. Its context is intact: it knows the task, the code, and its own
-choices. If your harness cannot send another message to a live subagent,
-dispatch a fresh implementer carrying the brief path, the report-file path,
-and the findings — the report file is the persistent memory either way.
+其余一切进入循环。一个修复轮由一次修复派发加一次范围化复审构成。每个任务最多 5 轮：
 
-**Rounds 4-5 — dispatch a fresh implementer on a more capable model** (per
-SKILL.md's Model Selection), with the brief path, the report-file path, the open
-findings, and this framing: "A prior implementer attempted this task
-[N] times; you own it now. Read the report file for what was tried." A loop
-that survives three resumes usually means the implementer cannot see its
-own problem — fresh eyes and a capability bump in one move.
+**第 1-3 轮——恢复原实施者。** 把未解决发现项逐字发给它。它的上下文完好无损：它了解这个任务、这份代码，以及它自己当初的选择。如果你的 harness 无法向一个仍在运行的子代理再发送一条消息，就派发一个全新实施者，带上简报路径、报告文件路径和未解决发现项——无论哪种方式，报告文件都是持久记忆。
 
-**Every round, either way:** the implementer fixes, re-runs the tests
-covering the amended code, appends its fix report to the same report file,
-and returns the short contract. Before re-dispatching the reviewer, confirm
-the fix report contains the covering tests, the command run, and the
-output; dispatch the re-review once all three are present. Name the
-covering test files in the fix message — a one-line fix does not need the
-whole suite.
+**第 4-5 轮——在更强档的模型上派发一个全新实施者**（依 SKILL.md 的 Model Selection（模型选择）一节），带上简报路径、报告文件路径、未解决发现项，以及这段框定语：「一位前任实施者已就本任务尝试过 [N] 次；现在由你接手。已试过什么，读报告文件。」一个挺过三轮恢复的循环，通常意味着实施者看不见自己的问题——新视角与能力升级一步到位。
 
-**The re-review is scoped.** Run `bash scripts/review-package PLAN_FILE FIX_BASE HEAD`
-where FIX_BASE is the head the previous review saw, and dispatch
-[re-review-prompt.md](../re-review-prompt.md) with the findings list, the
-brief, the report file, and the printed diff path. The re-reviewer verdicts
-each finding ADDRESSED or NOT ADDRESSED and flags new breakage in the fix
-diff only. New Critical/Important breakage in the fix diff joins the open
-findings list. Out-of-scope observations go to the ledger as deferred
-minors — they never extend the loop.
+**每一轮，无论哪种方式：** 实施者实施修复，重跑覆盖被修改代码的测试，把修复报告追加到同一个报告文件，并返回简短契约。在重新派发审查者之前，确认修复报告包含覆盖测试、所运行的命令和输出；三者齐备，才派发复审。在修复消息中写明覆盖测试文件——一行修复不需要整个测试套件。
 
-**After each round,** append to the ledger:
-`Task <N>: fix round <R>/5 (<X> addressed, <Y> open — <finding one-liners>; commits <a7>..<b7>)`
+**复审是范围化的。** 运行 `bash scripts/review-package PLAN_FILE FIX_BASE HEAD`，其中 FIX_BASE 是上一次审查所看到的 head；然后带着发现项清单、简报、报告文件和打印出的 diff 路径派发 [re-review-prompt.md](../re-review-prompt.md)。复审者对每个发现项给出判定：ADDRESSED 或 NOT ADDRESSED，且只标记修复 diff 中的新破坏。修复 diff 中新出现的 Critical/Important 破坏并入未解决发现项清单。超出范围的观察项作为暂缓的 Minor 记入台账——它们绝不延长循环。
 
-Never fix findings yourself in the controller session — your context stays
-clean for coordination, and controller fixes skip review.
+**每一轮之后，** 向台账追加：`Task <N>: fix round <R>/5 (<X> addressed, <Y> open — <finding one-liners>; commits <a7>..<b7>)`
 
-**The breaker.** When round 5's re-review still leaves findings open, stop
-dispatching. Adjudicate each open finding yourself — you hold the plan and
-the cross-task context the reviewer lacks:
+绝不在控制者会话里亲自修复发现项——你的上下文要保持干净，用于协调；而且控制者的修复会跳过审查。
 
-- **The reviewer is wrong, or the point is contestable:** park it —
-  `Task <N>: parked — <finding> — Ruling: <why the code stands>`. The final
-  review sees both sides.
-- **Real, but nothing downstream builds on it:** park it the same way, with
-  a ruling that says it's real and deferred.
-- **Real and load-bearing** — a later task builds on it, or it reveals a
-  plan defect: rule on the smallest change that unblocks the dependent work,
-  ledger it as `Task <N>: Ruling: <finding> — <what you decided and why>`,
-  and carry it into the next task's dispatch. Parking a structural failure
-  silently lets every dependent task build on it. Stop only when the defect
-  leaves every path forward a guess.
+**熔断。** 当第 5 轮复审仍留有未解决发现项时，停止派发。由你亲自裁决每个未解决发现项——你掌握着计划，以及审查者所缺乏的跨任务上下文：
 
-Adjudicate only at the cap. Adjudicating earlier to end a loop is
-pre-judging with a different name. Every adjudication is a ledger entry —
-a silent discard is forbidden.
+- **审查者错了，或这一点可以争议：** 搁置它——`Task <N>: parked — <finding> — Ruling: <why the code stands>`。终审会看到双方的说法。
+- **真实，但下游没有任何东西建立在它上面：** 以同样方式搁置，裁决中写明它属实且延期处理。
+- **真实且承重**——后续任务建立在它上面，或它暴露出计划缺陷：就解除依赖工作阻塞的最小改动做出裁决，以 `Task <N>: Ruling: <finding> — <what you decided and why>` 记入台账，并把它带入下一个任务的派发。静默搁置一个结构性故障，会让每个依赖任务都建立在它上面。只有当缺陷让每一条前行路径都沦为猜测时，才停止。
+
+只在上限时裁决。为了终结循环而提前裁决，是换了个名字的预判。每一次裁决都是一条台账记录——禁止静默丢弃。

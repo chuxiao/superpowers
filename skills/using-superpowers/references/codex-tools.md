@@ -1,76 +1,32 @@
-## Subagent dispatch requires multi-agent support
+## 子代理派发需要 multi-agent 支持
 
-Add to your Codex config (`~/.codex/config.toml`):
+在 Codex 配置（`~/.codex/config.toml`）中添加：
 
 ```toml
 [features]
 multi_agent = true
 ```
 
-This enables the multi-agent tools that skills like
-`dispatching-parallel-agents` and `subagent-driven-development` use.
-Which tools you get depends on the multi-agent version your model
-preset selects (current presets run V2; older ones run V1). Trust your
-actual tool list over any table — including this one — when they
-disagree.
+这会启用 `dispatching-parallel-agents` 与 `subagent-driven-development` 等技能所使用的 multi-agent 工具。你能拿到哪些工具，取决于你的模型预设（model preset）所选择的 multi-agent 版本（当前预设运行 V2；较旧的预设运行 V1）。当表格与实际情况不一致时，一律以你实际的工具列表为准——包括本文中的表格在内。
 
-- **Spawning:** give children a clean context with
-  `spawn_agent {fork_turns: "none"}`; the default `"all"` copies your
-  entire transcript into the child. On Codex 0.145+, role files under
-  `~/.codex/agents/` attach to isolated forks via `agent_type`.
-  Full-history forks accept `model` and `reasoning_effort` overrides
-  (only `agent_type` is refused there) — isolated forks are the SDD
-  default for context hygiene, not because overrides require them.
-- **Fix rounds:** resume the implementer with `followup_task` — it
-  delivers your message, triggers a turn, and transparently reloads a
-  child the harness evicted. Never dispatch a fresh implementer on the
-  theory that a spawned agent cannot be messaged again; on V2 it
-  always can.
-- **Lifecycle:** V2 has no `close_agent`. Finished children are
-  evicted automatically when slots are needed; leaving them unclosed
-  costs nothing. Only V1 sessions have `close_agent` — there, close
-  reviewers when their review returns, and close each implementer
-  after its task's review passes.
-- **Model names:** never copy a model name from a skill, table, or old
-  session into `spawn_agent` without checking it against your current
-  spawn allowlist — V2 accepts only V2-capable presets and hard-errors
-  on the rest.
+- **派生：** 用 `spawn_agent {fork_turns: "none"}` 给子代理一个干净的上下文；默认值 `"all"` 会把你的会话记录（transcript）复制进子代理。在 Codex 0.145+ 上，`~/.codex/agents/` 下的角色文件会通过 `agent_type` 附加到隔离 fork 上。完整历史 fork 接受 `model` 与 `reasoning_effort` 覆盖（其中仅拒绝 `agent_type`）——SDD 默认采用隔离 fork 是为了保持上下文干净，而不是因为覆盖参数必须依赖隔离 fork。
+- **修复轮：** 用 `followup_task` 恢复实施者——它会送达你的消息、触发一轮对话，并透明地重新载入被 harness 驱逐的子代理。绝不要以「派生出的 agent 无法再次接收消息」为由派发一个全新的实施者；在 V2 上它总是可以。
+- **生命周期：** V2 没有 `close_agent`。已完成的子代理会在需要腾出槽位时被自动驱逐；不去关闭它们没有任何代价。只有 V1 会话才有 `close_agent`——在 V1 下，审查者的审查一返回就关闭它，每个实施者在其任务的审查通过后关闭。
+- **模型名称：** 绝不要把来自技能、表格或旧会话的模型名称直接复制进 `spawn_agent`，却不先对照你当前的 spawn 允许列表（allowlist）核对——V2 只接受支持 V2 的预设，对其余的直接硬报错。
 
-## Waiting on children
+## 等待子代理
 
-`wait_agent` is an event subscription, not a poll: a long wait wakes
-the moment a child produces mailbox activity, with the same latency as
-a short one. Short-timeout polling buys nothing and costs a tool call —
-and a context rebill — per poll. In measured sessions, roughly
-two-thirds of all wait calls were short polls that timed out.
+`wait_agent` 是事件订阅，不是轮询：长等待会在子代理产生邮箱（mailbox）活动的瞬间醒来，延迟与短等待相同。短超时轮询毫无收益，而且每次轮询都要付出一次工具调用——外加一次上下文重新计费。在实测会话中，全部等待调用里约有三分之二是超时的短轮询。
 
-- While you still have local work, do not wait at all. A completed
-  child's final answer is pushed into your mailbox and arrives with
-  your next turn.
-- When you are genuinely idle with children outstanding, wait in
-  bounded stretches: `wait_agent` with `timeout_ms` 300000-600000
-  (5-10 minutes). After each stretch — wake or timeout — post one
-  status line, run `list_agents`, and chase any child that finished
-  without reporting. Never stack polls shorter than five minutes; the
-  event subscription wakes a bounded stretch just as fast as a short
-  one.
-- Completion mail cannot wake an idle controller (it is delivered
-  without triggering a turn); covering that idle window is
-  `wait_agent`'s only job. A stretch that times out with no activity
-  is your cue to reconcile, not to shorten the next stretch.
+- 只要你还有本地工作可做，就完全不要等待。已完成子代理的最终答案会被推入你的邮箱，并随你的下一轮到来。
+- 当你确实空闲、且还有子代理未完成时，以有界的时段进行等待：调用 `wait_agent` 并把 `timeout_ms` 设为 300000-600000（即 5-10 分钟）。每个时段结束后——无论是醒来还是超时——发一条状态行，运行 `list_agents`，并追查任何已完成却未报告的子代理。绝不叠加短于五分钟的轮询；事件订阅唤醒一个有界时段的速度，与唤醒短轮询一样快。
+- 完成邮件无法唤醒空闲中的控制者（它送达时不会触发新一轮）；覆盖这段空闲窗口正是 `wait_agent` 唯一的职责。一个毫无活动就超时的时段，是在提示你去核对状态，而不是让你缩短下一个时段。
 
-## Model routing on spawns
+## 派生时的模型路由
 
-Every `spawn_agent` you issue — including when you are yourself a
-spawned child running a fan-out — sets `model` AND `reasoning_effort`
-explicitly, per the Model Selection rules of the skill you are
-executing. Setting `model` alone is a trap: the child's effort
-silently resets to that model's default, not to yours.
+你发出的每一个 `spawn_agent`——包括你自己作为派生子代理执行扇出（fan-out）的情况——都要按你正在执行的技能的 Model Selection（模型选择）规则，显式设置 `model` 和 `reasoning_effort` 两者。只设置 `model` 是个陷阱：子代理的 effort 会被静默重置为该模型的默认值，而不是沿用你的设置。
 
-Ask your human partner to add a machine-level backstop to
-`~/.codex/config.toml` so any spawn that slips through still routes to
-a deliberate tier instead of silently inheriting the session's most
-expensive model:
+请你的需求方在 `~/.codex/config.toml` 中添加一道机器级兜底（backstop），这样任何漏网的派生仍会路由到有意选定的档位，而不是静默继承本会话最昂贵的模型：
 
 ```toml
 [agents]
@@ -78,10 +34,9 @@ default_subagent_model = "<a mid-tier model from your spawn allowlist>"
 default_subagent_reasoning_effort = "medium"
 ```
 
-## Environment Detection
+## 环境检测
 
-Skills that create worktrees or finish branches should detect their
-environment with read-only git commands before proceeding:
+会创建工作树或对分支收尾的技能，应在继续之前用只读 git 命令检测自身环境：
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
@@ -89,20 +44,16 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 BRANCH=$(git branch --show-current)
 ```
 
-- `GIT_DIR != GIT_COMMON` → already in a linked worktree (skip creation)
-- `BRANCH` empty → detached HEAD (cannot branch/push/PR from sandbox)
+- `GIT_DIR != GIT_COMMON` → 已处于链接工作树中（跳过创建）
+- `BRANCH` 为空 → 处于 detached HEAD（在沙箱中无法建分支/推送/发 PR）
 
-See `using-git-worktrees` Step 0 and `finishing-a-development-branch`
-Step 1 for how each skill uses these signals.
+各技能如何使用这些信号，见 `using-git-worktrees` 的 Step 0 与 `finishing-a-development-branch` 的 Step 1。
 
-## Codex App Finishing
+## Codex App 收尾
 
-When the sandbox blocks branch/push operations (detached HEAD in an
-externally managed worktree), the agent commits all work and informs
-the user to use the App's native controls:
+当沙箱阻止分支/推送操作时（外部管理的工作树中处于 detached HEAD），agent 会提交全部工作，并告知需求方使用 App 的原生控件：
 
-- **"Create branch"** — names the branch, then commit/push/PR via App UI
-- **"Hand off to local"** — transfers work to the user's local checkout
+- **"Create branch"（创建分支）**——命名分支，然后通过 App 界面完成提交/推送/PR
+- **"Hand off to local"（移交到本地）**——把工作转移到需求方的本地检出
 
-The agent can still run tests, stage files, and output suggested branch
-names, commit messages, and PR descriptions for the user to copy.
+agent 仍可运行测试、暂存文件，并输出建议的分支名、提交信息和 PR 描述，供需求方复制。

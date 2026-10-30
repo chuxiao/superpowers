@@ -1,294 +1,183 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, modifying behavior, or planning anything new, in software or out of it (a talk, a business, a renovation)."
+description: "在做任何创造性工作之前，你必须使用本技能——无论是创建特性、构建组件、添加功能、修改行为，还是规划任何新事物，软件内外皆然（一场演讲、一门生意、一次装修）。"
 ---
 
-# Brainstorming
+# 头脑风暴
 
-You are very good at building. You build what you believe your human
-partner wants, and that belief is usually thinner than it feels. This
-skill is for finding out what they actually want, and why, before
-anything gets built.
+你非常擅长构建。你构建的是你所相信的需求方想要的东西，而这种信念通常比它给人的感觉更单薄。这项技能的用途，就是在任何东西被构建出来之前，弄清他们真正想要什么、以及为什么。
 
-People often haven't finished working out what they want. Good questions
-help them think it through. When you understand the why, you make the
-hundred decisions they never mention the way they would have made them.
+人们往往还没想清楚自己要什么。好的提问能帮他们想透。当你理解了缘由，面对那一百个他们从未提起的决定，你就会做出他们本来会做的选择。
 
-## First: What Do You Actually Know?
+## 首先：你实际知道什么？
 
-Before you reply, ask yourself: what do I know about what they want, and
-why?
+回复之前，先问自己：对于他们想要什么、以及为什么，我到底知道些什么？
 
-- **Everything that matters is in the request** ("make the icon cornflower
-  blue"). This is a quick, clear task. Do it, and say what you did.
-- **Something non-trivial is missing.** Start the conversation.
+- **要紧的都在请求里**（“把图标改成矢车菊蓝”）。这是一个快速、清晰的任务。直接做，然后说明你做了什么。
+- **有非琐碎的东西缺失。** 开启对话。
 
-Before you start implementing, you must, in order:
+开始实现之前，你必须按顺序完成：
 
-1. Lay out the approaches in a message of their own, and have your
-   human partner pick one (see Lay out the approaches).
-2. Write the design doc, short or full (see Size the Work).
-3. Get their approval of that doc.
-4. Invoke the superpowers:writing-plans skill.
+1. 在单独的一条消息里列出各方案，并让需求方拍板选一个（见「列出各方案」）——需求分叉的「出题权」属于需求方，你不得代行设定需求题目与验收口径。
+2. 撰写设计文档，简短版或完整版（见「评估工作量」与「书面设计文档」）。
+3. 调用 superpowers:writing-plans，据设计文档写出实施计划——两份文档一次产出。
+4. 独立审读两份文档（见「独立审读」），逐条处置后，将两份一起提交需求方，获得一次明确确认（「嗯」「继续」不算确认）。
 
-Two things aren't implementing: a spike they said yes to (see Spike to
-feel things out), and doing what they asked once they've opted out of
-the questions.
+有两件事不算实现：他们点头同意的 spike（快速试制）（见「用 spike 摸底」），以及在他们选择退出提问之后，按其要求去做。
 
-## Look Before You Ask
+## 先看再问
 
-In an existing project, or when they've given you context (a spec, a plan,
-a handoff, files they pointed at, earlier conversation), dig in before your
-first message. Read what they referred to and the code or material it
-connects to, and keep reading until you can explain how the relevant
-parts work today and what this change would touch. Never ask what the
-project or their context already answers.
+在既有项目中，或当他们已经给了你上下文（设计文档、计划、交接说明、他们指给你的文件、早先的对话）时，在发出第一条消息之前先深入钻研。阅读他们所指的内容以及与之相连的代码或材料，一直读到你能解释相关部分如今如何运作、这次改动会触及什么为止。绝不问项目或他们的上下文已经能回答的问题。
 
-## Your First Message
+## 你的第一条消息
 
-Move the work forward, with one of these:
+推进工作，采用以下之一：
 
-- **They've already said what they want** (a spec, a plan, a detailed
-  request): aim for about 200 words for the whole message. Echo their
-  request back in your own words, so they can see whether you've got its
-  shape: what they want, who it's for, and why, as far as they've said.
-  Add what you found that bears on it: how the relevant parts work today
-  and what the change would touch. If you found something they may not
-  have considered that would change what they're asking for or how it
-  has to be built, like a constraint, a conflict, or a cheaper path, say
-  so plainly. How to build it comes later, once you understand what they
-  want (see Lay out the approaches). End with one line inviting
-  corrections, then one question about what they want: the thing their
-  request leaves open whose answer would most change what gets built.
-  Specs are often incomplete, so confirm before you build on one.
-- **They haven't:** one open question, in their own terms, about the
-  biggest thing their request leaves unsettled. Say why you're asking:
-  what the answer would change about what you build. For "a website for
-  my bakery": "If it's mostly for people deciding whether to stop by,
-  I'd lead with hours and what's in the case today; taking orders is a
-  different site. What do you want someone to do when they land on it?"
+- **他们已经说了想要什么**（设计文档、计划、一份详细的请求）：整条消息以 200 词左右为目标。用自己的话复述他们的请求，让他们能看出你是否抓住了它的轮廓：就他们已说出的范围而言，他们想要什么、给谁用、以及为什么。补充你发现的与之相关的内容：相关部分如今如何运作、这次改动会触及什么。如果你发现了他们可能没考虑过、且会改变他们所请求的内容或改变必须如何构建的东西——比如一个约束、一处冲突、或一条成本更低的路径——就直说。如何构建稍后再谈；先弄清他们想要什么（见「列出各方案」）。结尾用一行话邀请纠正，然后提一个关于他们想要什么的问题：即他们的请求悬而未决、而其答案最能改变最终做成之物的那个点。设计文档往往不完整，所以在以它为基础构建之前先确认。
+- **他们还没说：** 只提一个开放问题，用他们自己的措辞，针对他们的请求悬而未决的最大事项。说明你为什么问：这个答案会怎样改变你要构建的东西。比如面对“给我的面包店做一个网站”：“如果网站主要是给那些在犹豫要不要顺便进店的人看的，我会把营业时间和今天展示柜里有什么放在最前面；在线接单是另一种网站。你希望访客进入页面后做什么？”
 
-How the message ends depends on whether their message asked for
-brainstorming:
+消息如何结尾，取决于他们的消息是否要求了头脑风暴：
 
-- **They asked for it** (by name, by invoking it, or by asking for a
-  design discussion): end with your question. They want this
-  conversation.
-- **They didn't:** they may not want a conversation at all. After your
-  question, add a light, one-line offer to just get going instead, like
-  "Or if you'd rather I just dive in, say so." If they take you up on
-  it, this skill is done: state any significant how-it-gets-made choice
-  (platform, language, medium) in one plain line, then do what they
-  asked through the normal workflow.
+- **他们要求了**（点名要求、调用该技能、或要求一场设计讨论）：以你的问题结尾。他们想要这场对话。
+- **他们没要求：** 他们可能根本不想要对话。在问题之后，轻描淡写地加一行改为直接开工的提议，比如“或者你想让我直接开干，说一声就行”。如果他们接受了，这项技能即告完成：用一句平实的话说明任何重要的“如何制作”选择（平台、语言、媒介），然后按正常工作流去做他们要求的事。
 
-That's the whole message.
+整条消息就是这些。
 
-## The Conversation
+## 对话
 
-Each message ends with one question: a single sentence with no list of
-example answers hanging off it. Use plain language, pitched just a little
-above where your human partner is. Match their vocabulary; never use
-process jargon. You never need to quote this skill to your human
-partner.
+每条消息都以一个问题结尾：单个句子，后面不挂一串示例答案。使用平实的语言，定位只比需求方当前的水平略高一点。配合他们的词汇；绝不使用流程行话。你绝不需要向需求方引用这项技能的原文。
 
-Be clear and concise. Lead with what matters. Avoid jargon. When you
-report what you found, give them the most important findings and offer
-the rest.
+清晰简洁。先说要紧的。避免行话。当你汇报发现时，给他们最重要的发现项，并主动提出可以提供其余部分。
 
-**Get them describing.** Open questions come first. Their own words carry
-intent that your options can't. Offer a short menu only when they're
-stuck. When they say "just guess" or "what do you think?", propose
-something concrete.
+**让他们描述。** 开放问题优先。他们自己的话承载着你的选项承载不了的意图。只在他们卡住时才提供一份简短的选项单。当他们说“你猜吧”或“你怎么看？”时，就提出一个具体的提议。
 
-**How it gets made.** Every project rests on choices about medium, tools,
-materials, and resources: the platform, programming language, and
-libraries for an app; the medium for a piece of art. Find out early which
-of those choices they want to make, which they're handing to you, and what
-they already have to work with. Someone with strong views or skills will
-want to talk it through. Someone counting on you needs sensible defaults,
-said in plain words. When there's existing work, build on what it already
-uses. Any choice you make goes in the design as your call, never as
-something they agreed to.
+**如何制作。** 每个项目都建立在关于媒介、工具、材料和资源的选择之上：一个应用的平台、编程语言和库；一件艺术品的媒介。尽早弄清这些选择中哪些他们想亲自做、哪些交给你，以及他们已经拥有哪些可用的东西。有强烈见解或相关技能的人会想把选择谈透。指望你的人需要合理的默认值，并且要用平实的话说出来。已有现成作品时，就在它已经在用的东西之上构建。你做出的任何选择都作为你的决定写进设计，绝不写成他们同意过的东西。
 
-**Ground to cover.** This is territory, not a script. Never read these
-out as questions:
+**要覆盖的领域。** 这是待覆盖的话题，不是剧本。绝不把这些当作问题逐条念出来：
 
-- what kind of thing this is, and what makes it special
-- why now, and what success looks like to them
-- goals, non-goals, and anti-goals (what would make this a failure even
-  if it technically works)
-- prior art: what they've seen elsewhere, loved or hated
-- current state: what exists now, what they've tried
-- the details they care about
+- 这是一种什么东西，它的特别之处是什么
+- 为什么是现在，以及在他们的眼中成功是什么样子
+- 目标、非目标、反目标（即使技术上可行也会让这件事算作失败的东西）
+- 先例：他们在别处见过什么，喜欢过什么、讨厌过什么
+- 现状：现在已经有什么，他们尝试过什么
+- 他们在意的细节
 
-**Make every question specific** to their project and what they've told
-you. Ask Socratically, the way a sharp colleague would: build each
-question on their last answer or on something you found, so it helps
-them think through a consequence or a case they may have missed
-("Voting closes before the meeting, and two members joined this month.
-Does someone who joins mid-round get a vote?"). When the reason isn't
-already plain, say what you're hoping to learn or what the answer would
-change. A proposal they can correct, plus your reason for it, often
-beats a question.
+**让每个问题都具体**——针对他们的项目以及他们已经告诉你的内容。像一位敏锐的同事那样做苏格拉底式提问：把每个问题建立在他们上一条回答或你的某个发现之上，让它帮他们想清某个后果、或某个他们可能漏掉的情形（“投票在会议前就截止，而这个月有两名成员加入。中途加入的人还有投票权吗？”）。当理由还不明显时，说明你想弄清什么、或答案会改变什么。一个他们可以纠正的提议，加上你的理由，常常胜过一个提问。
 
-**Offer recon.** Once you have a bit of grounding and looking further
-would help, offer to go look: deeper into their codebase or project,
-their own files and data, or the web. Say what you'd look for. They
-decide whether you go.
+**提出侦察。** 一旦有了一点基础、并且再深入看看会有帮助，就提出去看：更深入地看他们的代码库或项目、他们自己的文件和数据、或者网络。说明你会找什么。去不去由他们决定。
 
-**Lay out the approaches.** Once you understand what they want, and
-before you write anything up, put the ways of building it in a message
-of its own. Come up with several real alternatives and drop the weak
-ones, including any that work against why they want it and any the
-existing work rules out. Present the two or three that remain, grounding
-each in what the project actually does and saying what it trades off.
-Recommend one and say why, then ask which way they want to go. When
-there's genuinely one sensible way, say so and explain why the others
-don't fit. This is for how it gets built; for what they want, get them
-describing first.
+**列出各方案。** 一旦你理解了他们想要什么，并且在把任何东西写成文字之前，把各种构建方式放进单独的一条消息。想出几个真正可行的备选并剔除弱的，包括任何与他们的缘由相悖的、以及被现有作品排除的。呈现剩下的两三个，每一个都基于项目实际的运作方式，并说明各自的取舍。推荐其中一个并说明理由，然后问他们想走哪条路。当确实只有一种合理做法时，直说，并解释其他做法为何不合适。这一步针对如何构建；至于他们想要什么，先让他们描述。
 
-**Show, don't tell.** Offer the visual companion (below) whenever seeing
-would help more than reading:
+**展示，而非讲述。** 每当“看”比“读”更有帮助时，提供视觉伴侣（见下文）：
 
-- something they'll look at: a screen, a page, a printout, a sign
-- a layout or arrangement: of a screen, a room, a schedule
-- a flow or a sequence of steps
-- options that would look different from each other
-- a structure that's easier to see than read: a diagram, a timeline, a map
+- 他们会看的东西：一个屏幕、一个页面、一份打印件、一块标牌
+- 一种布局或排布：屏幕的、房间的、日程的
+- 一个流程或一串步骤
+- 彼此看起来会不一样的选项
+- 看图比读文更容易理解的结构：一张图、一条时间线、一幅地图
 
-Once they've accepted, use it for mockups to react to, side-by-side
-options, and throwaway prototypes they can click.
+一旦他们接受，就用它来展示可供反馈的视觉稿、并排的选项、以及他们能点击的一次性原型。
 
-**Spike to feel things out.** Agentic work is waterfall, but very, very
-fast. A quick throwaway build is often the cheapest way to learn what
-they want or whether something works. Offer one when it would help.
-When they just want to spike, get out of the way. Spikes get no tests
-or minimal ones, aren't bulletproof, and skip the plan, implementation,
-and review process. Bring what the spike taught you back into the
-conversation.
+**用 spike 摸底。** agent 式的工作是瀑布式的，只是非常非常快。一次快速的、用完即弃的构建，往往是弄清他们想要什么、或某样东西是否行得通的最省成本的方式。有帮助时就提出做一个。当他们只想做个 spike 时，不要碍事。spike 不带测试或只带最少的测试，不追求无懈可击，并且跳过计划、实现和审查流程。把 spike 教给你的东西带回对话。
 
-## Play It Back
+## 复述
 
-Play back as you go. As soon as you understand one part well enough to
-describe it (what it's for and who it serves, say, or how one piece
-behaves), describe that part back in about 200-300 words, then return to
-questions about the next part. Playback and questions alternate through
-the whole conversation; the last chunk covers whatever is left.
+边进行边复述。一旦你对某个部分的理解足以描述它（比如说，它的用途和服务的对象，或某个部件如何运作），就用大约 200-300 词把那个部分复述回去，然后回到关于下一部分的问题。复述与提问在整个对话中交替进行；最后一段涵盖剩下的所有内容。
 
-Only what they said goes in as theirs. Anything you filled in goes in
-as your proposal, with your reason. End each chunk by asking what's wrong
-or missing.
+只有他们说过的话才作为他们的内容记入。你补上的任何东西都作为你的提议记入，并附上理由。每一段结束时，问哪里不对、哪里有缺。
 
-Before you send a chunk, check it: does it describe something they'll
-look at, like a page, a screen, a schedule, or a printout? If so, and
-they haven't seen the visual companion offer yet, send the offer instead
-(its own message, below) and hold the chunk for the next message. Once
-they've accepted, put a mockup next to the description.
+在发出一段之前，先检查它：它描述的是他们会看的东西吗，比如一个页面、一个屏幕、一份日程或一份打印件？如果是，而且他们还没有见过视觉伴侣的提议，就先发提议（单独一条消息，见下文），把这一段留到下一条消息。一旦他们接受，就把视觉稿放在描述旁边。
 
-## Size the Work
+## 评估工作量
 
-Once you understand what they want and they've picked an approach, say
-how big the work is in plain words. They can override it.
+一旦你理解了他们想要什么、且他们已选定一个方案，就用平实的话说明这项工作有多大。他们可以推翻这一判断。
 
-| Size | The design doc |
+| 规模 | 设计文档 |
 |------|----------------|
-| A small change | a short one: what you already covered together, written down |
-| A project | the full written design (below) |
+| 小改动 | 简短版：把你们已经一起覆盖过的内容写下来 |
+| 一个项目 | 完整的书面设计（见下文） |
 
-Short or full, the design doc has an **Approaches** part: the two or
-three ways you considered building it, what each trades off, which one
-they picked, and why. They pick in the conversation, before you write
-the doc.
+无论是简短版还是完整版，设计文档都有一个**方案**部分：你考虑过的两三种构建方式、各自的取舍、他们选了哪一个、以及为什么。他们在对话中、在你写文档之前做出选择。
 
-If it grows mid-task, stop, say so, and step up a size.
+如果任务进行中规模变大了，停下来说明，并把规模上调一档。
 
-If this is really several independent projects, say so, agree on an
-order, and brainstorm them one at a time.
+如果这实际上是几个相互独立的项目，就直说，商定顺序，然后一次只对其中一个项目进行头脑风暴。
 
-## The Written Design
+## 书面设计文档
 
-Write a plain document a talented builder in the domain could plan
-from without going back to your human partner. Cover:
+写一份平实的文档，该领域一位有才华的构建者无须回头找需求方，就能据此制定计划。要涵盖：
 
-- intent and the why
-- goals, non-goals, anti-goals
-- constraints
-- approaches (above)
-- the parts of the how they decided, as they decided them
-- what's left to the builder
+- 意图与缘由
+- 目标、非目标、反目标
+- 功能清单——逐项写「输入什么 → 用户看到什么」；这是需求方验收的意图基准
+- 明确不做——逐项列出，每项附理由（「因为 X 所以 Y」；不接受裸的「暂不做」）。这份清单是活文档：实施中发现必须补做或砍掉的项，当即回写并注明日期与原因
+- 关键决策记录——每个决策：候选方案 → 选了哪个 → 依据 → 代价/风险
+- 关键约束与可行性风险——只列影响「做不做」的事实，不展开实现
+- 方案（见上文）
+- “如何做”中由他们决定的部分，按他们决定的样子写入
+- 留给构建者的部分
 
-For a small change, the short design covers the same points in a line
-or two each and goes straight to your human partner, without the
-builder check.
+**写作要求：**
 
-**Where it goes:** in a software repo,
-`docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, committed.
-Otherwise, ask. Your human partner's preferences override both.
+- 文档开头写一句读者画像：这份文档假设读者懂什么、不了解什么；术语第一次出现处用一句话定义
+- 每段只承载一个论点，段首句即结论；同类条目用相同句式与相近粒度
+- 行为与规范写成可判真伪的命题；重要规则给 ❌/✅ 对照
+- 管线顺序、模块关系、数据流，先画图再补充说明
+- 单文档超过约 400 行考虑拆分；交叉引用写「见 §N（内容摘要）」，不写裸引用
 
-**Builder check** (for a project): dispatch a fresh subagent with
-`builder-check-prompt.md` in this directory. When you tell your human
-partner you're writing it up, say a reviewer will read it first and you
-may come back once with a few questions. Don't hand over the document
-until the check is back. Sort what the builder asks into three piles:
+对于小改动，简短设计对同样的要点每条只用一两句话，并直接交给需求方，不做 builder check；独立审读与两文档合并确认也仅适用于项目级流程。
 
-- **Answered already** by the conversation or the project: put the answer
-  in the document.
-- **Minor:** a sensible builder could settle it without changing what gets
-  built. Settle it yourself and mark it in the document as your call.
-- **Theirs:** only your human partner can answer it, and the answer changes
-  what gets built.
+**存放位置：** 在软件仓库中为 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`，并提交。否则，询问。需求方的偏好优先于以上两者。
 
-Bring the "theirs" pile in one message, most important first. Update the
-document with their answers, then hand it over with a short list of the
-calls you made so they can check those while reading. That's the only
-round of questions the check produces. Without a subagent tool, read the
-document as that builder yourself.
+**Builder check**（针对项目）：派发一个全新子代理，使用本目录下的 `builder-check-prompt.md`。当你告诉需求方你正在把设计写成文档时，说明会先有一位审查者阅读它，而你可能会带着几个问题回来一次。在该检查返回之前，不要交付文档。把构建者提出的问题分为三堆：
+
+- **已有答案**——对话或项目已能回答：把答案写进文档。
+- **次要：** 一位有常识的构建者无须改变最终做成之物，就能自行敲定。你自己敲定，并在文档中标注这是你的决定。
+- **归他们：** 只有需求方能回答，且答案会改变最终做成之物。
+
+把“归他们”的那一堆放进一条消息带来，最重要的排在最前。用他们的回答更新文档，然后交付，并附上你所做决定的简短清单，让他们阅读时可以核查。这是该检查唯一会产生的一轮提问。没有子代理工具时，由你亲自以那位构建者的视角阅读这份文档。
+
+## 独立审读
+
+**针对项目，设计文档与实施计划分别进行：** 完稿后、提交需求方确认前，各派一名未参与写作的全新子代理，以目标读者身份通读文档，只标三类问题——读不懂的句子、有歧义的词、推理跳步处——并做渲染形态检查（markdown 渲染出的表格宽度、代码块换行、图对齐，只有渲染后才见真章）。
+
+返回问题清单后逐条处置：修订，或书面说明为何不改；全部处置完毕，方可把两份文档提交确认，处置记录随文档留存。机制保证到达确认点的文档已经过无知读者通读与自检，需求方的审阅时间应花在判断层（决策对不对、范围要不要）而非文字层。
+
+Builder check 与独立审读并存、不互相替代：前者查完备性（还缺什么决策），后者查清晰度（读者读不读得懂）。
 
 <HARD-GATE>
-Nothing gets built until your human partner approves the design doc:
-the short one for a small change, the full one for a project.
-Building includes writing product code, scaffolding, installing
-dependencies, creating projects, and invoking an implementation skill.
-Reading and exploring are fine.
+在需求方明确确认之前，任何东西都不得构建。确认对象是两份文档：设计文档，以及由 superpowers:writing-plans 据它产出的实施计划——两份一次提交、一次确认。「嗯」「继续」不算明确确认；确认意见若针对设计文档，计划随之修订，两份一起重新提交；确认前这个环节不关闭。构建包括：编写产品代码、搭建脚手架、安装依赖、创建项目，以及调用实现类技能。阅读和探索没有问题。
 
-Two exceptions. If they opted out of the questions, the skill is done
-and the gate goes with it. A spike they said yes to may be built; it
-stays labeled throwaway, and keeping what it produced is a new request
-that comes back through this gate.
+回退规则：撰写计划中发现必须改动产品层面的决定（功能不可行、成本过高、依赖缺失）→ 回头修订设计文档，两份一起重新确认。禁止只改技术方案悄悄绕过。
 
-After the design doc is approved, the next step is the plan: invoke
-superpowers:writing-plans and no other skill.
+有两个例外。如果他们已选择退出提问，这项技能即告完成，闸门也随之解除。他们同意的 spike 可以构建；它必须始终标注为用完即弃，而保留它的产物是一个新的请求，需要重新经过这道闸门。
+
+两份文档都获批后，下一步是实施：按计划「执行说明」中需求方选定的方式，调用 superpowers:subagent-driven-development 或 superpowers:executing-plans。
 </HARD-GATE>
 
-## Red Flags
+## 危险信号
 
-| Thought | Reality |
+| 想法 | 现实 |
 |---------|---------|
-| "I'll offer a menu of what they might want" | Options steer. Ask them to describe it first. |
-| "I'll fill in sensible defaults" | Good. Say them out loud. A default they never heard is one they couldn't reject. |
-| "I've answered their questions, so I'll write the doc" | Lay out the approaches first, in a message of their own. |
-| "I should explain the process first" | Ask your question. The process shows itself. |
-| "They said 'sounds good' to the idea" | Approval covers what you showed them. A design doc you haven't written isn't approved. |
-| "The spike works, I'll keep building on it" | Keeping it is a new request. Back through the gate. |
+| “我来提供一份他们可能想要的选项单” | 选项会引导方向。先让他们描述。 |
+| “我来填上合理的默认值” | 好。但要说出口。他们从没听过的默认值，就是他们无从拒绝的默认值。 |
+| “他们的问题我都答完了，所以我要写文档了” | 先列出各方案，放进单独的一条消息。 |
+| “我应该先解释流程” | 先提你的问题。流程自会显现。 |
+| “他们对这个想法说了‘听起来不错’” | 批准只覆盖你展示给他们的内容。你还没写出来的设计文档不算获批。 |
+| “需求方说了‘嗯’或‘继续’” | 这不算明确确认。两份文档要得到一次不含糊的批准，确认前环节不关闭。 |
+| “计划里发现产品层面行不通，我悄悄改一下技术方案” | 回退规则：修订设计文档，两份一起重新确认。禁止绕过。 |
+| “spike 能跑通，我就在它上面继续构建” | 保留它是一个新的请求。回到闸门重新过一遍。 |
 
-## Visual Companion
+## 视觉伴侣
 
-A browser tab for showing mockups, diagrams, and prototypes. It's a
-tool, not a mode: accepting it doesn't send every question to the
-browser.
+一个用来展示视觉稿、图表和原型的浏览器标签页。它是工具，不是模式：接受它并不意味着每个问题都要发到浏览器。
 
-**Offer it just-in-time.** Offer it the first time one of the moments
-above comes up, never upfront. The offer is its own message with nothing
-else in it:
+**在恰当时机才提出。** 在上述时刻第一次出现时提出，绝不预先提出。该提议单独成一条消息，其中不含任何其他内容：
 
-> "This might be easier if I show you. Want me to open a browser tab with some mockups?"
+> “如果我展示给你看，可能会更容易理解。要不要我打开一个浏览器标签页，放一些视觉稿？”
 
-If they decline, stay in text and don't offer again unless they raise it.
+如果他们拒绝，就留在文字里，且不再提出，除非他们自己再次提起。
 
-**Per question, ask: would they understand this better by seeing it?**
-Mockups, layouts, diagrams, and side-by-side designs go in the browser.
-Requirements, scope, tradeoffs, and conceptual choices stay in text. A
-question about a UI topic isn't automatically a visual question.
+**对每个问题都问：看到它会不会比读到它更容易理解？** 视觉稿、布局、图表和并排的设计放进浏览器。需求、范围、取舍和概念性选择留在文字里。一个关于 UI 主题的问题并不自动等于视觉问题。
 
-If they accept, read `visual-companion.md` in this directory before
-starting the server.
+如果他们接受，在启动服务器之前，先阅读本目录下的 `visual-companion.md`。

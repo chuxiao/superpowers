@@ -1,28 +1,12 @@
-Read `prompts/analyst-common.md` first; it gives your role, inputs,
-context-safety rules, and the return format. This file adds the dimension.
+先读 `prompts/analyst-common.md`；其中给出了你的角色、输入、上下文安全规则与返回格式。本文件在此之上补充要分析的维度。
 
-Dimension: Cost and time
+维度：Cost and time
 
-Account for where tokens and wall-clock went.
+说明 token 与实际耗时（wall-clock）花在了哪里。
 
-1. Tokens. Use only the usage records and counter meanings established in the
-   case file. State whether each counter is incremental or cumulative before
-   calculating totals; difference cumulative observations without turning a
-   missing observation into zero. Report the five turns with the largest
-   supported totals and the supported totals per associated session.
-2. Wall-clock. Use the evidenced timestamp fields, event boundaries, and units
-   recorded in the case file. Report the five longest supported turns and any
-   gap longer than ten minutes between consecutive events (idle, waiting on an
-   associated session, or waiting on your human partner; say which only when
-   the records show it).
-3. Largest tool results: use the case file's evidenced tool-result records to
-   report the ten largest results with their tool and turn. Measure records
-   before extracting bounded content.
-4. Compactions: count and locate records whose meaning as compaction events was
-   established during discovery. Report available before/after counters and
-   what the session was doing when each fired; mark unsupported fields absent.
-5. Associated sessions: count them and report supported usage, duration, and
-   dispatching turn for each.
-6. Report the turns, subagents, tools, or repeats that dominate the
-   totals, with numbers. Do not speculate about why a
-   turn was expensive beyond what the transcript shows.
+1. token。只使用案件文件中确立的用量记录与计数器含义。在计算总量之前，先说明每个计数器是增量式还是累积式；对累积式观测做差，不要把缺失的观测当成零。报告有依据总量最大的五轮，以及每个关联会话对应的有依据总量。
+2. 实际耗时。使用案件文件中记录的、有证据支撑的时间戳字段、事件边界与单位。报告有依据的最长五轮，以及相邻事件之间超过十分钟的任何间隔（空闲、等待关联会话、或等待你的需求方；仅当记录能显示属于哪一种时才说明是哪一种）。
+3. 最大工具结果：使用案件文件中有证据支撑的工具结果记录，报告最大的十个结果及其所用工具与所在轮次。在提取限量内容之前，先度量记录。
+4. 上下文压缩：统计并定位那些作为上下文压缩事件的含义已在探查（discovery）阶段确立的记录。报告可用的压缩前后计数器，以及每次触发时会话当时正在做什么；无依据的字段标注为缺失。
+5. 关联会话：统计其数量，并逐个报告有依据的用量、时长与派发轮次。
+6. 报告在总量中占主导的轮次、子代理、工具或重复操作，并给出数字。不要超出会话记录（transcript）所显示的范围去猜测某轮为何昂贵。

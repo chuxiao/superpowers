@@ -1,17 +1,15 @@
 # GitHub issues
 
-Use `gh` when it is installed and authenticated; it handles auth, rate
-limits, and JSON. Fall back to the public API with curl, then to a URL
-your partner opens.
+若 `gh` 已安装且已认证，就使用 `gh`；认证、速率限制和 JSON 都由它处理。否则先回退到用 curl 调公共 API，再回退到交给你的需求方打开的 URL。
 
-## Search
+## 搜索
 
 ```bash
 gh search issues --repo obra/superpowers --limit 10 "<terms>" \
   --json number,state,title --jq '.[] | "\(.number)\t\(.state)\t\(.title)"'
 ```
 
-Without `gh` (unauthenticated, 10 requests a minute):
+没有 `gh` 时（未认证，每分钟 10 次请求）：
 
 ```bash
 curl -s -H "Accept: application/vnd.github+json" \
@@ -19,29 +17,23 @@ curl -s -H "Accept: application/vnd.github+json" \
   | jq -r '.items[] | "\(.number)\t\(.state)\t\(.title)"'
 ```
 
-Without curl, hand over `https://github.com/obra/superpowers/issues?q=<terms>`.
+没有 curl 时，交给你的需求方 `https://github.com/obra/superpowers/issues?q=<terms>`。
 
-## File
+## 提交 issue
 
-Write the filled `templates/issue.md` to the workspace and show the exact
-text. After approval:
+把填写好的 `templates/issue.md` 写入工作区，并展示其确切文本。获得批准后：
 
 ```bash
 gh issue create --repo obra/superpowers --title "<title>" --body-file <path> \
   --label bug --label automated-issue-report
 ```
 
-GitHub drops labels silently when the reporter lacks push access, so the
-labels land only for collaborators; the template footer still marks the
-issue as skill-filed. `gh` cannot attach files: give your partner the
-bundle path to attach through the browser after the issue exists.
+当报告者缺少 push 权限时，GitHub 会静默丢弃标签，因此标签只对协作者（collaborator）生效；不过模板页脚仍会把该 issue 标记为由技能提交。`gh` 无法附加文件：issue 创建后，把材料包（bundle）路径交给你的需求方，由其通过浏览器附加。
 
-Without `gh`, hand over a prefilled link on the `bug_report.md` template,
-which applies the `bug` label for any reporter:
+没有 `gh` 时，交给你的需求方一个基于 `bug_report.md` 模板预填好的链接，它会为任何报告者套用 `bug` 标签：
 
 ```
 https://github.com/obra/superpowers/issues/new?template=bug_report.md&title=<url-encoded title>&body=<url-encoded body>
 ```
 
-GitHub rejects URLs over about 8,000 characters; past that, send the link
-with the title only and tell your partner to paste the body from the file.
+GitHub 会拒绝超过约 8000 个字符的 URL；超过时，只发送带标题的链接，并让你的需求方从文件中粘贴正文。

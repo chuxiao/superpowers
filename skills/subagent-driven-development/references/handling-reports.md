@@ -1,15 +1,15 @@
-# Handling a Report That Isn't DONE
+# 处理非 DONE 的报告
 
-Part of superpowers:subagent-driven-development.
+本文是 superpowers:subagent-driven-development 的一部分。
 
-**DONE_WITH_CONCERNS:** The implementer completed the work but flagged doubts. Read the concerns before proceeding. If the concerns are about correctness or scope, address them before review. If they're observations (e.g., "this file is getting large"), note them and proceed to review.
+**DONE_WITH_CONCERNS:** 实施者完成了工作，但标记出了疑虑。继续之前先阅读这些疑虑。如果疑虑涉及正确性或范围，先解决它们再进入审查。如果只是观察性描述（例如“这个文件越来越大”），记录下来后继续进入审查。
 
-**NEEDS_CONTEXT:** The implementer needs information that wasn't provided. Provide the missing context and re-dispatch.
+**NEEDS_CONTEXT:** 实施者缺少未被提供的信息。补齐缺失的上下文，然后重新派发。
 
-**BLOCKED:** The implementer cannot complete the task. Assess the blocker:
-1. If it's a context problem, provide more context and re-dispatch with the same model
-2. If the task requires more reasoning, re-dispatch with a more capable model
-3. If the task is too large, break it into smaller pieces
-4. If the plan itself is wrong, rule on the correction, ledger it, and re-dispatch with the ruling carried in the dispatch
+**BLOCKED:** 实施者无法完成任务。评估阻塞原因：
+1. 如果是上下文问题，提供更多上下文，并用同一模型重新派发
+2. 如果任务需要更强的推理，用更强档的模型重新派发
+3. 如果任务过大，把它拆成更小的部分
+4. 如果计划本身有误，对修正做出裁决，记入台账，然后重新派发，并在派发中携带该裁决
 
-**Never** ignore an escalation or force the same model to retry without changes. If the implementer said it's stuck, something needs to change.
+**绝不**要忽略上报，也不要毫无改动就强迫同一模型重试。如果实施者说自己卡住了，那就说明必须做出一些改变。

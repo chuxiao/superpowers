@@ -1,26 +1,11 @@
-Read `prompts/analyst-common.md` first; it gives your role, inputs,
-context-safety rules, and the return format. This file adds the dimension.
+先读 `prompts/analyst-common.md`；其中给出了你的角色、输入、上下文安全规则与返回格式。本文件在此之上补充要分析的维度。
 
-Dimension: Quality evidence
+维度：Quality evidence
 
-Judge the process against its own claims. This is not a code review; do
-not evaluate the code the session produced.
+对照流程自身的声明来评判该流程。这不是代码审查；不要评估该会话产出的代码。
 
-1. Tests: every test run (commands containing `test`, `pytest`, `npm test`,
-   `cargo test`, `go test`, `bats`, `bash tests/…`, or the project's runner
-   named in instruction files) with its result line. Report runs that
-   failed and what the assistant did next.
-2. Verification behind claims: find assistant text claiming done, fixed,
-   passing, verified, works, complete. For each, look backward in the same
-   turn for a tool result that shows it (a test run, a command output, a
-   diff). Report claims with no supporting result in that turn.
-3. Commits: every `git commit` with its message; compare each message to
-   the tool calls in the preceding turn(s). Report commits whose message
-   claims work that no tool call performed, and work performed that was
-   never committed when the agreed plan said it would be.
-4. Review feedback: where a reviewer (human or subagent) raised points,
-   find the response. Report points acknowledged but not acted on, and
-   points dismissed without a stated reason.
-5. Acceptance criteria: if the case file's problem statement or the
-   agreed plan states criteria, report each as met / not met /
-   not checked with the evidence line.
+1. 测试：每一次测试运行（命令中包含 `test`、`pytest`、`npm test`、`cargo test`、`go test`、`bats`、`bash tests/…`，或指令文件中写明的项目运行器）及其结果行。报告失败的运行，以及助手随后做了什么。
+2. 声明背后的验证：找出助手声称 done、fixed、passing、verified、works、complete 的文本。对每一处，在同一轮内向回查找能证明它的工具结果（一次测试运行、一条命令输出、一个 diff）。报告该轮内没有任何支撑结果的声明。
+3. 提交：每一次 `git commit` 及其提交信息；将每条提交信息与前面一轮或多轮中的工具调用相对照。报告提交信息声称了没有任何工具调用执行过的工作的提交，以及已执行但在约定的计划说应当提交之时从未提交的工作。
+4. 审查反馈：凡是审查者（人类或子代理）提出意见的地方，找出对应的回应。报告被承认却未采取行动的意见，以及未经说明理由就被驳回的意见。
+5. 验收准则：若案件文件的问题陈述或约定的计划写明了准则，则对每一条给出 met / not met / not checked 判定，并附上证据行。

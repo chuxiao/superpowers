@@ -1,29 +1,11 @@
-# Claude Code Tool Notes
+# Claude Code 工具说明
 
-Claude Code is the reference harness: skills speak its vocabulary
-(`Agent` for a subagent dispatch, todos, `Skill`). These notes cover the
-one place Claude Code can run a plan cheaper than the skills' default
-shape. It is opt-in by your human partner and changes nothing the skills
-require.
+Claude Code 是参照 harness：技能使用的就是它的词汇（派发子代理用 `Agent`、待办、`Skill`）。本说明覆盖唯一一处 Claude Code 能以低于技能默认形态的成本运行计划的场景。是否启用由需求方决定，且不改变技能要求的任何内容。
 
-## Cheaper orchestration for subagent-driven development
+## 子代理驱动开发的更省成本编排
 
-The controller session is the most expensive seat in a
-superpowers:subagent-driven-development run: it reads every dispatch
-result and every report, and it usually runs on the session's most
-capable model. Claude Code supports nested subagents (three layers below
-the main conversation by default; `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`
-adjusts it), so the whole loop can run one layer down.
+在 superpowers:subagent-driven-development 的一次运行中，控制者会话是最昂贵的席位：它要读取每一份派发结果和每一份报告，而且通常运行在会话的最强档模型上。Claude Code 支持嵌套子代理（默认在主会话之下三层；`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` 可调整该层数），所以整个循环可以下沉一层运行。
 
-When your human partner asks for it — or has said the session model is
-too expensive to spend on coordination — dispatch ONE orchestrator
-subagent on a mid-tier model with the plan path and the instruction to
-use superpowers:subagent-driven-development end to end. The orchestrator
-dispatches its own implementers and reviewers per that skill's Model
-Selection; the workspace and ledger live on disk, so nothing is lost to
-the extra layer. Its final message must carry the "Rulings I made" list
-verbatim — that list is how the decisions reach your human partner, and
-you relay it, not summarize it.
+当需求方提出要求——或已表示会话模型花在协调上过于昂贵——就仅派发一个编排器子代理：使用中档模型，附上计划路径，以及要求它端到端使用 superpowers:subagent-driven-development 的指令。编排器按该技能的 Model Selection（模型选择）一节派发自己的实施者与审查者；工作区和台账都存放在磁盘上，所以多出的这一层不会丢失任何内容。它的最终消息必须逐字带上 "Rulings I made"（我做出的裁决）清单——这份清单是各项决定传达给需求方的途径，你要转达它，而不是总结它。
 
-Do this only for a whole plan. Nesting a single task's dispatch buys
-nothing and adds a seat.
+只对整个计划这样做。把单个任务的派发再嵌套一层毫无收益，只会多出一个席位。

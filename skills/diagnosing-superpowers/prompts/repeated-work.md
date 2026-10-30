@@ -1,30 +1,18 @@
-Read `prompts/analyst-common.md` first; it gives your role, inputs,
-context-safety rules, and the return format. This file adds the dimension.
+先读 `prompts/analyst-common.md`；其中给出了你的角色、输入、上下文安全规则与返回格式。本文件在此之上补充要分析的维度。
 
-Dimension: Repeated work
+维度：Repeated work
 
-Find work the session did more than once.
+找出该会话做过不止一次的工作。
 
-1. Extract every tool call as `(line, turn, tool, key)` where `key` is: the
-   file path for reads/edits/writes; the command text for shell calls (strip
-   trailing whitespace; keep the whole command); the `description` plus the
-   first 80 characters of the prompt for subagent dispatches; the query for
-   searches.
-2. Group by `(tool, key)` and report the groups at or over threshold:
+1. 将每一次工具调用提取为 `(line, turn, tool, key)`，其中 `key` 的取值为：读/编辑/写操作取文件路径；shell 调用取命令文本（去除末尾空白；保留整条命令）；子代理派发取 `description` 加提示词的前 80 个字符；搜索取查询内容。
+2. 按 `(tool, key)` 分组，报告达到或超过阈值的组：
 
-   | Category | Threshold | Exempt |
+   | 类别 | 阈值 | 豁免 |
    |---|---|---|
-   | reads, searches | 3 | |
-   | edits | 2 | |
-   | shell commands | 2 | status checks and test runs (`git status`, `ls`, `pwd`, test runners) |
-   | subagent dispatches | 2 with the same description | |
-3. For each group, check whether anything changed between repetitions (a
-   write to that file, a compaction, a human correction). Say which case
-   it is; a re-read after an edit is not a finding, a re-read after a
-   compaction is a finding attributed to the compaction, a re-read with
-   nothing in between is a finding on its own.
-4. Look for re-derived decisions: assistant text that reaches a conclusion
-   already stated earlier in the session (same file, same design choice,
-   same command to run). Quote both places.
-5. One finding per group, with the first and last line numbers and the
-   count.
+   | 读、搜索 | 3 | |
+   | 编辑 | 2 | |
+   | shell 命令 | 2 | 状态检查与测试运行（`git status`、`ls`、`pwd`、测试运行器） |
+   | 子代理派发 | 2 次且 description 相同 | |
+3. 对每一组，检查各次重复之间是否有任何变化（对该文件的一次写入、一次上下文压缩、一次人工纠正）。说明属于哪种情形：编辑之后的重读不算发现项；上下文压缩之后的重读算发现项，归因于该次上下文压缩；中间没有任何变化的重读单独算一个发现项。
+4. 寻找重新推导出的决定：即助手文本得出了会话早前已陈述过的结论之处（同一文件、同一设计选择、同一要运行的命令）。把两处都引用出来。
+5. 每组一个发现项，附首末行号与次数。

@@ -1,10 +1,5 @@
-# "Cannot Verify From Diff" Items
+# “无法从 diff 验证”的条目
 
-Part of superpowers:subagent-driven-development.
+本文是 superpowers:subagent-driven-development 的一部分。
 
-The task reviewer may report "⚠️ Cannot verify from diff" items — requirements
-that live in unchanged code or span tasks. These do not block the rest of the
-review, but you must resolve each one yourself before marking the task
-complete: you hold the plan and cross-task context the reviewer
-lacks. If you confirm an item is a real gap, treat it as a failed spec
-review — it enters the fix loop with the other findings.
+任务审查者可能报告 “⚠️ Cannot verify from diff” 条目——即那些位于未改动代码中、或横跨多个任务的需求。这些条目不会阻塞审查的其余部分，但在将任务标记为完成之前，你必须亲自逐条解决：你掌握着审查者所缺乏的计划与跨任务上下文。如果你确认某条是真实缺口，就将其视为一次未通过的设计文档审查——它会与其他发现项一起进入修复循环。

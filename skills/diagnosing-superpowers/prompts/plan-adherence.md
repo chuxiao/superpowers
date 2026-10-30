@@ -1,29 +1,15 @@
-Read `prompts/analyst-common.md` first; it gives your role, inputs,
-context-safety rules, and the return format. This file adds the dimension.
+先读 `prompts/analyst-common.md`；其中给出了你的角色、输入、上下文安全规则与返回格式。本文件在此之上补充要分析的维度。
 
-Dimension: Plan adherence
+维度：Plan adherence
 
-Recover the plan the session agreed to, then map each plan step to what
-happened. "Plan" here means any agreed course of action, not git commits.
+找回该会话达成一致的计划，然后把每个计划步骤对应到实际发生的事情。这里的"计划"指任何达成一致的行动方案，而不是 git 提交。
 
-1. Find the agreed plan: a design or plan agreed in chat (look for the
-   assistant text preceding a human "yes/ok/go ahead"), a spec or plan file
-   written during the session (tool calls that write under `docs/`,
-   `plans/`, `specs/`, or any file the human named), a todo-list record whose
-   meaning was established in the case file, or any numbered checklist in
-   assistant text. Quote each plan step with its `path:line`.
-2. Mark structural events between the plan and its execution: compaction
-   events identified during discovery, resumes, aborted turns, and associated
-   session dispatches. Note their line numbers; plan drift right after one of
-   these is a distinct finding.
-3. For each plan step, find the tool calls and assistant text that
-   executed it, or establish that none did. Report:
-   - steps skipped (no execution found; quote the plan step);
-   - steps executed out of order (line numbers show the order);
-   - steps silently changed (execution differs from the plan step in a
-     way the assistant never announced; quote both);
-   - steps invented (work done that no plan step covers);
-   - drift immediately after a structural event (cite the event line and
-     the first divergent action).
-4. If there is no recoverable plan, say so as the only finding, with
-   the lines you checked.
+1. 找到达成一致的计划：可能是对话中达成一致的设计文档或计划（寻找需求方说出 "yes/ok/go ahead" 之前的助手文本），可能是会话期间写入的设计文档或计划文件（在 `docs/`、`plans/`、`specs/` 之下写入文件的工具调用，或写入需求方点名文件的工具调用），可能是含义已在案件文件中得到确认的待办清单记录，也可能是助手文本中的任何带编号清单。引用每个计划步骤及其 `path:line`。
+2. 标记计划与其执行之间的结构性事件：在探查（discovery）阶段识别出的上下文压缩事件、会话恢复、被中止的轮次，以及相关的会话派发。记下它们的行号；紧随其中某个事件之后的计划偏移是一个独立的发现项。
+3. 对每个计划步骤，找到执行了该步骤的工具调用和助手文本，或确认并不存在这样的执行。报告以下情况：
+   - 被跳过的步骤（未找到任何执行；引用该计划步骤）；
+   - 乱序执行的步骤（行号显示了顺序）；
+   - 被静默更改的步骤（执行与计划步骤的差异是助手从未宣告过的；两者都引用）；
+   - 凭空造出的步骤（做了没有任何计划步骤覆盖的工作）；
+   - 紧随结构性事件之后的偏移（引用该事件的行号与第一个偏离的动作）。
+4. 如果没有可恢复的计划，就把这一点作为唯一的发现项报告，并附上你检查过的行号。

@@ -1,201 +1,199 @@
-# Writing SKILL.md for Discovery
+# 为可发现性编写 SKILL.md
 
-Part of superpowers:writing-skills: the SKILL.md template and how to name,
-describe and size a skill so agents find it and read it.
+superpowers:writing-skills 的一部分：SKILL.md 模板，以及如何为技能命名、撰写描述并控制篇幅，让 agent 能找到并阅读它。
 
-## SKILL.md Structure
+## SKILL.md 结构
 
-**Frontmatter (YAML):**
-- Two required fields: `name` and `description` (see [agentskills.io/specification](https://agentskills.io/specification) for all supported fields)
-- Max 1024 characters total
-- `name`: Use letters, numbers, and hyphens only (no parentheses, special chars)
-- `description`: Third-person, describes ONLY when to use (NOT what it does)
-  - Start with "Use when..." to focus on triggering conditions
-  - Include specific symptoms, situations, and contexts
-  - **NEVER summarize the skill's process or workflow** (see Skill Discovery Optimization below for why)
-  - Keep under 500 characters if possible
+**Frontmatter（YAML）：**
+- 两个必填字段：`name` 与 `description`（全部支持的字段见 [agentskills.io/specification](https://agentskills.io/specification)）
+- 总长最多 1024 个字符
+- `name`：只使用字母、数字和连字符（不用括号与特殊字符）
+- `description`：第三人称，只描述何时使用（而不是它做什么）
+  - 以「当……时使用」开头，聚焦触发条件
+  - 包含具体的症状、场景与情境
+  - **绝不概括技能的流程或工作流**（原因见下文「技能可发现性优化」一节）
+  - 如有可能，保持在 500 个字符以内
 
 ```markdown
 ---
 name: Skill-Name-With-Hyphens
-description: Use when [specific triggering conditions and symptoms]
+description: 当[具体触发条件与症状]时使用
 ---
 
-# Skill Name
+# 技能名称
 
-## Overview
-What is this? Core principle in 1-2 sentences.
+## 概述
+这是什么？用 1-2 句话给出核心原则。
 
-## When to Use
-[Small inline flowchart IF decision non-obvious]
+## 何时使用
+[仅当决策并非显而易见时，才放一个小的内联流程图]
 
-Bullet list with SYMPTOMS and use cases
-When NOT to use
+用要点列出症状与使用场景
+何时不该使用
 
-## Core Pattern (for techniques/patterns)
-Before/after code comparison
+## 核心模式（针对技巧/模式）
+前后代码对比
 
-## Quick Reference
-Table or bullets for scanning common operations
+## 速查参考
+用于快速扫读常见操作的表格或要点
 
-## Implementation
-Inline code for simple patterns
-Link to file for heavy reference or reusable tools
+## 实现
+简单模式直接用内联代码
+重量级参考或可复用工具则链接到文件
 
-## Common Mistakes
-What goes wrong + fixes
+## 常见错误
+会出什么问题 + 修复方法
 
-## Real-World Impact (optional)
-Concrete results
+## 实际效果（可选）
+具体成果
 ```
 
+## 技能可发现性优化（SDO）
 
-## Skill Discovery Optimization (SDO)
+**对可发现性至关重要：**未来的 agent 需要能找到你的技能
 
-**Critical for discovery:** Future agents need to FIND your skill
+### 1. 信息丰富的 description 字段
 
-### 1. Rich Description Field
+**目的：**你的 agent 会阅读 description 来决定针对给定任务加载哪些技能。要让 description 能回答：「我现在是否就该读这个技能？」
 
-**Purpose:** Your agent reads the description to decide which skills to load for a given task. Make it answer: "Should I read this skill right now?"
+**格式：**以「当……时使用」开头，聚焦触发条件
 
-**Format:** Start with "Use when..." to focus on triggering conditions
+**关键：description = 何时使用，绝不是技能做什么**
 
-**CRITICAL: Description = When to Use, NOT What the Skill Does**
+description 只应描述触发条件。绝不要在 description 里概括技能的流程或工作流。
 
-The description should ONLY describe triggering conditions. Do NOT summarize the skill's process or workflow in the description.
+**为什么重要：**测试发现，当 description 概括了技能的工作流时，agent 可能照着 description 行事，而不去阅读完整的技能内容。一条写着「任务之间进行代码审查」的 description 曾导致 agent 仅做了一次审查，尽管技能的流程图明确画了两次审查（先设计文档符合性，再代码质量）。
 
-**Why this matters:** Testing revealed that when a description summarizes the skill's workflow, an agent may follow the description instead of reading the full skill content. A description saying "code review between tasks" caused an agent to do ONE review, even though the skill's flowchart clearly showed TWO reviews (spec compliance then code quality).
+后来把 description 改成只有「当执行含独立任务的实施计划时使用」（不含工作流概括），agent 就正确阅读了流程图，并遵循了两阶段审查流程。
 
-When the description was changed to just "Use when executing implementation plans with independent tasks" (no workflow summary), the agent correctly read the flowchart and followed the two-stage review process.
-
-**The trap:** Descriptions that summarize workflow create a shortcut agents will take. The skill body becomes documentation agents skip.
+**陷阱：**概括工作流的 description 会制造一条 agent 必然去走的捷径。技能正文由此沦为 agent 跳过不读的文档。
 
 ```yaml
-# ❌ BAD: Summarizes workflow - agents may follow this instead of reading skill
-description: Use when executing plans - dispatches subagent per task with code review between tasks
+# ❌ 错误：概括了工作流——agent 可能照此行事，而不去读技能
+description: 当执行计划时使用——每个任务派发一个子代理，任务之间进行代码审查
 
-# ❌ BAD: Too much process detail
-description: Use for TDD - write test first, watch it fail, write minimal code, refactor
+# ❌ 错误：过程细节太多
+description: 用于 TDD——先写测试、看它失败、写最少代码、再重构
 
-# ✅ GOOD: Just triggering conditions, no workflow summary
-description: Use when executing implementation plans with independent tasks in the current session
+# ✅ 正确：只有触发条件，无工作流概括
+description: 当在当前会话中执行含独立任务的实施计划时使用
 
-# ✅ GOOD: Triggering conditions only
-description: Use when implementing any feature or bugfix, before writing implementation code
+# ✅ 正确：只写触发条件
+description: 在编写实现代码之前，实现任何功能或修复 bug 时使用
 ```
 
-**Content:**
-- Use concrete triggers, symptoms, and situations that signal this skill applies
-- Describe the *problem* (race conditions, inconsistent behavior) not *language-specific symptoms* (setTimeout, sleep)
-- Keep triggers technology-agnostic unless the skill itself is technology-specific
-- If skill is technology-specific, make that explicit in the trigger
-- Write in third person (injected into system prompt)
-- **NEVER summarize the skill's process or workflow**
+**内容：**
+- 使用能表明本技能适用的具体触发条件、症状与情境
+- 描述*问题*本身（竞态条件、行为不一致），而不是*语言特定的症状*（setTimeout、sleep）
+- 触发条件保持技术无关，除非技能本身就特定于某项技术
+- 如果技能特定于某项技术，就在触发条件中明确写出
+- 用第三人称书写（会被注入系统提示词）
+- **绝不概括技能的流程或工作流**
 
 ```yaml
-# ❌ BAD: Too abstract, vague, doesn't include when to use
-description: For async testing
+# ❌ 错误：太抽象、含糊，没说明何时使用
+description: 用于异步测试
 
-# ❌ BAD: First person
-description: I can help you with async tests when they're flaky
+# ❌ 错误：第一人称
+description: 当异步测试不稳定时，我可以帮你处理
 
-# ❌ BAD: Mentions technology but skill isn't specific to it
-description: Use when tests use setTimeout/sleep and are flaky
+# ❌ 错误：提到了技术，但技能并不特定于该技术
+description: 当测试用到 setTimeout/sleep 且不稳定时使用
 
-# ✅ GOOD: Starts with "Use when", describes problem, no workflow
-description: Use when tests have race conditions, timing dependencies, or pass/fail inconsistently
+# ✅ 正确：以「当……时使用」开头，描述问题，无工作流
+description: 当测试存在竞态条件、时序依赖，或通过/失败结果不一致时使用
 
-# ✅ GOOD: Technology-specific skill with explicit trigger
-description: Use when using React Router and handling authentication redirects
+# ✅ 正确：特定技术的技能，触发条件中明确写出
+description: 当使用 React Router 并处理认证重定向时使用
 ```
 
-### 2. Keyword Coverage
+### 2. 关键词覆盖
 
-Use words an agent would search for:
-- Error messages: "Hook timed out", "ENOTEMPTY", "race condition"
-- Symptoms: "flaky", "hanging", "zombie", "pollution"
-- Synonyms: "timeout/hang/freeze", "cleanup/teardown/afterEach"
-- Tools: Actual commands, library names, file types
+使用 agent 会搜索的词语：
+- 错误信息："Hook timed out"（Hook 超时）、"ENOTEMPTY"、"race condition"（竞态条件）
+- 症状："flaky"（不稳定）、"hanging"（挂起）、"zombie"（僵尸进程）、"pollution"（污染）
+- 同义词："timeout/hang/freeze"（超时/挂起/冻结）、"cleanup/teardown/afterEach"（清理/收尾/afterEach）
+- 工具：实际的命令、库名、文件类型
 
-### 3. Descriptive Naming
+### 3. 描述性命名
 
-**Use active voice, verb-first:**
-- ✅ `creating-skills` not `skill-creation`
-- ✅ `condition-based-waiting` not `async-test-helpers`
+**用主动语态，动词在前：**
+- ✅ `creating-skills`，而不是 `skill-creation`
+- ✅ `condition-based-waiting`，而不是 `async-test-helpers`
 
-### 4. Token Efficiency (Critical)
+### 4. Token 效率（关键）
 
-**Problem:** getting-started and frequently-referenced skills load into EVERY conversation. Every token counts.
+**问题：**getting-started 和被频繁引用的技能会加载进每一次对话。每个 token 都很重要。
 
-**Target word counts:**
-- getting-started workflows: <150 words each
-- Frequently-loaded skills: <200 words total
-- Other skills: <500 words (still be concise)
+**目标词数：**
+- getting-started 工作流：每个 <150 词
+- 频繁加载的技能：总共 <200 词
+- 其他技能：<500 词（仍要保持简洁）
 
-**Techniques:**
+**技巧：**
 
-**Move details to tool help:**
+**把细节移进工具的帮助信息：**
 ```bash
-# ❌ BAD: Document all flags in SKILL.md
-search-conversations supports --text, --both, --after DATE, --before DATE, --limit N
+# ❌ 错误：在 SKILL.md 里罗列所有 flag
+search-conversations 支持 --text、--both、--after DATE、--before DATE、--limit N
 
-# ✅ GOOD: Reference --help
-search-conversations supports multiple modes and filters. Run --help for details.
+# ✅ 正确：指向 --help
+search-conversations 支持多种模式与过滤器。详情请运行 --help。
 ```
 
-**Use cross-references:**
+**使用交叉引用：**
 ```markdown
-# ❌ BAD: Repeat workflow details
-When searching, dispatch subagent with template...
-[20 lines of repeated instructions]
+# ❌ 错误：重复工作流细节
+搜索时，用模板派发子代理……
+[重复的 20 行指令]
 
-# ✅ GOOD: Reference other skill
-Always use subagents (50-100x context savings). REQUIRED: Use [other-skill-name] for workflow.
+# ✅ 正确：引用其他技能
+始终使用子代理（可节省 50-100 倍上下文）。REQUIRED：使用 [other-skill-name] 来执行工作流。
 ```
 
-**Compress examples:**
+**压缩示例：**
 ```markdown
-# ❌ BAD: Verbose example (42 words)
+# ❌ 错误：冗长示例（42 词）
 your human partner: "How did we handle authentication errors in React Router before?"
 You: I'll search past conversations for React Router authentication patterns.
 [Dispatch subagent with search query: "React Router authentication error handling 401"]
 
-# ✅ GOOD: Minimal example (20 words)
+# ✅ 正确：极简示例（20 词）
 Partner: "How did we handle auth errors in React Router?"
 You: Searching...
 [Dispatch subagent → synthesis]
 ```
 
-**Eliminate redundancy:**
-- Don't repeat what's in cross-referenced skills
-- Don't explain what's obvious from command
-- Don't include multiple examples of same pattern
+**消除冗余：**
+- 不要重复交叉引用的技能里已有的内容
+- 不要解释从命令本身就能看出的东西
+- 不要为同一个模式给出多个示例
 
-**Verification:**
+**验证：**
 ```bash
 wc -w skills/path/SKILL.md
-# getting-started workflows: aim for <150 each
-# Other frequently-loaded: aim for <200 total
+# getting-started 工作流：目标为每个 <150 词
+# 其他频繁加载的技能：目标为总共 <200 词
 ```
 
-**Name by what you DO or core insight:**
-- ✅ `condition-based-waiting` > `async-test-helpers`
-- ✅ `using-skills` not `skill-usage`
-- ✅ `flatten-with-flags` > `data-structure-refactoring`
-- ✅ `root-cause-tracing` > `debugging-techniques`
+**用你实际做的事或核心洞见来命名：**
+- ✅ `condition-based-waiting` 优于 `async-test-helpers`
+- ✅ `using-skills`，而不是 `skill-usage`
+- ✅ `flatten-with-flags` 优于 `data-structure-refactoring`
+- ✅ `root-cause-tracing` 优于 `debugging-techniques`
 
-**Gerunds (-ing) work well for processes:**
-- `creating-skills`, `testing-skills`, `debugging-with-logs`
-- Active, describes the action you're taking
+**动名词（-ing）适合过程类技能：**
+- `creating-skills`、`testing-skills`、`debugging-with-logs`
+- 主动语态，描述你正在做的动作
 
-### 5. Cross-Referencing Other Skills
+### 5. 交叉引用其他技能
 
-**When writing documentation that references other skills:**
+**撰写会引用其他技能的文档时：**
 
-Use skill name only, with explicit requirement markers:
-- ✅ Good: `**REQUIRED SUB-SKILL:** Use superpowers:test-driven-development`
-- ✅ Good: `**REQUIRED BACKGROUND:** You MUST understand superpowers:systematic-debugging`
-- ❌ Bad: `See skills/testing/test-driven-development` (unclear if required)
-- ❌ Bad: `@skills/testing/test-driven-development/SKILL.md` (force-loads, burns context)
+只写技能名，并加上明确的需求标记：
+- ✅ 正确：`**REQUIRED SUB-SKILL:** Use superpowers:test-driven-development`
+- ✅ 正确：`**REQUIRED BACKGROUND:** You MUST understand superpowers:systematic-debugging`
+- ❌ 错误：`See skills/testing/test-driven-development`（不清楚是否必需）
+- ❌ 错误：`@skills/testing/test-driven-development/SKILL.md`（强制加载，消耗上下文）
 
-**Why no @ links:** `@` syntax force-loads files immediately, consuming 200k+ context before you need them.
+**为什么不用 @ 链接：**`@` 语法会立即强制加载文件，在你需要之前就消耗 200k+ 的上下文。

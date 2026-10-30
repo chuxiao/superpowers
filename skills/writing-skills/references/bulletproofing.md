@@ -1,80 +1,79 @@
-# Bulletproofing Skills Against Rationalization
+# 让技能抵御合理化借口（防压加固）
 
-Part of superpowers:writing-skills. Use it when the baseline failure is a
-discipline failure: the agent knows the rule and skips it under pressure.
+本文是 superpowers:writing-skills 的一部分。当基线失败属于纪律失败时使用：agent 明知规则，却在压力之下跳过它。
 
-## Bulletproofing Skills Against Rationalization
+## 让技能抵御合理化借口（防压加固）
 
-Skills that enforce discipline (like TDD) need to resist rationalization. Agents are smart and will find loopholes when under pressure.
+强制执行纪律的技能（如 TDD）需要能抵御合理化借口。agent 很聪明，压力之下会找出漏洞。
 
-**Scope:** this toolkit is for discipline failures — an agent that knows the rule and skips it under pressure. For wrong-shaped output or omitted elements, prohibition-based bulletproofing backfires; use the forms in Match the Form to the Failure instead.
+**适用范围：**本工具集针对的是纪律失败——即 agent 明知规则却在压力下跳过它。对于形态不对的输出或被遗漏的元素，基于禁令的防压加固会适得其反；请改用 SKILL.md「让形式匹配失败类型」一节中的形式。
 
-**Psychology note:** Understanding WHY persuasion techniques work helps you apply them systematically. See persuasion-principles.md in this directory for research foundation (Cialdini, 2021; Meincke et al., 2025) on authority, commitment, scarcity, social proof, and unity principles.
+**心理学说明：**理解说服技巧**为什么**有效，能帮助你系统地运用它们。关于权威、承诺、稀缺、社会认同与同一性原则的研究基础（Cialdini，2021；Meincke 等，2025），见本目录下的 persuasion-principles.md。
 
-### Close Every Loophole Explicitly
+### 显式封堵每一个漏洞
 
-Don't just state the rule - forbid specific workarounds:
+不要只陈述规则——要明令禁止具体的变通手法：
 
 <Bad>
 ```markdown
-Write code before test? Delete it.
+先写了代码再写测试？删掉。
 ```
 </Bad>
 
 <Good>
 ```markdown
-Write code before test? Delete it. Start over.
+先写了代码再写测试？删掉。从头再来。
 
-**No exceptions:**
-- Don't keep it as "reference"
-- Don't "adapt" it while writing tests
-- Don't look at it
-- Delete means delete
+**无任何例外：**
+- 不要把它留作「参考」
+- 不要在写测试时「改造」它
+- 不要去看它
+- 删掉就是删掉
 ```
 </Good>
 
-### Address "Spirit vs Letter" Arguments
+### 应对「精神 vs 字面」式论辩
 
-Add foundational principle early:
+在技能靠前位置加入这条基础性原则：
 
 ```markdown
-**Violating the letter of the rules is violating the spirit of the rules.**
+**违反规则的字面，就是违反规则的精神。**
 ```
 
-This cuts off entire class of "I'm following the spirit" rationalizations.
+这直接切断了一整类「我在遵循精神」式的合理化借口。
 
-### Build Rationalization Table
+### 构建合理化借口表
 
-Capture rationalizations from baseline testing (see Testing section below). Every excuse agents make goes in the table:
+从基线测试中收集合理化借口（参见 superpowers:writing-skills 的「测试所有类型的技能」一节）。agent 提出的每一个借口都要写进表：
 
 ```markdown
-| Excuse | Reality |
+| 借口 | 现实 |
 |--------|---------|
-| "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
-| "I'll test after" | Tests passing immediately prove nothing. |
-| "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
+| 「太简单，不用测」 | 简单的代码也会出错。写个测试只要 30 秒。 |
+| 「我稍后再测」 | 立即通过的测试什么都证明不了。 |
+| 「事后测试能达到同样目标」 | 事后测试 = 「这段代码做了什么？」测试先行 = 「这段代码应该做什么？」 |
 ```
 
-### Create Red Flags List
+### 创建危险信号清单
 
-Make it easy for agents to self-check when rationalizing:
+让 agent 在合理化时能够轻松自查：
 
 ```markdown
-## Red Flags - STOP and Start Over
+## 危险信号——停下，从头再来
 
-- Code before test
-- "I already manually tested it"
-- "Tests after achieve the same purpose"
-- "It's about spirit not ritual"
-- "This is different because..."
+- 先写了代码再写测试
+- 「我已经手动测过了」
+- 「事后测试能达到同样目的」
+- 「关键在精神，不在仪式」
+- 「这次不一样，因为……」
 
-**All of these mean: Delete code. Start over with TDD.**
+**以上所有这些情况都意味着：删掉代码，用 TDD 从头再来。**
 ```
 
-### Update SDO for Violation Symptoms
+### 更新 SDO（技能发现优化）以加入违规征兆
 
-Add to description: symptoms of when you're ABOUT to violate the rule:
+在 description 中加入：你**即将**违反规则时的征兆：
 
 ```yaml
-description: use when implementing any feature or bugfix, before writing implementation code
+description: 在编写实现代码之前，实现任何功能或修复 bug 时使用
 ```

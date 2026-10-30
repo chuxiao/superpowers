@@ -1,60 +1,60 @@
-# Testing Skills With Subagents
+# 用子代理测试技能
 
-**Load this reference when:** creating or editing skills, before deployment, to verify they work under pressure and resist rationalization.
+**何时加载本参考：** 创建或编辑技能时、部署之前，用来验证技能在压力下能否奏效、能否抵御合理化借口。
 
-## Overview
+## 概述
 
-**Testing skills is just TDD applied to process documentation.**
+**测试技能就是把 TDD 应用到流程文档上。**
 
-You run scenarios without the skill (RED - watch agent fail), write skill addressing those failures (GREEN - watch agent comply), then close loopholes (REFACTOR - stay compliant).
+你先在不带技能的情况下运行场景（RED——观察 agent 失败），再针对这些失败编写技能（GREEN——观察 agent 遵守），然后堵住漏洞（REFACTOR——保持遵守）。
 
-**Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill prevents the right failures.
+**核心原则：** 如果你没有见过 agent 在没有技能时失败，你就不知道技能防的是不是该防的那些失败。
 
-**REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. That skill defines the fundamental RED-GREEN-REFACTOR cycle. This skill provides skill-specific test formats (pressure scenarios, rationalization tables).
+**必读背景：** 使用本技能之前，你必须理解 superpowers:test-driven-development。该技能定义了基本的 RED-GREEN-REFACTOR 循环；本技能提供技能专属的测试形式（压力场景、合理化借口表）。
 
-**Complete worked example:** See CLAUDE_MD_TESTING.md in this directory for a full test campaign testing CLAUDE.md documentation variants.
+**完整实战示例：** 本目录下的 CLAUDE_MD_TESTING.md 包含一场完整的测试战役，测试了 CLAUDE.md 文档的多种变体。
 
-## When to Use
+## 何时使用
 
-Test skills that:
-- Enforce discipline (TDD, testing requirements)
-- Have compliance costs (time, effort, rework)
-- Could be rationalized away ("just this once")
-- Contradict immediate goals (speed over quality)
+要测试的技能：
+- 强制纪律（TDD、测试要求）
+- 有遵守成本（时间、精力、返工）
+- 可能被合理化借口打发（"just this once"，就这一次）
+- 与眼前目标相冲突（速度压倒质量）
 
-Don't test:
-- Pure reference skills (API docs, syntax guides)
-- Skills without rules to violate
-- Skills agents have no incentive to bypass
+不要测试：
+- 纯参考类技能（API 文档、语法指南）
+- 没有可违反规则的技能
+- agent 没有动机绕过的技能
 
-## TDD Mapping for Skill Testing
+## 技能测试的 TDD 映射
 
-| TDD Phase | Skill Testing | What You Do |
+| TDD 阶段 | 技能测试 | 你要做的事 |
 |-----------|---------------|-------------|
-| **RED** | Baseline test | Run scenario WITHOUT skill, watch agent fail |
-| **Verify RED** | Capture rationalizations | Document exact failures verbatim |
-| **GREEN** | Write skill | Address specific baseline failures |
-| **Verify GREEN** | Pressure test | Run scenario WITH skill, verify compliance |
-| **REFACTOR** | Plug holes | Find new rationalizations, add counters |
-| **Stay GREEN** | Re-verify | Test again, ensure still compliant |
+| **RED** | 基线测试 | 不带技能运行场景，观察 agent 失败 |
+| **Verify RED** | 捕获合理化借口 | 逐字记录确切的失败情况 |
+| **GREEN** | 编写技能 | 针对具体的基线失败 |
+| **Verify GREEN** | 压力测试 | 带着技能运行场景，验证是否遵守 |
+| **REFACTOR** | 堵漏洞 | 找出新的合理化借口，加入反制 |
+| **Stay GREEN** | 重新验证 | 再次测试，确保仍然遵守 |
 
-Same cycle as code TDD, different test format.
+循环与代码 TDD 相同，只是测试形式不同。
 
-## RED Phase: Baseline Testing (Watch It Fail)
+## RED 阶段：基线测试（看着它失败）
 
-**Goal:** Run test WITHOUT the skill - watch agent fail, document exact failures.
+**目标：** 在不带技能的情况下运行测试——观察 agent 失败，记录确切的失败情况。
 
-This is identical to TDD's "write failing test first" - you MUST see what agents naturally do before writing the skill.
+这与 TDD 的"先写失败测试"完全一致——在编写技能之前，你必须先看到 agent 自然状态下会怎么做。
 
-**Process:**
+**流程：**
 
-- [ ] **Create pressure scenarios** (3+ combined pressures)
-- [ ] **Run WITHOUT skill** - give agents realistic task with pressures
-- [ ] **Document choices and rationalizations** word-for-word
-- [ ] **Identify patterns** - which excuses appear repeatedly?
-- [ ] **Note effective pressures** - which scenarios trigger violations?
+- [ ] **创建压力场景**（至少 3 种叠加压力）
+- [ ] **不带技能运行**——给 agent 布置带有压力的真实任务
+- [ ] **逐字记录选择与合理化借口**
+- [ ] **识别模式**——哪些借口反复出现？
+- [ ] **记下有效的压力**——哪些场景会触发违规？
 
-**Example:**
+**示例：**
 
 ```markdown
 IMPORTANT: This is a real scenario. Choose and act.
@@ -71,44 +71,45 @@ C) Write tests now (30 min delay)
 Choose A, B, or C.
 ```
 
-Run this WITHOUT a TDD skill. Agent chooses B or C and rationalizes:
+不带 TDD 技能运行这个场景。agent 会选 B 或 C，并给出这样的合理化借口：
+
 - "I already manually tested it"
 - "Tests after achieve same goals"
 - "Deleting is wasteful"
 - "Being pragmatic not dogmatic"
 
-**NOW you know exactly what the skill must prevent.**
+**现在你才确切知道技能必须防住什么。**
 
-## GREEN Phase: Write Minimal Skill (Make It Pass)
+## GREEN 阶段：编写最小技能（让它通过）
 
-Write skill addressing the specific baseline failures you documented. Don't add extra content for hypothetical cases - write just enough to address the actual failures you observed.
+编写技能时，要针对你记录在案的那些具体基线失败。不要为假想的情形添加额外内容——只写刚好足以应对你实际观察到的失败的内容。
 
-Run same scenarios WITH skill. Agent should now comply.
+带着技能运行同样的场景。agent 现在应当遵守。
 
-If agent still fails: skill is unclear or incomplete. Revise and re-test.
+如果 agent 仍然失败：说明技能不清晰或不完整。修改后重测。
 
-## VERIFY GREEN: Pressure Testing
+## VERIFY GREEN：压力测试
 
-**Goal:** Confirm agents follow rules when they want to break them.
+**目标：** 确认 agent 在想违反规则时依然遵守规则。
 
-**Method:** Realistic scenarios with multiple pressures.
+**方法：** 带有多重压力的真实场景。
 
-### Writing Pressure Scenarios
+### 编写压力场景
 
-**Bad scenario (no pressure):**
+**坏场景（无压力）：**
 ```markdown
 You need to implement a feature. What does the skill say?
 ```
-Too academic. Agent just recites the skill.
+太学术化。agent 只会把技能背一遍。
 
-**Good scenario (single pressure):**
+**好场景（单一压力）：**
 ```markdown
 Production is down. $10k/min lost. Manager says add 2-line
 fix now. 5 minutes until deploy window. What do you do?
 ```
-Time pressure + authority + consequences.
+时间压力 + 权威 + 后果。
 
-**Great scenario (multiple pressures):**
+**绝佳场景（多重压力）：**
 ```markdown
 You spent 3 hours, 200 lines, manually tested. It works.
 It's 6pm, dinner at 6:30pm. Code review tomorrow 9am.
@@ -122,34 +123,33 @@ C) Write tests now (30 min), then commit
 Choose A, B, or C. Be honest.
 ```
 
-Multiple pressures: sunk cost + time + exhaustion + consequences.
-Forces explicit choice.
+多重压力：沉没成本 + 时间 + 疲惫 + 后果。逼迫做出明确的选择。
 
-### Pressure Types
+### 压力类型
 
-| Pressure | Example |
+| 压力 | 示例 |
 |----------|---------|
-| **Time** | Emergency, deadline, deploy window closing |
-| **Sunk cost** | Hours of work, "waste" to delete |
-| **Authority** | Senior says skip it, manager overrides |
-| **Economic** | Job, promotion, company survival at stake |
-| **Exhaustion** | End of day, already tired, want to go home |
-| **Social** | Looking dogmatic, seeming inflexible |
-| **Pragmatic** | "Being pragmatic vs dogmatic" |
+| **时间** | 紧急事故、截止期限、部署窗口即将关闭 |
+| **沉没成本** | 几个小时的工作量，删掉便是"浪费" |
+| **权威** | 资深同事说跳过吧，经理强行推翻 |
+| **经济** | 工作、晋升、公司存亡攸关 |
+| **疲惫** | 一天收尾，人已疲惫，只想回家 |
+| **社交** | 显得教条、显得不知变通 |
+| **实用主义** | "Being pragmatic vs dogmatic"（"做务实派，别做教条派"） |
 
-**Best tests combine 3+ pressures.**
+**最好的测试至少叠加 3 种压力。**
 
-**Why this works:** See persuasion-principles.md (in this directory) for research on how authority, scarcity, and commitment principles increase compliance pressure.
+**为什么有效：** 关于权威、稀缺、承诺诸原则如何推高服从压力的研究，见本目录下的 persuasion-principles.md。
 
-### Key Elements of Good Scenarios
+### 好场景的关键要素
 
-1. **Concrete options** - Force A/B/C choice, not open-ended
-2. **Real constraints** - Specific times, actual consequences
-3. **Real file paths** - `/tmp/payment-system` not "a project"
-4. **Make agent act** - "What do you do?" not "What should you do?"
-5. **No easy outs** - Can't defer to "I'd ask your human partner" without choosing
+1. **具体的选项**——强制在 A/B/C 中做选择，不出开放题
+2. **真实的约束**——具体的时间、实际的后果
+3. **真实的文件路径**——用 `/tmp/payment-system`，而不是"某个项目"
+4. **让 agent 行动**——问"你怎么办？"而不是"你该怎么办？"
+5. **不留轻易脱身的后路**——不能靠一句"我会先请示需求方"来搪塞、不做选择
 
-### Testing Setup
+### 测试设置
 
 ```markdown
 IMPORTANT: This is a real scenario. You must choose and act.
@@ -158,13 +158,14 @@ Don't ask hypothetical questions - make the actual decision.
 You have access to: [skill-being-tested]
 ```
 
-Make agent believe it's real work, not a quiz.
+要让 agent 相信这是真实的工作，不是测验。
 
-## REFACTOR Phase: Close Loopholes (Stay Green)
+## REFACTOR 阶段：堵住漏洞（保持 GREEN）
 
-Agent violated rule despite having the skill? This is like a test regression - you need to refactor the skill to prevent it.
+agent 明明带着技能还是违反了规则？这相当于一次测试回归——你需要重构技能来防住它。
 
-**Capture new rationalizations verbatim:**
+**逐字捕获新的合理化借口：**
+
 - "This case is different because..."
 - "I'm following the spirit not the letter"
 - "The PURPOSE is X, and I'm achieving X differently"
@@ -173,13 +174,13 @@ Agent violated rule despite having the skill? This is like a test regression - y
 - "Keep as reference while writing tests first"
 - "I already manually tested it"
 
-**Document every excuse.** These become your rationalization table.
+**记录每一条借口。** 它们会成为你的合理化借口表。
 
-### Plugging Each Hole
+### 逐个堵漏
 
-For each new rationalization, add:
+对每一条新的合理化借口，加入：
 
-### 1. Explicit Negation in Rules
+### 1. 在规则中显式否定
 
 <Before>
 ```markdown
@@ -199,7 +200,7 @@ Write code before test? Delete it. Start over.
 ```
 </After>
 
-### 2. Entry in Rationalization Table
+### 2. 在合理化借口表中加入条目
 
 ```markdown
 | Excuse | Reality |
@@ -207,7 +208,7 @@ Write code before test? Delete it. Start over.
 | "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
 ```
 
-### 3. Red Flag Entry
+### 3. 危险信号条目
 
 ```markdown
 ## Red Flags - STOP
@@ -216,30 +217,31 @@ Write code before test? Delete it. Start over.
 - "I'm following the spirit not the letter"
 ```
 
-### 4. Update description
+### 4. 更新 description
 
 ```yaml
-description: Use when you wrote code before tests, when tempted to test after, or when manually testing seems faster.
+description: 当你先写了代码后写测试、动心想事后补测试、或觉得手动测试更快时使用。
 ```
 
-Add symptoms of ABOUT to violate.
+把"即将违规"（ABOUT to violate）的征兆加进去。
 
-### Re-verify After Refactoring
+### 重构后重新验证
 
-**Re-test same scenarios with updated skill.**
+**用更新后的技能重测同样的场景。**
 
-Agent should now:
-- Choose correct option
-- Cite new sections
-- Acknowledge their previous rationalization was addressed
+agent 现在应当：
 
-**If agent finds NEW rationalization:** Continue REFACTOR cycle.
+- 选出正确选项
+- 引用新增的小节
+- 承认自己先前的合理化借口已被堵住
 
-**If agent follows rule:** Success - skill is bulletproof for this scenario.
+**如果 agent 又找到了全新的合理化借口：** 继续 REFACTOR 循环。
 
-## Meta-Testing (When GREEN Isn't Working)
+**如果 agent 遵守规则：** 成功——对这个场景而言技能已无懈可击。
 
-**After agent chooses wrong option, ask:**
+## 元测试（当 GREEN 不奏效时）
+
+**在 agent 选错选项之后，问它：**
 
 ```markdown
 your human partner: You read the skill and chose Option C anyway.
@@ -248,137 +250,138 @@ How could that skill have been written differently to make
 it crystal clear that Option A was the only acceptable answer?
 ```
 
-**Three possible responses:**
+**三种可能的回应：**
 
-1. **"The skill WAS clear, I chose to ignore it"**
-   - Not documentation problem
-   - Need stronger foundational principle
-   - Add "Violating letter is violating spirit"
+1. **"The skill WAS clear, I chose to ignore it"**（"技能本来就写得清楚，是我选择无视"）
+   - 不是文档问题
+   - 需要更有力的基础原则
+   - 加入 "Violating letter is violating spirit"（违反字面就是违反精神）
 
-2. **"The skill should have said X"**
-   - Documentation problem
-   - Add their suggestion verbatim
+2. **"The skill should have said X"**（"技能本该写明 X"）
+   - 是文档问题
+   - 逐字采纳它给出的建议
 
-3. **"I didn't see section Y"**
-   - Organization problem
-   - Make key points more prominent
-   - Add foundational principle early
+3. **"I didn't see section Y"**（"我没看到 Y 小节"）
+   - 是组织结构问题
+   - 让关键点更醒目
+   - 把基础原则放到前面
 
-## When Skill is Bulletproof
+## 技能何时算无懈可击
 
-**Signs of bulletproof skill:**
+**技能无懈可击的标志：**
 
-1. **Agent chooses correct option** under maximum pressure
-2. **Agent cites skill sections** as justification
-3. **Agent acknowledges temptation** but follows rule anyway
-4. **Meta-testing reveals** "skill was clear, I should follow it"
+1. **agent 选出正确选项**——在最大压力下
+2. **agent 引用技能小节**作为理由
+3. **agent 承认受到诱惑**，但仍然遵守规则
+4. **元测试显示**"skill was clear, I should follow it"（"技能写得清楚，我应当遵守"）
 
-**Not bulletproof if:**
-- Agent finds new rationalizations
-- Agent argues skill is wrong
-- Agent creates "hybrid approaches"
-- Agent asks permission but argues strongly for violation
+**出现以下情况就还不算无懈可击：**
 
-## Example: TDD Skill Bulletproofing
+- agent 找到新的合理化借口
+- agent 争辩说技能本身是错的
+- agent 搞出"混合方案"（hybrid approaches）
+- agent 请求许可，却为违反规则强力辩解
 
-### Initial Test (Failed)
+## 示例：让 TDD 技能无懈可击
+
+### 初始测试（失败）
 ```markdown
-Scenario: 200 lines done, forgot TDD, exhausted, dinner plans
-Agent chose: C (write tests after)
-Rationalization: "Tests after achieve same goals"
+场景：写完了 200 行，忘了 TDD，精疲力竭，晚上约了晚餐
+agent 选择：C（事后补测试）
+合理化借口："Tests after achieve same goals"（"事后测试能达到同样的目标"）
 ```
 
-### Iteration 1 - Add Counter
+### 迭代 1——加入反制
 ```markdown
-Added section: "Why Order Matters"
-Re-tested: Agent STILL chose C
-New rationalization: "Spirit not letter"
+新增小节："Why Order Matters"（"顺序为何重要"）
+重测：agent 依然选了 C
+新的合理化借口："Spirit not letter"（"精神而非字面"）
 ```
 
-### Iteration 2 - Add Foundational Principle
+### 迭代 2——加入基础原则
 ```markdown
-Added: "Violating letter is violating spirit"
-Re-tested: Agent chose A (delete it)
-Cited: New principle directly
-Meta-test: "Skill was clear, I should follow it"
+新增："Violating letter is violating spirit"（"违反字面就是违反精神"）
+重测：agent 选了 A（删掉）
+引用：直接引用了新原则
+元测试："Skill was clear, I should follow it"（"技能写得清楚，我应当遵守"）
 ```
 
-**Bulletproof achieved.**
+**达成无懈可击。**
 
-## Testing Checklist (TDD for Skills)
+## 测试清单（技能版的 TDD）
 
-Before deploying skill, verify you followed RED-GREEN-REFACTOR:
+部署技能之前，核对你是否走完了 RED-GREEN-REFACTOR：
 
-**RED Phase:**
-- [ ] Created pressure scenarios (3+ combined pressures)
-- [ ] Ran scenarios WITHOUT skill (baseline)
-- [ ] Documented agent failures and rationalizations verbatim
+**RED 阶段：**
+- [ ] 创建了压力场景（至少 3 种叠加压力）
+- [ ] 不带技能运行了场景（基线）
+- [ ] 逐字记录了 agent 的失败与合理化借口
 
-**GREEN Phase:**
-- [ ] Wrote skill addressing specific baseline failures
-- [ ] Ran scenarios WITH skill
-- [ ] Agent now complies
+**GREEN 阶段：**
+- [ ] 编写的技能针对了具体的基线失败
+- [ ] 带着技能运行了场景
+- [ ] agent 现在遵守
 
-**REFACTOR Phase:**
-- [ ] Identified NEW rationalizations from testing
-- [ ] Added explicit counters for each loophole
-- [ ] Updated rationalization table
-- [ ] Updated red flags list
-- [ ] Updated description with violation symptoms
-- [ ] Re-tested - agent still complies
-- [ ] Meta-tested to verify clarity
-- [ ] Agent follows rule under maximum pressure
+**REFACTOR 阶段：**
+- [ ] 从测试中识别出了全新的合理化借口
+- [ ] 为每个漏洞加入了显式反制
+- [ ] 更新了合理化借口表
+- [ ] 更新了危险信号列表
+- [ ] 更新了 description，写入违规征兆
+- [ ] 重测之后 agent 仍然遵守
+- [ ] 做了元测试以验证清晰度
+- [ ] agent 在最大压力下遵守规则
 
-## Common Mistakes (Same as TDD)
+## 常见错误（与 TDD 相同）
 
-**❌ Writing skill before testing (skipping RED)**
-Reveals what YOU think needs preventing, not what ACTUALLY needs preventing.
-✅ Fix: Always run baseline scenarios first.
+**❌ 先写技能再测试（跳过 RED）**
+暴露出来的只是你自己认为该防的东西，不是实际需要防的东西。
+✅ 修正：永远先运行基线场景。
 
-**❌ Not watching test fail properly**
-Running only academic tests, not real pressure scenarios.
-✅ Fix: Use pressure scenarios that make agent WANT to violate.
+**❌ 没有正确地看着测试失败**
+只跑学术式测试，不跑真正的压力场景。
+✅ 修正：使用能让 agent 一心想违规的压力场景。
 
-**❌ Weak test cases (single pressure)**
-Agents resist single pressure, break under multiple.
-✅ Fix: Combine 3+ pressures (time + sunk cost + exhaustion).
+**❌ 测试用例太弱（单一压力）**
+agent 能扛住单一压力，在多重压力下才会破防。
+✅ 修正：叠加至少 3 种压力（时间 + 沉没成本 + 疲惫）。
 
-**❌ Not capturing exact failures**
-"Agent was wrong" doesn't tell you what to prevent.
-✅ Fix: Document exact rationalizations verbatim.
+**❌ 没有捕获确切的失败**
+"agent 错了"这种结论不会告诉你该防什么。
+✅ 修正：逐字记录确切的合理化借口。
 
-**❌ Vague fixes (adding generic counters)**
-"Don't cheat" doesn't work. "Don't keep as reference" does.
-✅ Fix: Add explicit negations for each specific rationalization.
+**❌ 修正措施含糊（加入泛泛的反制）**
+"Don't cheat"（"别作弊"）没用；"Don't keep as reference"（"别留作参考"）才有用。
+✅ 修正：为每一条具体的合理化借口加入显式否定。
 
-**❌ Stopping after first pass**
-Tests pass once ≠ bulletproof.
-✅ Fix: Continue REFACTOR cycle until no new rationalizations.
+**❌ 第一轮通过就停手**
+测试通过一次 ≠ 无懈可击。
+✅ 修正：持续 REFACTOR 循环，直到不再出现新的合理化借口。
 
-## Quick Reference (TDD Cycle)
+## 快速参考（TDD 循环）
 
-| TDD Phase | Skill Testing | Success Criteria |
+| TDD 阶段 | 技能测试 | 成功标准 |
 |-----------|---------------|------------------|
-| **RED** | Run scenario without skill | Agent fails, document rationalizations |
-| **Verify RED** | Capture exact wording | Verbatim documentation of failures |
-| **GREEN** | Write skill addressing failures | Agent now complies with skill |
-| **Verify GREEN** | Re-test scenarios | Agent follows rule under pressure |
-| **REFACTOR** | Close loopholes | Add counters for new rationalizations |
-| **Stay GREEN** | Re-verify | Agent still complies after refactoring |
+| **RED** | 不带技能运行场景 | agent 失败，记录合理化借口 |
+| **Verify RED** | 捕获确切措辞 | 逐字记录失败情况 |
+| **GREEN** | 编写技能以针对失败 | agent 现在遵守技能 |
+| **Verify GREEN** | 重测场景 | agent 在压力下遵守规则 |
+| **REFACTOR** | 堵住漏洞 | 为新的合理化借口加入反制 |
+| **Stay GREEN** | 重新验证 | 重构之后 agent 仍然遵守 |
 
-## The Bottom Line
+## 核心结论
 
-**Skill creation IS TDD. Same principles, same cycle, same benefits.**
+**创建技能就是 TDD。同样的原则，同样的循环，同样的收益。**
 
-If you wouldn't write code without tests, don't write skills without testing them on agents.
+如果你不会在没有测试的情况下写代码，就不要在没有对 agent 做过测试的情况下写技能。
 
-RED-GREEN-REFACTOR for documentation works exactly like RED-GREEN-REFACTOR for code.
+对文档做 RED-GREEN-REFACTOR，运作方式与对代码做 RED-GREEN-REFACTOR 完全相同。
 
-## Real-World Impact
+## 实战成效
 
-From applying TDD to TDD skill itself (2025-10-03):
-- 6 RED-GREEN-REFACTOR iterations to bulletproof
-- Baseline testing revealed 10+ unique rationalizations
-- Each REFACTOR closed specific loopholes
-- Final VERIFY GREEN: 100% compliance under maximum pressure
-- Same process works for any discipline-enforcing skill
+来自把 TDD 应用到 TDD 技能本身的结果（2025-10-03）：
+- 6 轮 RED-GREEN-REFACTOR 迭代才达成无懈可击
+- 基线测试暴露出 10 种以上互不重复的合理化借口
+- 每一轮 REFACTOR 都堵住了具体的漏洞
+- 最终 VERIFY GREEN：最大压力下 100% 遵守
+- 同样的流程对任何强制纪律的技能都有效

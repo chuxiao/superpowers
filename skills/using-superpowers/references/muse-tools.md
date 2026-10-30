@@ -1,35 +1,35 @@
-# Muse Tool Mapping
+# Muse 工具对照
 
-Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On Muse these resolve to the tools below.
+技能以动作来表达（「派发一个子代理」「创建一个待办」「读取一个文件」）。在 Muse 上，这些动作对应到下列工具。
 
-| Action skills request | Muse equivalent |
+| 技能请求的动作 | Muse 中的对应工具 |
 |----------------------|----------------|
-| Read a file | `read_file` |
-| Read multiple files | `read_file` (call multiple times) or `search` |
-| Create a new file | `write_file` |
-| Edit a file | `edit_file` |
-| Run a shell command | `bash` |
-| Search file contents | `search` |
-| Find files by name | `search` with `glob` |
-| Fetch a URL | `web_fetch` |
-| Search the web | `web_search` |
-| Invoke a skill | `read_file` on `skills/<name>/SKILL.md` or native skill tool |
-| Dispatch a subagent (`Subagent (general-purpose):` template) | `subagent_spawn` with prompt filling |
-| Task tracking ("create a todo", "mark complete") | `write_todos` or `bash` task file |
-| Ask the user a question | `request_user_input` |
+| 读取一个文件 | `read_file` |
+| 读取多个文件 | `read_file`（多次调用）或 `search` |
+| 创建新文件 | `write_file` |
+| 编辑一个文件 | `edit_file` |
+| 运行 shell 命令 | `bash` |
+| 搜索文件内容 | `search` |
+| 按名称查找文件 | `search` 配合 `glob` |
+| 获取 URL | `web_fetch` |
+| 搜索网络 | `web_search` |
+| 调用一个技能 | 对 `skills/<name>/SKILL.md` 执行 `read_file`，或使用原生技能工具 |
+| 派发一个子代理（`Subagent (general-purpose):` 模板） | `subagent_spawn`，并填充提示词 |
+| 任务跟踪（「创建一个待办」「标记为完成」） | `write_todos` 或 `bash` 任务文件 |
+| 向需求方提问 | `request_user_input` |
 
-## Instructions file
+## 指令文件
 
-When a skill mentions "your instructions file", on Muse this is **`CLAUDE.md`** or **`AGENTS.md`** in the project root. Muse loads these hierarchically where configured.
+当技能提到「你的指令文件」时，在 Muse 上指的是项目根目录下的 **`CLAUDE.md`** 或 **`AGENTS.md`**。在已配置的地方，Muse 会分层加载这些文件。
 
-## Skill invocation
+## 技能调用
 
-Muse has native skill support via `muse skills`. To invoke a Superpowers skill, read its `SKILL.md` and follow the instructions. The bootstrap (`using-superpowers`) is injected automatically at `SessionStart` via the plugin hook — you are already following it, do not re-load it.
+Muse 通过 `muse skills` 提供对技能的原生支持。要调用一个 Superpowers 技能，读取它的 `SKILL.md` 并遵循其中的指示。引导技能（`using-superpowers`）会在 `SessionStart` 时通过插件钩子自动注入——你已经在遵循它，不要重新加载。
 
-## Subagent dispatch
+## 子代理派发
 
-Use `subagent_spawn` to delegate work to isolated subagents. Fill prompt templates (e.g., `implementer-prompt.md`, `task-reviewer-prompt.md`) before dispatching. If no subagent tool is available, do the work inline rather than inventing tool calls.
+使用 `subagent_spawn` 把工作委派给隔离的子代理。派发之前，先填充提示词模板（例如 `implementer-prompt.md`、`task-reviewer-prompt.md`）。如果没有可用的子代理工具，就在会话内执行这项工作，而不是凭空捏造工具调用。
 
-## Task tracking
+## 任务跟踪
 
-Use `write_todos` for checklist tracking. Create one todo per skill checklist item, mark in_progress/completed as you go. If `write_todos` is unavailable, maintain a markdown task file via `write_file`/`edit_file`.
+使用 `write_todos` 跟踪清单。为技能清单的每一项创建一个待办，随着推进将其标记为 in_progress/completed。如果 `write_todos` 不可用，就通过 `write_file`/`edit_file` 维护一个 markdown 任务文件。
