@@ -20,7 +20,7 @@
 
 ## 指令文件
 
-当技能提到「你的指令文件」时，在 Hermes Agent 上指的是项目目录中的 **`AGENTS.md`**，或全局位置 `~/.hermes/SOUL.md` 处的 **`SOUL.md`**。
+当技能提到「你的指令文件」时，它在 Hermes Agent 上指的是项目目录中的 **`AGENTS.md`**，或全局位置 `~/.hermes/SOUL.md` 处的 **`SOUL.md`**。
 
 ## 调用技能
 
@@ -31,7 +31,7 @@ skill_view("brainstorming")
 skill_view("test-driven-development")
 ```
 
-如果 `skill_view` 找不到某个 superpowers 技能（在插件完全注册之前，它可能不会出现在目录中），退回为直接读取 SKILL.md：
+如果 `skill_view` 找不到某个 superpowers 技能（在插件完全注册之前，它可能尚未出现在技能目录列表中），则回退为直接读取 SKILL.md：
 
 ```
 read_file(path="~/.hermes/plugins/superpowers/skills/<skill-name>/SKILL.md")
@@ -41,7 +41,7 @@ read_file(path="~/.hermes/plugins/superpowers/skills/<skill-name>/SKILL.md")
 
 ## 子代理派发
 
-使用 `delegate_task` 派生隔离的子代理，用于并行或顺序的各项工作：
+使用 `delegate_task` 派生相互隔离的子代理，用于以并行或串行方式完成各项工作：
 
 ```
 delegate_task(goal="...", context="...", toolsets=[...], role="leaf")

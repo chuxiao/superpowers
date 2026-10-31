@@ -1,6 +1,6 @@
 ---
 name: using-superpowers
-description: 在开始任何对话时使用——确立如何查找与使用技能，要求在发出任何回应（包括澄清性问题）之前先调用技能
+description: 在开始任何对话时使用——规定如何查找与使用技能，要求在发出任何回应（包括澄清性问题）之前先调用技能
 ---
 
 <SUBAGENT-STOP>
@@ -12,12 +12,12 @@ description: 在开始任何对话时使用——确立如何查找与使用技�
 
 如果一项技能适用于你的任务，你没有选择的余地。你必须使用它。
 
-这不可协商。你无法用合理化借口绕开它。
+这不可协商。你无法用合理化借口绕开这条规则。
 </EXTREMELY-IMPORTANT>
 
 ## 规则
 
-**在任何回应或行动之前，先调用相关或被要求的技能**——包括提出澄清性问题、探索代码库或查看文件。如果事后发现它不适合当前情况，你就不必使用它。
+**在任何回应或行动之前，先调用相关技能或请求中点名的技能**——包括提出澄清性问题、探索代码库或查看文件。如果事后发现它不适合当前情况，你就不必使用它。
 
 **在进入 plan mode 之前：**如果你还没有做过头脑风暴，先调用 brainstorming 技能。
 
@@ -25,14 +25,14 @@ description: 在开始任何对话时使用——确立如何查找与使用技�
 
 ## 技能优先级
 
-当多个技能都适用时，流程技能优先——它们确定方法，然后由实现技能（frontend-design 等）来落实。Brainstorming 和 systematic-debugging 是 Superpowers 中最常用的流程技能，但这条规则对其中任何一个都成立。
+当多个技能都适用时，流程技能优先——它们确定方法，然后由实现技能（frontend-design 等）来落实。Brainstorming 和 systematic-debugging 是 Superpowers 中最常用的流程技能，但这条优先级规则适用于任何流程技能，不止这两个。
 
 - 「我们来构建 X」→ 先用 superpowers:brainstorming，再用实现技能。
 - 「修复这个 bug」→ 先用 superpowers:systematic-debugging，再用领域技能。
 
 ## 危险信号
 
-这些念头意味着停下——你正在找合理化借口：
+出现这些念头就说明你该停下——你正在找合理化借口：
 
 | 念头 | 现实 |
 |---------|---------|
@@ -51,7 +51,7 @@ description: 在开始任何对话时使用——确立如何查找与使用技�
 
 ## 平台适配
 
-如果你的 harness 出现在下面的列表中，请阅读它的参考文件以获取特别说明：
+如果你的 harness 出现在下面的列表中，请阅读该 harness 的参考文件以获取特别说明：
 
 - Claude Code: `references/claude-code-tools.md`
 - Codex: `references/codex-tools.md`

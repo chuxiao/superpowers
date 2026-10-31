@@ -29,7 +29,7 @@ Title: <skill or symptom>: <one-line observable> (<harness>)
 
 <"Not tried", or what your partner ran without superpowers and what happened, with the transcript path if there is one. Tick the box above only when a transcript shows the problem did not recur.>
 
-参与的证据见下文；它并不确立成因。
+下文给出 Superpowers 参与的证据；这些证据并不能确定成因。
 
 ## 发生了什么？
 
@@ -51,7 +51,7 @@ Title: <skill or symptom>: <one-line observable> (<harness>)
 
 ## 调试日志或会话记录（transcript）
 
-会话 id：<ids>. Delivered local archive: <path, redaction level <level> | none built>. Attached bundle: <no claim; attach only after approval>。按诊断报告，Superpowers 的参与情况：<possible | likely>，证据见 <transcript lines>。本报告不提出修复方案。
+会话 id：<ids>。已交付本地归档：<path, redaction level <level> | none built>。已附带材料包：<no claim; attach only after approval>。按诊断报告，Superpowers 的参与情况：<possible | likely>，证据见 <transcript lines>。本报告不提出修复方案。
 
 ---
 本报告由 `diagnosing-superpowers` 技能提交。提交方的模型与 harness 见「谁在提交这份报告」小节；被诊断会话的模型、harness、版本与插件见「环境」表格。

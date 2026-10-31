@@ -13,8 +13,8 @@
   - `free: <one-line description>`（仅凭会话记录判断）
 
 流程：
-1. 对 CANDIDATE 应用 `references/context-safety.md`。使用 CASE 中记录的命令提取其身份信息：会话 id、cwd、首条人类提示词、首个时间戳、harness 版本，以及所用模型。
-2. 对每个标记，先用行号优先的命令定位证据；然后从具体行中提取截取后的字段。当你拿到 `path:line` 时，该标记即为 `hit`；搜索过但一无所获时为 `miss`；当会话记录缺少所需字段时为 `unknown`（说明缺哪个字段）。
+1. 对 CANDIDATE 应用 `references/context-safety.md`。使用 CASE 中记录的命令提取 CANDIDATE 的身份信息：会话 id、cwd、首条人类提示词、首个时间戳、harness 版本，以及所用模型。
+2. 对每个标记，先用能直接给出行号的命令定位证据；然后从具体行中提取字段并做截取。当你拿到 `path:line` 时，该标记即为 `hit`；搜索过但一无所获时为 `miss`；当会话记录缺少所需字段时为 `unknown`（说明缺哪个字段）。
 3. 一字不差地返回以下内容：
 
 ```

@@ -1,6 +1,6 @@
 # 创建日志：系统化调试（systematic-debugging）技能
 
-提取、结构化并加固（bulletproofing）一项关键技能的参考示例。
+一份展示如何提取、结构化并加固（bulletproofing）关键技能的参考示例。
 
 ## 来源材料
 
@@ -39,13 +39,13 @@
 - "ALWAYS" / "NEVER"（而非 "should" / "try to"）
 - "even if faster" / "even if I seem in a hurry"
 - "STOP and re-analyze"（显式暂停）
-- "Don't skip past"（拦住实际行为）
+- "Don't skip past"（切实拦住「跳过」这一实际行为）
 
 ### 结构性防御
 - **Phase 1 为必经阶段** - 不得直接跳到实施环节
 - **单假设规则** - 强制思考，防止乱枪打鸟式修复（shotgun fixes）
-- **显式失败模式** - "IF your first fix doesn't work"（若首个修复无效），并附带强制动作
-- **反模式小节** - 展示捷径的确切样貌
+- **显式规定失败后的处理** - "IF your first fix doesn't work"（若首个修复无效），并附带强制动作
+- **反模式小节** - 展示捷径实际长什么样
 
 ### 冗余
 - 根因强制要求同时出现在概述 + when_to_use + Phase 1 + 实施规则中
@@ -99,19 +99,19 @@
 
 ## 关键洞察
 
-**最重要的加固：** 反模式小节展示那些当下感觉情有可原的捷径的确切样貌。当 Claude 冒出 "I'll just add this one quick fix"（我就快速加上这一个修复）的念头时，看到这个确切模式被列为错误做法，会产生认知摩擦。
+**最重要的加固：** 反模式小节展示那些当下感觉情有可原的捷径究竟长什么样。当 Claude 冒出 "I'll just add this one quick fix"（我就快速加上这一个修复）的念头时，看到这个确切模式被列为错误做法，内心会产生认知摩擦。
 
 ## 使用示例
 
 遇到 bug 时：
 1. 加载技能：skills/debugging/systematic-debugging
-2. 阅读概述（10 秒）- 想起那条强制要求
+2. 阅读概述（10 秒）- 想起「永远找到根因，绝不修复症状」那条强制要求
 3. 执行 Phase 1 清单 - 被迫开展调查
 4. 如果动了跳过的念头 - 看到反模式，停下
 5. 完成所有阶段 - 找到根因
 
 **时间投入：** 5-10 分钟
-**节省的时间：** 数小时的"症状打地鼠"
+**节省的时间：** 数小时的"反复修补症状"
 
 ---
 

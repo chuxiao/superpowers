@@ -24,7 +24,7 @@ digraph when_to_use {
 ```
 
 **适用场景：**
-- 错误发生在执行深处（而非入口点）
+- 错误发生在执行流程深处（而非入口点）
 - 堆栈跟踪显示出很长的调用链
 - 不清楚无效数据源自何处
 - 需要找出是哪个测试/哪段代码触发了问题
@@ -47,7 +47,7 @@ await execFileAsync('git', ['init'], { cwd: projectDir });
 WorktreeManager.createSessionWorktree(projectDir, sessionId)
   → 由 Session.initializeWorkspace() 调用
   → 由 Session.create() 调用
-  → 由 Project.create() 处的测试调用
+  → 由测试代码中的 Project.create() 调用
 ```
 
 ### 4. 继续向上追踪
@@ -82,7 +82,7 @@ async function gitInit(directory: string) {
 }
 ```
 
-**关键：** 在测试中使用 `console.error()`（不要用 logger——它可能不会显示）
+**关键：** 在测试中使用 `console.error()`（不要用 logger——其输出可能不会显示）
 
 **运行并捕获：**
 ```bash
@@ -111,7 +111,7 @@ bash ./find-polluter.sh '.git' 'src/**/*.test.ts'
 **症状：** `.git` 被创建在了 `packages/core/`（源码）里
 
 **回溯链：**
-1. `git init` 运行在 `process.cwd()` ← cwd 参数为空
+1. `git init` 运行于 `process.cwd()` ← cwd 参数为空
 2. WorktreeManager 被调用时传入空的 projectDir
 3. Session.create() 传入了空字符串
 4. 测试在 beforeEach 之前访问了 `context.tempDir`

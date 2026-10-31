@@ -15,12 +15,12 @@
 | 搜索网络 | `web_search` |
 | 调用一个技能 | 对 `skills/<name>/SKILL.md` 执行 `read_file`，或使用原生技能工具 |
 | 派发一个子代理（`Subagent (general-purpose):` 模板） | `subagent_spawn`，并填充提示词 |
-| 任务跟踪（「创建一个待办」「标记为完成」） | `write_todos` 或 `bash` 任务文件 |
+| 任务跟踪（「创建一个待办」「标记为完成」） | `write_todos`，或用 `bash` 维护的任务文件 |
 | 向需求方提问 | `request_user_input` |
 
 ## 指令文件
 
-当技能提到「你的指令文件」时，在 Muse 上指的是项目根目录下的 **`CLAUDE.md`** 或 **`AGENTS.md`**。在已配置的地方，Muse 会分层加载这些文件。
+当技能提到「你的指令文件」时，在 Muse 上指的是项目根目录下的 **`CLAUDE.md`** 或 **`AGENTS.md`**。在配置了分层加载的地方，Muse 会分层加载这些文件。
 
 ## 技能调用
 
@@ -32,4 +32,4 @@ Muse 通过 `muse skills` 提供对技能的原生支持。要调用一个 Super
 
 ## 任务跟踪
 
-使用 `write_todos` 跟踪清单。为技能清单的每一项创建一个待办，随着推进将其标记为 in_progress/completed。如果 `write_todos` 不可用，就通过 `write_file`/`edit_file` 维护一个 markdown 任务文件。
+使用 `write_todos` 跟踪清单。为技能检查清单中的每一项各创建一个待办，随着工作推进，将其标记为 in_progress/completed。如果 `write_todos` 不可用，就通过 `write_file`/`edit_file` 维护一个 markdown 任务文件。

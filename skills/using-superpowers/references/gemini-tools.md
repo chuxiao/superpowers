@@ -1,6 +1,6 @@
 # Gemini CLI 工具对照
 
-技能以动作来表达（「派发子代理」「创建待办」「读取文件」）。在 Gemini CLI 上，这些动作对应到下列工具。
+技能以动作来表述需求（「派发子代理」「创建待办」「读取文件」）。在 Gemini CLI 上，这些动作对应到下列工具。
 
 | 技能请求的动作 | Gemini CLI 中的对应工具 |
 |----------------------|----------------------|
@@ -21,17 +21,17 @@
 
 ## 指令文件
 
-当技能提到「你的指令文件」时，在 Gemini CLI 上指的是 **`GEMINI.md`**。Gemini CLI 按层级加载 `GEMINI.md`：全局的在 `~/.gemini/GEMINI.md`，项目级的文件位于工作区目录及其上级目录中，而子目录的 `GEMINI.md` 文件则在工具访问这些目录中的文件时加载。
+当技能提到「你的指令文件」时，在 Gemini CLI 上指的是 **`GEMINI.md`**。Gemini CLI 按层级加载 `GEMINI.md`：全局的在 `~/.gemini/GEMINI.md`，项目级的文件位于工作区目录及其上级目录中，而子目录的 `GEMINI.md` 文件则在工具访问该子目录内的文件时加载。
 
 ## 个人技能目录
 
-用户级技能位于 **`~/.gemini/skills/`**，**`~/.agents/skills/`** 是它的跨运行时别名（与 Codex 和 Copilot CLI 共享）。当同一作用域下两个目录都存在时，以 `.agents/skills/` 为准。每个技能是一个子目录，内含一份 `SKILL.md`（带有 `name` 与 `description` frontmatter）。
+用户级技能位于 **`~/.gemini/skills/`**，**`~/.agents/skills/`** 是它的跨运行时别名（与 Codex 和 Copilot CLI 共享）。当同一层级下两个目录都存在时，以 `.agents/skills/` 为准。每个技能是一个子目录，内含一份 `SKILL.md`（带有 `name` 与 `description` frontmatter）。
 
 ## 子代理支持
 
-Gemini CLI 通过 `invoke_agent` 工具派发子代理，该工具接受 `agent_name` 与 `prompt` 参数。同一派发操作也以聊天语法快捷方式提供：输入 `@generalist <prompt>` 等价于以 `agent_name: "generalist"` 调用 `invoke_agent`。内置 agent 名称包括 `generalist`、`cli_help`、`codebase_investigator`，以及（在启用浏览器工具的情况下）`browser_agent`。
+Gemini CLI 通过 `invoke_agent` 工具派发子代理，该工具接受 `agent_name` 与 `prompt` 参数。同一派发操作也有聊天语法快捷方式：输入 `@generalist <prompt>` 等价于以 `agent_name: "generalist"` 调用 `invoke_agent`。内置 agent 名称包括 `generalist`、`cli_help`、`codebase_investigator`，以及（在启用浏览器工具的情况下）`browser_agent`。
 
-技能以 `Subagent (general-purpose):` 派发，要么引用一份提示词模板文件（如 `superpowers:subagent-driven-development` 的 `./implementer-prompt.md`），要么直接给出内联提示词。在 Gemini CLI 上：
+技能以 `Subagent (general-purpose):` 模板派发子代理，要么引用一份提示词模板文件（如 `superpowers:subagent-driven-development` 的 `./implementer-prompt.md`），要么直接给出内联提示词。在 Gemini CLI 上：
 
 | 技能派发形式 | Gemini CLI 中的对应工具 |
 |---------------------|----------------------|
@@ -41,11 +41,11 @@ Gemini CLI 通过 `invoke_agent` 工具派发子代理，该工具接受 `agent_
 
 ### 提示词填充
 
-技能提供的提示词模板带有占位符，如 `{WHAT_WAS_IMPLEMENTED}` 或 `[FULL TEXT of task]`。在把完整提示词传给 `invoke_agent` 之前，先填充所有占位符。提示词模板本身就包含 agent 的角色、审查标准与预期输出格式——子代理会遵循它。
+技能提供的提示词模板带有占位符，如 `{WHAT_WAS_IMPLEMENTED}` 或 `[FULL TEXT of task]`。在把完整提示词传给 `invoke_agent` 之前，先填充所有占位符。提示词模板本身就包含 agent 的角色、审查标准与预期输出格式——子代理会遵循整份模板。
 
 ### 并行派发
 
-Gemini CLI 支持并行派发子代理。在同一响应中发起多次 `invoke_agent` 调用（或在一个提示词中多次调用 `@generalist`），即可并行运行相互独立的子代理工作。有依赖的任务保持串行，但不要仅仅为了保留一份更简单的历史记录，就把相互独立的子代理任务串行化。
+Gemini CLI 支持并行派发子代理。在同一响应中发起多次 `invoke_agent` 调用（或在一个提示词中多次调用 `@generalist`），即可让相互独立的子代理并行工作。有依赖的任务保持串行，但不要仅仅为了保留一份更简单的历史记录，就把相互独立的子代理任务串行化。
 
 ## 其他 Gemini CLI 工具
 
@@ -55,9 +55,9 @@ Gemini CLI 支持并行派发子代理。在同一响应中发起多次 `invoke_
 |------|---------|
 | `save_memory`（旧版） | 当 `experimental.memoryV2 = false` 时跨会话持久化事实 |
 | `get_internal_docs` | 查阅 Gemini CLI 自带的文档 |
-| `ask_user` | 向需求方提出结构化问题（文本 / 单选 / 多选） |
+| `ask_user` | 向用户提出结构化问题（文本 / 单选 / 多选） |
 | `enter_plan_mode` / `exit_plan_mode` | 进入与退出只读的计划模式 |
-| `update_topic` | 更新当前对话的主题 / 战略意图元数据 |
-| `complete_task` | 通知 Gemini 子代理已完成，并将其结果返回给父 agent |
-| `tracker_create_task`、`tracker_update_task`、`tracker_get_task`、`tracker_list_tasks`、`tracker_add_dependency`、`tracker_visualize` | 带依赖与可视化支持的富任务追踪器 |
+| `update_topic` | 更新当前对话的「主题」「战略意图」两类元数据 |
+| `complete_task` | 供 Gemini 子代理声明自身已完成，并将其结果返回给父 agent |
+| `tracker_create_task`、`tracker_update_task`、`tracker_get_task`、`tracker_list_tasks`、`tracker_add_dependency`、`tracker_visualize` | 功能丰富、支持依赖关系与可视化的任务追踪器 |
 | `read_mcp_resource`、`list_mcp_resources` | MCP 资源访问 |
