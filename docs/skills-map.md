@@ -23,7 +23,7 @@ flowchart TD
     WT -- "会话内执行" --> EP["④a executing-plans<br>一个上下文做完所有任务"]
     WT -- "子代理驱动" --> SDD["④b subagent-driven-development<br>每任务：实施者子代理 → 任务审查<br>→ 修复循环（轮数上限 + 熔断）"]
 
-    EP --> LOOP["逐任务（TDD 是闸门）：<br>test-driven-development 红绿循环 → 提交<br>出 bug → systematic-debugging<br>独立失败 → dispatching-parallel-agents<br>声称完成前 → verification-before-completion"]
+    EP --> LOOP["逐任务（TDD 是闸门）：<br>test-driven-development 批量红绿 → 提交<br>出 bug → systematic-debugging<br>独立失败 → dispatching-parallel-agents<br>声称完成前 → verification-before-completion"]
     LOOP --> FR
 
     SDD --> FR["整分支终审<br>requesting-code-review（code-reviewer 模板）<br>Critical/Important 仅一轮修复<br>Minor 与裁决清单移交需求方"]
@@ -87,9 +87,9 @@ flowchart TD
 
 ### 执行中反复触发的内嵌闸门
 
-**test-driven-development** —— 先写失败测试、亲眼看它失败，再写最简实现让它通过；没有先行失败的测试，绝不写生产代码。
+**test-driven-development** —— 证据双形态铁律：新行为测试先红后绿；特征测试（锁定既有行为）改前改后双绿。默认按任务批量展开——全部测试先红、批量实现后全绿；bug 修复等三例外保留细粒度。
 - 触发：编写任何实现代码之前——新功能、bug 修复、重构、行为变更；例外（原型、生成代码、配置）需需求方点头。
-- 输出：经红绿循环验证的代码与测试；无独立文档产物。
+- 输出：经双形态验证的代码与测试；无独立文档产物。
 
 **systematic-debugging** —— 未经根因调查绝不修复：四阶段（根因 → 模式 → 假设 → 实施），3 次修复失败即停下质疑架构。
 - 触发：任何 bug、测试失败、意外行为、构建失败——提出任何修复方案之前。
