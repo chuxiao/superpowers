@@ -1,6 +1,6 @@
 ---
 name: diagnosing-superpowers
-description: 当某个 superpowers 会话出了问题、而需求方想知道原因时使用 —— 重复工作、无视计划、磕绊、结果差、某个技能没有触发、"耗时太长"、"为什么这么贵"、"它在干什么" —— 或者当需求方想为 superpowers 维护者准备一份 bug 报告时使用，对象可以是当前会话，也可以是凭 id 或路径指定的历史会话，适用于任何 harness。
+description: 当某个 superpowers 会话出了问题、而需求方想知道原因时使用 —— 重复工作、无视计划、磕绊、结果差、某个技能没有触发、"耗时太长"、"为什么这么贵"、"它在干什么" —— 或者当需求方想为 superpowers 维护者准备一份 bug 报告时使用，对象可以是当前会话，也可以是凭 id 或路径指定的历史会话，适用于任何 harness
 ---
 
 # 诊断 Superpowers
