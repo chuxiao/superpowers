@@ -44,4 +44,15 @@ flowchart TD
 - 命名：问题以？结尾；动作以动词开头；命令原样放进方框；状态描述处境，不用「步骤 N」这类泛化标签
 - 多行文字用 `<br/>` 换行
 
+## 语法红线（机械可查）
+
+违反任意一条都会导致渲染失败或退化到不可移植写法。提交前运行 `bash scripts/check-mermaid.sh <文件.md>`（brainstorming 与 writing-plans 两个技能的 scripts/ 目录各有一份）。
+
+- subgraph 标题一律 `subgraph id["标题"]` 形态——裸标题位置的文法不接受 HTML 标记，换行 `<br/>` 写在引号内（实例：`<br>` 写在裸标题里触发 TAGSTART 解析错误）
+- 节点文本与含空格或特殊字符的边标签放进双引号；`<br/>` 换行只出现在引号内
+- 引号外的文本不放 ASCII 圆括号——文字放进引号，或改用全角（）（形状语法 `[(…)]`、`([…])`、`((…))`、`[[…]]`、`[/…/]`、`[\…\]` 除外）
+- 边标签保持单行——两行信息合并为一行或移入节点文本
+- 换行用 `<br/>`，不用 `<br>`
+- mermaid 围栏必须闭合
+
 **为需求方做可视化：**mermaid 图在 GitHub、VS Code、Typora、Obsidian 等支持 mermaid 的 markdown 阅读器中直接渲染，无需额外工具；需要导出图片时用 mermaid-cli（`npx @mermaid-js/mermaid-cli -i graph.mmd -o graph.svg`）。

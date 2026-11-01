@@ -7,37 +7,37 @@
 
 ```mermaid
 flowchart TD
-    US["using-superpowers<br>（会话入口，规则贯穿全程）"]
+    US["using-superpowers<br/>（会话入口，规则贯穿全程）"]
     IDEA([需求 / 想法]) --> BS
     US -.-> BS
 
-    BS["① brainstorming<br>头脑风暴，把想法聊成设计"] --> SPEC[/"设计文档<br>docs/superpowers/specs/"/]
-    SPEC --> G1{"人工确认门 1<br>设计文档"}
+    BS["① brainstorming<br/>头脑风暴，把想法聊成设计"] --> SPEC[/"设计文档<br/>docs/superpowers/specs/"/]
+    SPEC --> G1{"人工确认门 1<br/>设计文档"}
     G1 -- "修订" --> BS
-    G1 -- "确认" --> WP["② writing-plans<br>写实施计划 + 自审 + 独立审读"]
-    WP --> PLAN[/"实施计划<br>docs/superpowers/plans/"/]
-    PLAN --> G2{"人工确认门 2<br>计划 + 选执行方式"}
+    G1 -- "确认" --> WP["② writing-plans<br/>写实施计划 + 自审 + 独立审读"]
+    WP --> PLAN[/"实施计划<br/>docs/superpowers/plans/"/]
+    PLAN --> G2{"人工确认门 2<br/>计划 + 选执行方式"}
     G2 -- "修订" --> WP
 
     G2 -- "隔离工作区" --> WT["③ using-git-worktrees"]
-    WT -- "会话内执行" --> EP["④a executing-plans<br>一个上下文做完所有任务"]
-    WT -- "子代理驱动" --> SDD["④b subagent-driven-development<br>每任务：实施者子代理 → 任务审查<br>→ 修复循环（轮数上限 + 熔断）"]
+    WT -- "会话内执行" --> EP["④a executing-plans<br/>一个上下文做完所有任务"]
+    WT -- "子代理驱动" --> SDD["④b subagent-driven-development<br/>每任务：实施者子代理 → 任务审查<br/>→ 修复循环（轮数上限 + 熔断）"]
 
-    EP --> LOOP["逐任务（TDD 是闸门）：<br>test-driven-development 批量红绿 → 提交<br>出 bug → systematic-debugging<br>独立失败 → dispatching-parallel-agents<br>声称完成前 → verification-before-completion"]
+    EP --> LOOP["逐任务（TDD 是闸门）：<br/>test-driven-development 批量红绿 → 提交<br/>出 bug → systematic-debugging<br/>独立失败 → dispatching-parallel-agents<br/>声称完成前 → verification-before-completion"]
     LOOP --> FR
 
-    SDD --> FR["整分支终审<br>requesting-code-review（code-reviewer 模板）<br>Critical/Important 仅一轮修复<br>Minor 与裁决清单移交需求方"]
-    RCR["receiving-code-review<br>（每次收到审查反馈时）"] -.-> SDD
+    SDD --> FR["整分支终审<br/>requesting-code-review（code-reviewer 模板）<br/>Critical/Important 仅一轮修复<br/>Minor 与裁决清单移交需求方"]
+    RCR["receiving-code-review<br/>（每次收到审查反馈时）"] -.-> SDD
     RCR -.-> FR
-    FR --> SG{"安全门<br>requesting-code-review（security-reviewer 模板）<br>五面判据不合才查：数据流 / 认证授权 / 密钥依赖<br>Clean-Pass 放行 / Critical/Important 一轮安全修复<br>残留移交需求方"}
-    SG --> FIN["⑤ finishing-a-development-branch<br>在合并结果上重跑全量测试"]
+    FR --> SG{"安全门<br/>requesting-code-review（security-reviewer 模板）<br/>五面判据不合才查：数据流 / 认证授权 / 密钥依赖<br/>Clean-Pass 放行 / Critical/Important 一轮安全修复<br/>残留移交需求方"}
+    SG --> FIN["⑤ finishing-a-development-branch<br/>在合并结果上重跑全量测试"]
     FIN --> DEC{"需求方选择"}
     DEC -- "本地合并" --> M([合并回基准分支])
     DEC -- "推送建 PR" --> P([Pull Request])
     DEC -- "保留" --> K([分支保留，稍后处理])
 
-    WS["writing-skills<br>（改技能时，旁路）"]
-    DS["diagnosing-superpowers<br>（会话出问题时，旁路）"]
+    WS["writing-skills<br/>（改技能时，旁路）"]
+    DS["diagnosing-superpowers<br/>（会话出问题时，旁路）"]
 ```
 
 两条人工确认门是链路上仅有的强制停顿点：设计文档确认（意图）、计划确认（规格）。其余环节任务之间都不停顿。

@@ -35,9 +35,13 @@ If any of these checks fail, do not open the PR. Explain to your human partner w
 
 ## What We Will Not Accept
 
-### Third-party dependencies
+### Third-party dependencies（fork 政策，2026-11-01 起放宽）
 
-PRs that add optional or required dependencies on third-party projects will not be accepted unless they are adding support for a new harness (e.g., a new IDE or CLI tool). Superpowers is a zero-dependency plugin by design. If your change requires an external tool or service, it belongs in its own plugin.
+上游仓库对三方依赖执行零依赖规则；本 fork 自 2026-11-01 起放宽：**为集成验证与定期回归服务的改动，允许在技能文案中绑定第三方工具链**（如 testcontainers、docker-compose + Playwright、Appium）。
+
+边界：插件本体自身仍不引入运行时依赖——被绑定的工具由被验证的项目安装，不随本插件分发。
+
+注意：面向上游仓库（obra/superpowers）的 PR 仍按上游规则执行，届时以上游 AGENTS.md 原文为准。
 
 ### "Compliance" changes to skills
 

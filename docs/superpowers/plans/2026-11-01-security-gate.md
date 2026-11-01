@@ -10,17 +10,17 @@
 
 ```mermaid
 flowchart TD
-    T1[Task1 安全审查者模板<br>security-reviewer.md] --> T3[Task3 挂载<br>final-review.md + executing-plans/SKILL.md]
-    T1 --> T2[Task2 安全复审模板<br>security-re-review-prompt.md]
+    T1["Task1 安全审查者模板<br/>security-reviewer.md"] --> T3["Task3 挂载<br/>final-review.md + executing-plans/SKILL.md"]
+    T1 --> T2["Task2 安全复审模板<br/>security-re-review-prompt.md"]
     T2 --> T3
-    T1 --> T5[Task5 静态测试+drill 规格<br>tests/security-gate/]
+    T1 --> T5["Task5 静态测试+drill 规格<br/>tests/security-gate/"]
     T2 --> T5
     T3 --> T5
-    T1 --> T6[Task6 真实会话 drill 与证据回收]
+    T1 --> T6["Task6 真实会话 drill 与证据回收"]
     T2 --> T6
     T3 --> T6
     T5 --> T6
-    T3 --> T4[Task4 技能地图同步<br>docs/skills-map.md]
+    T3 --> T4["Task4 技能地图同步<br/>docs/skills-map.md"]
 ```
 
 | 文件 | 动作 | 职责 |
