@@ -161,23 +161,7 @@ Critical 和 Important 发现项由你自己修复——在这里你就是实施
 
 ### 安全门
 
-终审及其后的一切修复/复审工作收尾之后、编制裁决清单与删除工作区之前，执行安全门。它是合并前的最后一道安全把关：所有分支必过；缺子代理工具只降级形态，不免除把关。
-
-用与终审相同的方式生成整分支审查包（`review-package PLAN_FILE MERGE_BASE HEAD`，MERGE_BASE = 分支的起始提交）。
-
-**有子代理工具时：** 把审查者派发到可用的最强档模型上（安全门是判断型任务，与终审同级；按 Model Selection 显式指定模型），使用 `skills/requesting-code-review/security-reviewer.md` 模板。随附三样输入：审查包路径；终审发现清单（从台账与修复记录整理——已被修复的项加 `[已修复] ` 前缀，未修复项无标记）；台账中搁置/暂缓行的指引。
-
-**没有子代理工具时：** 阅读 `skills/requesting-code-review/security-reviewer.md`，亲自按模板对照审查包执行安全自查，把 `Final: security-gate: self-review (no subagent tool)` 写入台账，并在最终消息说明这一点：自查弱于全新审查者的审查，由你的需求方在合并前决定这是否足够。
-
-按报告处置：
-
-- **Clean-Pass** → 记台账行 `Final: security-gate: clean-pass: <一句依据>`。
-- **Critical / Important** → 恰好一轮安全修复：有子代理工具时派单个修复子代理携带完整发现清单，没有时由你亲自修复。每项修复 RED→GREEN + 全绿测试套件；修复报告必须含覆盖测试的命令与输出证据；每项发现项记台账行 `Final: security-gate: finding (<severity>): <one-liner>`。随后恰好一次安全复审：有子代理工具时用 `skills/requesting-code-review/security-re-review-prompt.md` 派发最强档子代理（Model Selection 中「限定范围重审用最低档到中档」的规则不适用于安全门复审，依据为设计文档决策 6），没有时由你亲自按模板执行，以台账中的安全修复行及其测试输出作为 `[REPORT_FILE]` 的等价物。
-- **复审后的 NOT ADDRESSED 残留与新安全问题** → 记台账裁决行 `Final: security-gate: Ruling: <finding> — <decision> — <cost>`，移交需求方。不存在第二轮安全修复——熔断有界，残留项沿收尾渠道可见。
-- **Minor** → 记台账行 `Final: security-gate: minor (deferred): <one-liner>`，绝不进入安全修复轮。
-- **非安全观察**（门与复审两处）→ 记入台账，不阻塞。
-
-移交：收尾时把台账中全部 `Final: security-gate:` 行收进你最终消息，在 Rulings I made 之下单列 `Security gate` 小节——其中裁决行（含 `Ruling:` 子串）同时进 Rulings I made 本体，clean-pass 与 minor (deferred) 行进 Security gate 小节。
+终审及其后的一切修复/复审工作收尾之后、编制裁决清单与删除工作区之前，执行安全门——它是合并前的最后一道安全把关：所有分支必过；缺子代理工具只降级形态，不免除把关。完整规则（审查者派发与输入、Clean-Pass 与分级处置、恰好一轮安全修复与安全复审、台账行格式、移交渠道）见 `../subagent-driven-development/references/final-review.md` 的「安全门」一节，照做，不在此处复述。
 
 ## 收尾
 

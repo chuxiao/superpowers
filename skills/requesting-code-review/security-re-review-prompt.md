@@ -71,7 +71,7 @@ Subagent (general-purpose):
 
 **占位符：**
 - `[MODEL]` — 必填：最强档。Model Selection 中限定范围重审的低档规则不适用于安全门复审，依据为设计文档决策 6
-- `[FINDINGS]` — 安全门审查的全部 Critical/Important 安全发现项，逐字复制，每条占一个列表项；清单中的已修复验证项带 `[已修复] ` 前缀，跳过其判定
+- `[FINDINGS]` — 安全门审查的全部 Critical/Important 安全发现项，逐字复制，每条占一个列表项，逐项判定，无一跳过
 - `[REPORT_FILE]` — 安全修复者的报告文件（修复报告与测试证据在其中；会话内执行时为台账中的安全修复行及其测试输出）
 - `[FIX_BASE_SHA]` — 安全门审查所看到的 head
 - `[HEAD_SHA]` — 当前提交

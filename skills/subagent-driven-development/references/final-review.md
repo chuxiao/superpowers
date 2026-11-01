@@ -22,7 +22,7 @@
 - **Critical / Important** → 恰好一轮安全修复：有子代理工具时派单个修复子代理携带完整发现清单，没有时由你亲自修复。每项修复 RED→GREEN + 全绿测试套件；修复报告必须含覆盖测试的命令与输出证据；每项发现项记台账行 `Final: security-gate: finding (<severity>): <one-liner>`。随后恰好一次安全复审：有子代理工具时用 `skills/requesting-code-review/security-re-review-prompt.md` 派发最强档子代理（Model Selection 中「限定范围重审用最低档到中档」的规则不适用于安全门复审，依据为设计文档决策 6），没有时由你亲自按模板执行，以台账中的安全修复行及其测试输出作为 `[REPORT_FILE]` 的等价物。
 - **复审后的 NOT ADDRESSED 残留与新安全问题** → 记台账裁决行 `Final: security-gate: Ruling: <finding> — <decision> — <cost>`，移交需求方。不存在第二轮安全修复——熔断有界，残留项沿收尾渠道可见。
 - **Minor** → 记台账行 `Final: security-gate: minor (deferred): <one-liner>`，绝不进入安全修复轮。
-- **非安全观察**（门与复审两处）→ 记入台账，不阻塞。
+- **非安全观察与范围外安全观察**（门与复审两处）→ 记入台账：非安全观察不阻塞；范围外安全观察按 `Final: security-gate: finding (<severity>): <one-liner>` 记录、进 Security gate 小节，承重者由你做出裁决。
 
 移交：收尾时把台账中全部 `Final: security-gate:` 行收进你最终消息，在 Rulings I made 之下单列 `Security gate` 小节——其中裁决行（含 `Ruling:` 子串）同时进 Rulings I made 本体，clean-pass 与 minor (deferred) 行进 Security gate 小节。
 

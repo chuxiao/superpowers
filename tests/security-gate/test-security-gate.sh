@@ -44,22 +44,37 @@ for f in "$SR" "$RR"; do
   ck "no-after-final-review:$(basename "$f")" "! grep -Eq '(还会|之后|后续)[^。]*终审' \"$f\""
 done
 
-# 断言 5：两文件安全门段逐行 diff ≤ 2 行（提取：标题行起，至下一个以 # 开头的标题行止）
+# 断言 5：单一权威源 + 引用——安全门规则全文唯一存在于 final-review.md（references
+# 文件无 SKILL.md 的 compaction 字节上限），EP 以短引用段指向它。单一源使两执行
+# 方式的措辞漂移在结构上不可能（设计风险 2 的更强解）。
 extract() { awk 'f && /^#/{exit} /^### 安全门/{f=1} f' "$1"; }
-DIFFN=$(diff <(extract "$SDD") <(extract "$EP") | grep -c '^[<>]' || true)
-ck "gate-section-diff-le2" "[ \"\${DIFFN:-99}\" -le 2 ]"
+ck "gate-authoritative-section" "[ -n \"\$(extract \"$SDD\")\" ]"
+ck "ep-gate-reference"          "grep -qF 'references/final-review.md\` 的「安全门」一节' \"$EP\""
+ck "ep-gate-must-pass"          "grep -q '所有分支必过' \"$EP\""
 
-# 断言 6：台账行格式三条 + [已修复] 前缀（两文件各查）；收集追加句存在且位于 finishing 句之前
+# 断言 6：台账行格式三条 + [已修复] 前缀（权威源 final-review.md）；收集追加句
+# 两文件各查、且位于 finishing 句之前
 APPEND='安全门的全部行（clean-pass、裁决、minor deferred、self-review）收进你最终消息的 Security gate 小节，其中裁决行同时进 Rulings I made。'
+ck "ledger-clean-pass"     "grep -q 'Final: security-gate: clean-pass:' \"$SDD\""
+ck "ledger-minor-deferred" "grep -q 'Final: security-gate: minor (deferred):' \"$SDD\""
+ck "ledger-self-review"    "grep -q 'Final: security-gate: self-review (no subagent tool)' \"$SDD\""
+ck "fixed-prefix"          "grep -qF '\`[已修复] \` 前缀' \"$SDD\""
 for f in "$SDD" "$EP"; do
   n=$(basename "$f")
-  ck "ledger-clean-pass:$n"     "grep -q 'Final: security-gate: clean-pass:' \"$f\""
-  ck "ledger-minor-deferred:$n" "grep -q 'Final: security-gate: minor (deferred):' \"$f\""
-  ck "ledger-self-review:$n"    "grep -q 'Final: security-gate: self-review (no subagent tool)' \"$f\""
-  ck "fixed-prefix:$n"          "grep -qF '\`[已修复] \` 前缀' \"$f\""
   ck "append-sentence:$n"       "grep -qF \"$APPEND\" \"$f\""
   ck "append-before-finishing:$n" "[ \"\$(grep -nF \"$APPEND\" \"$f\" | head -1 | cut -d: -f1)\" -lt \"\$(grep -n '使用 superpowers:finishing-a-development-branch。' \"$f\" | tail -1 | cut -d: -f1)\" ]"
 done
+
+# 断言 6b：行为承重句持久锁——门模板的四条行为边界、「文件」窄解，
+# 挂载段的安全修复轮与发现项台账格式，复审模板的最强档例外声明。
+ck "rev-missing-findings-note" "grep -q '未提供' \"$SR\""
+ck "rev-non-security-obs"      "grep -q 'Non-Security' \"$SR\""
+ck "rev-fixed-prefix-skip"     "grep -qF '\`[已修复] \` 前缀' \"$SR\""
+ck "rev-four-element-findings" "grep -q '可被利用' \"$SR\""
+ck "rev-file-narrow-source"    "grep -q '不可信来源' \"$SR\""
+ck "gate-finding-ledger-line"  "grep -qF 'Final: security-gate: finding (<severity>): <one-liner>' \"$SDD\""
+ck "gate-one-round-rule"       "grep -q '不存在第二轮安全修复' \"$SDD\""
+ck "rereview-model-exception"  "grep -q '低档规则不适用于安全门复审' \"$RR\""
 
 # 断言 7：复审模板六占位符、四输出节名、「## 测试」节
 for p in '\[MODEL\]' '\[FINDINGS\]' '\[REPORT_FILE\]' '\[FIX_BASE_SHA\]' '\[HEAD_SHA\]' '\[DIFF_FILE\]'; do
