@@ -36,4 +36,19 @@
 
 ## 执行记录
 
-（待 Task 6 执行后填写）
+### 场景②（放行路径）— 2026-11-01，实施会话内真实派发
+
+- 派发方式：真实安全审查者子代理（最强档），输入 = 实施分支 50fd319..57fb65b 审查包（43378 字节）+ 空终审发现清单 + 台账路径。
+- 报告要点：审查者注明「终审发现清单未提供，已修复项未知」后照常执行；五面逐一对照均未触及（脚本仅读本仓库文件、纯只读、无密钥/依赖、无网络调用、无 LLM 输出路由进汇）。
+- 判定：**Clean-Pass**，依据写明五面；Non-Security Observations 3 条未进分级、不阻塞。成功标准 2 达成。
+
+### 场景①（触发路径）— 2026-11-01，实施会话内真实派发
+
+- 前置：临时 worktree `drill-vuln`（已删）预埋 `report-runner.sh`——环境变量 `REPORT_TOOL` 与参数 `OUTPUT_DIR` 未校验拼进 `sh -c`。
+- 派发方式：真实安全审查者子代理（最强档），输入 = 预埋分支审查包（570 字节）+ 空终审发现清单。
+- 审查报告要点：快速放行对照判定「外部输入处理」触及（环境变量与参数两源）→ 完整走检查结构；Findings (1 Critical, 1 Minor)——Critical 四要素齐全（位置 report-runner.sh:9；`sh -c` 二次解释；路径 A 参数注入/路径 B 环境注入两条触发→危险汇路径；修复方向 exec argv + 存在性校验）；Minor 不进修复轮。
+- 修复轮：单个修复者携带完整 Critical 清单 → 提交 d07d76d，`exec "$REPORT_TOOL" --out "$OUTPUT_DIR"` + REPORT_TOOL 存在性校验 + 7 项冒烟测试（改前 5 passed 2 failed——两条 FAIL 即注入复现；改后 7 passed）。
+- 安全复审：逐项判定 **ADDRESSED**（附 file:line 证据与测试声明核验推演），New Security Issues: None，Verdict: All findings addressed, no new Critical/Important security issues。
+- 判定：**触发 → 恰好一轮修复 → 恰好一次复审 → 全部 ADDRESSED**，无第二轮。成功标准 1 达成；成功标准 3 的「恰好一轮」结构经真实执行证实（残留移交分支见场景④，留 eval 仓库）。
+
+预埋缺陷 worktree 已删除（`git worktree list` 无残留），分支 drill-vuln 已删（243019b、d07d76d 含缺陷代码，按规格用完即弃）。
