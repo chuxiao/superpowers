@@ -37,7 +37,9 @@ flowchart TD
     more_tasks{"还有更多任务？"}
     branch_review["整分支终审（如有全新审查者可用）"]
     triage_and_fix["重新分级，然后：Critical/Important → 仅一轮修复，每项修复 RED→GREEN + 全绿测试套件；Minor → 记入台账"]
-    cleanup["终审通过：删除本计划的工作区"]
+    security_gate{"安全门"}
+    sg_fix["安全修复轮：恰好一轮 RED→GREEN + 全绿套件，随后安全复审"]
+    cleanup["终审与安全门通过：删除本计划的工作区"]
     finish["使用 superpowers:finishing-a-development-branch"]
 
     subgraph per_task["每个任务"]
@@ -63,7 +65,10 @@ flowchart TD
     more_tasks -->|是| task_start
     more_tasks -->|否| branch_review
     branch_review --> triage_and_fix
-    triage_and_fix --> cleanup
+    triage_and_fix --> security_gate
+    security_gate -->|快速放行 / 仅 Minor| cleanup
+    security_gate -->|Critical/Important| sg_fix
+    sg_fix --> cleanup
     cleanup --> finish
     style finish fill:#90ee90
 ```
@@ -154,11 +159,17 @@ Critical 和 Important 发现项由你自己修复——在这里你就是实施
 
 你决定不修的发现项就是一项裁决——`Final: Ruling: <finding> — <why the code stands> — <cost if wrong>`——并经由裁决清单送达你的需求方。不存在第二轮修复。
 
+### 安全门
+
+终审及其后的一切修复/复审工作收尾之后、编制裁决清单与删除工作区之前，执行安全门——它是合并前的最后一道安全把关：所有分支必过；缺子代理工具只降级形态，不免除把关。完整规则（审查者派发与输入、Clean-Pass 与分级处置、恰好一轮安全修复与安全复审、台账行格式、移交渠道）见 `../subagent-driven-development/references/final-review.md` 的「安全门」一节，照做，不在此处复述。
+
 ## 收尾
 
 在删除任何东西之前，把台账中所有含 `Ruling:` 的行都收进你最终消息的「Rulings I made」（我做出的裁决）一栏，按你做出它们的顺序排列，每条都写明错了的代价；并把每一行 `minor (deferred)` 收进「Deferred minors」一栏。两份清单都必须完整收录、无一遗漏。你的最终消息是唯一渠道：你代表需求方做出的决定，以及你选择不处理的发现项，都只有靠它才能传到他们那里。
 
 当终审干净、其修复也已提交之后，删除本计划的工作区目录——git 历史从现在起就是记录。同级目录属于其他计划；别去动它们。
+
+安全门的全部行（clean-pass、裁决、minor deferred、self-review）收进你最终消息的 Security gate 小节，其中裁决行同时进 Rulings I made。
 
 使用 superpowers:finishing-a-development-branch。
 
