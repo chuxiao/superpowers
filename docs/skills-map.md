@@ -29,7 +29,8 @@ flowchart TD
     SDD --> FR["整分支终审<br>requesting-code-review（code-reviewer 模板）<br>Critical/Important 仅一轮修复<br>Minor 与裁决清单移交需求方"]
     RCR["receiving-code-review<br>（每次收到审查反馈时）"] -.-> SDD
     RCR -.-> FR
-    FR --> FIN["⑤ finishing-a-development-branch<br>在合并结果上重跑全量测试"]
+    FR --> SG{"安全门<br>requesting-code-review（security-reviewer 模板）<br>五面判据不合才查：数据流 / 认证授权 / 密钥依赖<br>Clean-Pass 放行 / Critical/Important 一轮安全修复<br>残留移交需求方"}
+    SG --> FIN["⑤ finishing-a-development-branch<br>在合并结果上重跑全量测试"]
     FIN --> DEC{"需求方选择"}
     DEC -- "本地合并" --> M([合并回基准分支])
     DEC -- "推送建 PR" --> P([Pull Request])
@@ -105,18 +106,20 @@ flowchart TD
 
 ## 审查（每任务后与收尾前）
 
-### 三份审查模板的分工
+### 五份审查模板的分工
 
-每任务审查不是独立 skill，而是执行技能内置的派发模板；三份模板各管一段：
+每任务审查不是独立 skill，而是执行技能内置的派发模板；五份模板各管一段：
 
 | 模板 | 位置 | 审什么 | 输出 |
 |---|---|---|---|
 | `task-reviewer-prompt.md` | subagent-driven-development | 每任务闸门：规格符合性（缺失/多余/误解，对照任务简报）+ 代码质量 | Spec Compliance（✅/❌/⚠️）+ Issues + Approved / Needs fixes |
 | `code-reviewer.md` | requesting-code-review | 整分支终审（两种执行方式共用）：双层基准（设计文档=意图、计划=规格）+ Declined to judge | Ready to merge? Yes / No / With fixes |
 | `re-review-prompt.md` | subagent-driven-development | 修复轮之后的限定范围复审，只验证修复本身 | 复审判定 |
+| `security-reviewer.md` | requesting-code-review | 安全门（两种执行方式共用，终审链收尾后）：数据流（源→汇有无校验/参数化/转义）+ 认证授权 + 密钥/依赖；五面判据不合才查 | Clean-Pass（一句依据）或分级安全发现项（四要素） |
+| `security-re-review-prompt.md` | requesting-code-review | 安全修复轮之后的限定复审，只验证修复本身与新安全问题；该分支最后一次审查 | ADDRESSED / NOT ADDRESSED + 新安全问题 + Verdict |
 
 **requesting-code-review** —— 派发拿到专门构造上下文（绝不是会话历史）的审查者子代理，在问题级联前捕获；模板 code-reviewer.md 按双层基准审（设计文档=意图基准，计划=规格基准），文档未提及的行为按理性之人预期评。
-- 触发：整分支终审（两种执行方式都派它）；skill 原文也把「SDD 每任务后」列为强制项——实际由上表的 task-reviewer-prompt.md 承担。可选：卡住时、重构前、复杂 bug 修复后。
+- 触发：整分支终审（两种执行方式都派它）；skill 原文也把「SDD 每任务后」列为强制项——实际由上表的 task-reviewer-prompt.md 承担。可选：卡住时、重构前、复杂 bug 修复后。其后为安全门（security-reviewer 模板，见上表）。
 - 输出：Strengths / Issues（Critical / Important / Minor）/ Recommendations / Assessment（Ready to merge?），每条发现项带 file:line。
 
 **receiving-code-review** —— 先验证再实施：对照代码库核查每条反馈，能反驳就用技术论证反驳；禁止表演性认同与道谢，正确回应是直接修掉。
