@@ -1,9 +1,9 @@
 {
   "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers core skills library",
+  "description": "Personal fork of obra/superpowers with customized skills and Chinese documentation",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "yanzengyan",
+    "email": "308792303@qq.com"
   },
   "plugins": [
     {

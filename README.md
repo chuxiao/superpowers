@@ -83,6 +83,24 @@ The Superpowers marketplace provides Superpowers and some other related plugins 
   /plugin install superpowers@superpowers-marketplace
   ```
 
+#### This Fork (chuxiao/superpowers)
+
+This repository is a personal fork of [obra/superpowers](https://github.com/obra/superpowers) with customized skills and Chinese documentation. To install this fork instead of the upstream version:
+
+- Register this repository as a marketplace:
+
+  ```bash
+  /plugin marketplace add chuxiao/superpowers
+  ```
+
+- Install the plugin from it:
+
+  ```bash
+  /plugin install superpowers@superpowers-dev
+  ```
+
+The marketplace tracks the repository's default branch, so pushes to `main` are picked up automatically the next time Claude Code starts.
+
 ### Antigravity
 
 Install Superpowers as a plugin from this repository:
