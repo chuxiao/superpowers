@@ -21,22 +21,21 @@ description: 在当前会话中执行含独立任务的实施计划时使用
 
 ## 适用时机
 
-```dot
-digraph when_to_use {
-    "有实施计划？" [shape=diamond];
-    "任务大体独立？" [shape=diamond];
-    "需求方选择会话内执行，或没有子代理工具？" [shape=diamond];
-    "subagent-driven-development" [shape=box];
-    "executing-plans" [shape=box];
-    "手动执行，或先做头脑风暴" [shape=box];
+```mermaid
+flowchart TD
+    has_plan{"有实施计划？"}
+    tasks_independent{"任务大体独立？"}
+    in_session_or_no_subagents{"需求方选择会话内执行，或没有子代理工具？"}
+    sdd["subagent-driven-development"]
+    executing_plans["executing-plans"]
+    manual_or_brainstorm["手动执行，或先做头脑风暴"]
 
-    "有实施计划？" -> "任务大体独立？" [label="是"];
-    "有实施计划？" -> "手动执行，或先做头脑风暴" [label="否"];
-    "任务大体独立？" -> "需求方选择会话内执行，或没有子代理工具？" [label="是"];
-    "任务大体独立？" -> "手动执行，或先做头脑风暴" [label="否 - 紧耦合"];
-    "需求方选择会话内执行，或没有子代理工具？" -> "executing-plans" [label="是"];
-    "需求方选择会话内执行，或没有子代理工具？" -> "subagent-driven-development" [label="否"];
-}
+    has_plan -->|是| tasks_independent
+    has_plan -->|否| manual_or_brainstorm
+    tasks_independent -->|是| in_session_or_no_subagents
+    tasks_independent -->|否 - 紧耦合| manual_or_brainstorm
+    in_session_or_no_subagents -->|是| executing_plans
+    in_session_or_no_subagents -->|否| sdd
 ```
 
 **对比 Executing Plans（会话内执行）：**
@@ -47,44 +46,41 @@ digraph when_to_use {
 
 ## 流程
 
-```dot
-digraph process {
-    rankdir=TB;
+```mermaid
+flowchart TD
+    prep["准备：工作树、台账检查、读计划、预检"]
+    tasks_remaining{"还有剩余任务？"}
+    final_review["终审并收尾：读 references/final-review.md"]
+    cleanup["终审通过：删除本计划的工作区"]
+    finish["使用 superpowers:finishing-a-development-branch"]
 
-    subgraph cluster_per_task {
-        label="每任务";
-        "派发实施者子代理 (./implementer-prompt.md)" [shape=box];
-        "实施者提问？" [shape=diamond];
-        "回答问题，提供上下文" [shape=box];
-        "实施者实现、测试、提交、自审" [shape=box];
-        "生成审查包，派发任务审查者 (./task-reviewer-prompt.md)" [shape=box];
-        "设计文档 ✅ 且质量通过？" [shape=diamond];
-        "修复循环：每轮之前先读 references/fix-loop.md" [shape=box];
-        "把完成情况追加进台账，标记待办完成" [shape=box];
-    }
+    subgraph per_task["每任务"]
+        dispatch_implementer["派发实施者子代理 (./implementer-prompt.md)"]
+        implementer_asks{"实施者提问？"}
+        answer_questions["回答问题，提供上下文"]
+        implement_and_selfreview["实施者实现、测试、提交、自审"]
+        dispatch_reviewer["生成审查包，派发任务审查者 (./task-reviewer-prompt.md)"]
+        review_passed{"设计文档 ✅ 且质量通过？"}
+        fix_loop["修复循环：每轮之前先读 references/fix-loop.md"]
+        update_ledger["把完成情况追加进台账，标记待办完成"]
+    end
 
-    "准备：工作树、台账检查、读计划、预检" [shape=box];
-    "还有剩余任务？" [shape=diamond];
-    "终审并收尾：读 references/final-review.md" [shape=box];
-    "终审通过：删除本计划的工作区" [shape=box];
-    "使用 superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
-
-    "准备：工作树、台账检查、读计划、预检" -> "派发实施者子代理 (./implementer-prompt.md)";
-    "派发实施者子代理 (./implementer-prompt.md)" -> "实施者提问？";
-    "实施者提问？" -> "回答问题，提供上下文" [label="是"];
-    "回答问题，提供上下文" -> "实施者实现、测试、提交、自审";
-    "实施者提问？" -> "实施者实现、测试、提交、自审" [label="否"];
-    "实施者实现、测试、提交、自审" -> "生成审查包，派发任务审查者 (./task-reviewer-prompt.md)";
-    "生成审查包，派发任务审查者 (./task-reviewer-prompt.md)" -> "设计文档 ✅ 且质量通过？";
-    "设计文档 ✅ 且质量通过？" -> "把完成情况追加进台账，标记待办完成" [label="是"];
-    "设计文档 ✅ 且质量通过？" -> "修复循环：每轮之前先读 references/fix-loop.md" [label="否"];
-    "修复循环：每轮之前先读 references/fix-loop.md" -> "把完成情况追加进台账，标记待办完成" [label="已处理，或在上限处搁置"];
-    "把完成情况追加进台账，标记待办完成" -> "还有剩余任务？";
-    "还有剩余任务？" -> "派发实施者子代理 (./implementer-prompt.md)" [label="是"];
-    "还有剩余任务？" -> "终审并收尾：读 references/final-review.md" [label="否"];
-    "终审并收尾：读 references/final-review.md" -> "终审通过：删除本计划的工作区";
-    "终审通过：删除本计划的工作区" -> "使用 superpowers:finishing-a-development-branch";
-}
+    prep --> dispatch_implementer
+    dispatch_implementer --> implementer_asks
+    implementer_asks -->|是| answer_questions
+    answer_questions --> implement_and_selfreview
+    implementer_asks -->|否| implement_and_selfreview
+    implement_and_selfreview --> dispatch_reviewer
+    dispatch_reviewer --> review_passed
+    review_passed -->|是| update_ledger
+    review_passed -->|否| fix_loop
+    fix_loop -->|已处理，或在上限处搁置| update_ledger
+    update_ledger --> tasks_remaining
+    tasks_remaining -->|是| dispatch_implementer
+    tasks_remaining -->|否| final_review
+    final_review --> cleanup
+    cleanup --> finish
+    style finish fill:#90ee90
 ```
 
 ## 准备

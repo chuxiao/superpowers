@@ -98,7 +98,7 @@ skills/
 
 ## 流程图
 
-当你在技能中新增或修改流程图时，先阅读 [references/flowcharts.md](references/flowcharts.md)：流程图何时才配得上一席之地、graphviz 惯例，以及如何渲染一张流程图。
+当你在技能中新增或修改流程图时，先阅读 [references/flowcharts.md](references/flowcharts.md)：流程图何时才配得上一席之地、mermaid 风格规则，以及如何渲染一张流程图。
 
 ## 代码示例
 
@@ -310,9 +310,10 @@ example-js.js、example-py.py、example-go.go
 **为什么不好：**质量平庸，维护负担
 
 ### ❌ 流程图里放代码
-```dot
-step1 [label="import fs"];
-step2 [label="read file"];
+```mermaid
+flowchart TD
+    step1["import fs"]
+    step2["read file"]
 ```
 **为什么不好：**无法复制粘贴，难以阅读
 

@@ -65,18 +65,19 @@ description: 在编写实现代码之前、实现任何功能或修复 bug 时�
 
 ## 任务批量循环（默认形态）
 
-```dot
-digraph batch_cycle {
-    rankdir=LR;
-    write [label="写全任务测试\n新行为测试 + 特征测试", shape=box];
-    red [label="RED 运行\n新行为：逐条失败\n特征：逐条通过", shape=box, style=filled, fillcolor="#ffcccc"];
-    impl [label="批量最简实现", shape=box];
-    green [label="GREEN 运行\n新行为：全绿\n特征：仍然全绿", shape=box, style=filled, fillcolor="#ccffcc"];
-    refactor [label="REFACTOR\n保持全绿", shape=box, style=filled, fillcolor="#ccccff"];
-    suite [label="全量套件收口", shape=ellipse];
+```mermaid
+flowchart LR
+    write_tests["写全任务测试<br/>新行为测试 + 特征测试"]
+    red_run["RED 运行<br/>新行为：逐条失败<br/>特征：逐条通过"]
+    minimal_impl["批量最简实现"]
+    green_run["GREEN 运行<br/>新行为：全绿<br/>特征：仍然全绿"]
+    refactor["REFACTOR<br/>保持全绿"]
+    full_suite(["全量套件收口"])
 
-    write -> red -> impl -> green -> refactor -> suite;
-}
+    write_tests --> red_run --> minimal_impl --> green_run --> refactor --> full_suite
+    style red_run fill:#ffcccc
+    style green_run fill:#ccffcc
+    style refactor fill:#ccccff
 ```
 
 1. **写全任务的测试**：新行为测试与特征测试一次写完。测试质量同标准：一个行为、清晰命名、断言真实代码（不可避免才用 mock）。特征测试的写法见「遗留代码」节。

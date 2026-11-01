@@ -15,22 +15,21 @@ description: 当面对 2 个以上相互独立、可在没有共享状态或顺�
 
 ## 何时使用
 
-```dot
-digraph when_to_use {
-    "有多个失败？" [shape=diamond];
-    "它们相互独立吗？" [shape=diamond];
-    "单个 agent 排查全部" [shape=box];
-    "每个问题域一个 agent" [shape=box];
-    "它们能并行工作吗？" [shape=diamond];
-    "串行的 agent" [shape=box];
-    "并行派发" [shape=box];
+```mermaid
+flowchart TD
+    multiple_failures{"有多个失败？"}
+    independent{"它们相互独立吗？"}
+    single_agent["单个 agent 排查全部"]
+    one_agent_per_domain["每个问题域一个 agent"]
+    can_parallelize{"它们能并行工作吗？"}
+    serial_agents["串行的 agent"]
+    parallel_dispatch["并行派发"]
 
-    "有多个失败？" -> "它们相互独立吗？" [label="是"];
-    "它们相互独立吗？" -> "单个 agent 排查全部" [label="否 - 相关联"];
-    "它们相互独立吗？" -> "它们能并行工作吗？" [label="是"];
-    "它们能并行工作吗？" -> "并行派发" [label="是"];
-    "它们能并行工作吗？" -> "串行的 agent" [label="否 - 共享状态"];
-}
+    multiple_failures -->|是| independent
+    independent -->|否 - 相关联| single_agent
+    independent -->|是| can_parallelize
+    can_parallelize -->|是| parallel_dispatch
+    can_parallelize -->|否 - 共享状态| serial_agents
 ```
 
 **适用情形：**

@@ -31,44 +31,41 @@ description: 在当前会话中由你亲自以实施者身份执行实施计划�
 
 ## 流程
 
-```dot
-digraph process {
-    rankdir=TB;
+```mermaid
+flowchart TD
+    prep["准备：工作树、工作区 + 台账、阅读计划 + 设计文档、预检扫描"]
+    more_tasks{"还有更多任务？"}
+    branch_review["整分支终审（如有全新审查者可用）"]
+    triage_and_fix["重新分级，然后：Critical/Important → 仅一轮修复，每项修复 RED→GREEN + 全绿测试套件；Minor → 记入台账"]
+    cleanup["终审通过：删除本计划的工作区"]
+    finish["使用 superpowers:finishing-a-development-branch"]
 
-    subgraph cluster_per_task {
-        label="每个任务";
-        "task-start：简报 + BASE；阅读简报" [shape=box];
-        "从验收标准批量展开 TDD：新行为测试先红后绿、特征测试改前改后双绿" [shape=box];
-        "结果与验收标准相符？" [shape=diamond];
-        "计划错了？裁决并记入台账。代码错了？systematic-debugging" [shape=box];
-        "提交" [shape=box];
-        "完成契约满足？" [shape=diamond];
-        "task-done：运行测试，把结果记入台账；将待办标记为完成" [shape=box];
-    }
+    subgraph per_task["每个任务"]
+        task_start["task-start：简报 + BASE；阅读简报"]
+        tdd_loop["从验收标准批量展开 TDD：新行为测试先红后绿、特征测试改前改后双绿"]
+        matches_acceptance{"结果与验收标准相符？"}
+        diagnose["计划错了？裁决并记入台账。代码错了？systematic-debugging"]
+        commit["提交"]
+        contract_met{"完成契约满足？"}
+        task_done["task-done：运行测试，把结果记入台账；将待办标记为完成"]
+    end
 
-    "准备：工作树、工作区 + 台账、阅读计划 + 设计文档、预检扫描" [shape=box];
-    "还有更多任务？" [shape=diamond];
-    "整分支终审（如有全新审查者可用）" [shape=box];
-    "重新分级，然后：Critical/Important → 仅一轮修复，每项修复 RED→GREEN + 全绿测试套件；Minor → 记入台账" [shape=box];
-    "终审通过：删除本计划的工作区" [shape=box];
-    "使用 superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
-
-    "准备：工作树、工作区 + 台账、阅读计划 + 设计文档、预检扫描" -> "task-start：简报 + BASE；阅读简报";
-    "task-start：简报 + BASE；阅读简报" -> "从验收标准展开 TDD：先写失败测试、看它失败、最小实现、看它通过";
-    "从验收标准展开 TDD：先写失败测试、看它失败、最小实现、看它通过" -> "结果与验收标准相符？";
-    "结果与验收标准相符？" -> "计划错了？裁决并记入台账。代码错了？systematic-debugging" [label="否"];
-    "计划错了？裁决并记入台账。代码错了？systematic-debugging" -> "从验收标准展开 TDD：先写失败测试、看它失败、最小实现、看它通过";
-    "结果与验收标准相符？" -> "提交" [label="是，全部验收标准已兑现"];
-    "提交" -> "完成契约满足？";
-    "完成契约满足？" -> "从验收标准展开 TDD：先写失败测试、看它失败、最小实现、看它通过" [label="否——完成任务"];
-    "完成契约满足？" -> "task-done：运行测试，把结果记入台账；将待办标记为完成" [label="是"];
-    "task-done：运行测试，把结果记入台账；将待办标记为完成" -> "还有更多任务？";
-    "还有更多任务？" -> "task-start：简报 + BASE；阅读简报" [label="是"];
-    "还有更多任务？" -> "整分支终审（如有全新审查者可用）" [label="否"];
-    "整分支终审（如有全新审查者可用）" -> "重新分级，然后：Critical/Important → 仅一轮修复，每项修复 RED→GREEN + 全绿测试套件；Minor → 记入台账";
-    "重新分级，然后：Critical/Important → 仅一轮修复，每项修复 RED→GREEN + 全绿测试套件；Minor → 记入台账" -> "终审通过：删除本计划的工作区";
-    "终审通过：删除本计划的工作区" -> "使用 superpowers:finishing-a-development-branch";
-}
+    prep --> task_start
+    task_start --> tdd_loop
+    tdd_loop --> matches_acceptance
+    matches_acceptance -->|否| diagnose
+    diagnose --> tdd_loop
+    matches_acceptance -->|是，全部验收标准已兑现| commit
+    commit --> contract_met
+    contract_met -->|否——完成任务| tdd_loop
+    contract_met -->|是| task_done
+    task_done --> more_tasks
+    more_tasks -->|是| task_start
+    more_tasks -->|否| branch_review
+    branch_review --> triage_and_fix
+    triage_and_fix --> cleanup
+    cleanup --> finish
+    style finish fill:#90ee90
 ```
 
 ## 准备

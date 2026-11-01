@@ -8,19 +8,18 @@ Bug 常常在调用栈深处显现（git init 在错误的目录里执行、文�
 
 ## 何时使用
 
-```dot
-digraph when_to_use {
-    "Bug 出现在调用栈深处？" [shape=diamond];
-    "能向上回溯吗？" [shape=diamond];
-    "在症状点修复" [shape=box];
-    "回溯到最初触发点" [shape=box];
-    "更优：同时加上纵深防御" [shape=box];
+```mermaid
+flowchart TD
+    deep_in_stack{"Bug 出现在调用栈深处？"}
+    can_backtrace{"能向上回溯吗？"}
+    fix_at_symptom["在症状点修复"]
+    trace_to_origin["回溯到最初触发点"]
+    add_defense["更优：同时加上纵深防御"]
 
-    "Bug 出现在调用栈深处？" -> "能向上回溯吗？" [label="是"];
-    "能向上回溯吗？" -> "回溯到最初触发点" [label="是"];
-    "能向上回溯吗？" -> "在症状点修复" [label="否——死路"];
-    "回溯到最初触发点" -> "更优：同时加上纵深防御";
-}
+    deep_in_stack -->|是| can_backtrace
+    can_backtrace -->|是| trace_to_origin
+    can_backtrace -->|否——死路| fix_at_symptom
+    trace_to_origin --> add_defense
 ```
 
 **适用场景：**
@@ -129,26 +128,26 @@ bash ./find-polluter.sh '.git' 'src/**/*.test.ts'
 
 ## 关键原则
 
-```dot
-digraph principle {
-    "找到了直接原因" [shape=ellipse];
-    "能向上追溯一层吗？" [shape=diamond];
-    "向上回溯" [shape=box];
-    "这就是源头吗？" [shape=diamond];
-    "在源头修复" [shape=box];
-    "在每一层都加上校验" [shape=box];
-    "Bug 不可能发生" [shape=doublecircle];
-    "绝不只修症状" [shape=octagon, style=filled, fillcolor=red, fontcolor=white];
+```mermaid
+flowchart TD
+    found_cause(["找到了直接原因"])
+    can_trace_up{"能向上追溯一层吗？"}
+    trace_up["向上回溯"]
+    is_root{"这就是源头吗？"}
+    fix_root["在源头修复"]
+    validate_layers["在每一层都加上校验"]
+    bug_impossible(("Bug 不可能发生"))
+    never_symptom_only["绝不只修症状"]
 
-    "找到了直接原因" -> "能向上追溯一层吗？";
-    "能向上追溯一层吗？" -> "向上回溯" [label="是"];
-    "能向上追溯一层吗？" -> "绝不只修症状" [label="否"];
-    "向上回溯" -> "这就是源头吗？";
-    "这就是源头吗？" -> "向上回溯" [label="否——继续向上"];
-    "这就是源头吗？" -> "在源头修复" [label="是"];
-    "在源头修复" -> "在每一层都加上校验";
-    "在每一层都加上校验" -> "Bug 不可能发生";
-}
+    found_cause --> can_trace_up
+    can_trace_up -->|是| trace_up
+    can_trace_up -->|否| never_symptom_only
+    trace_up --> is_root
+    is_root -->|否——继续向上| trace_up
+    is_root -->|是| fix_root
+    fix_root --> validate_layers
+    validate_layers --> bug_impossible
+    style never_symptom_only fill:red,color:white
 ```
 
 **绝不只在错误出现的地方修复。** 要向上回溯，找到最初的触发点。
