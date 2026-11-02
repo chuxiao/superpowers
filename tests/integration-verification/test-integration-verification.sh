@@ -70,7 +70,7 @@ ck "fin-exit-credential" "grep -qF '台账存在集成验证出口凭据' \"$FIN
 ck "fin-head-match" "grep -qF '与当前 HEAD 一致' \"$FIN\""
 ck "fin-worktree-clean" "grep -qF 'git status --porcelain' \"$FIN\""
 ck "fin-expired-handoff" "grep -qF '集成验证结果过期' \"$FIN\""
-ck "fin-merge-section" "grep -qF '### 验证方案并入（选项 1 与选项 2 执行后）' \"$FIN\""
+ck "fin-merge-section" "grep -qF '### 验证方案并入（本地合并与推送并创建 PR 执行后）' \"$FIN\""
 ck "fin-no-merge-on-keep" "grep -qF '「保持分支原样」不并入' \"$FIN\""
 
 # 断言 7：writing-plans 验证方案要求句 + 自审第十项
@@ -95,6 +95,9 @@ ck "iv-rerun-once-flaky" "grep -qF '自动重跑一次' \"$IV\""
 ck "iv-expectation-iron-rule" "grep -qF '不得修改方案期望' \"$IV\""
 # 断言 9b：⑫ 修复轮增补的模糊授权语条款——integration-verification 与 regression-sweep 两处副本同步锚定
 ck "iv-rs-vague-authority-clause" "grep -qF '模糊授权语（「你看着办」「你决定」「随便怎么处理」）不构成定性' \"$IV\" && grep -qF '模糊授权语（「你看着办」「你决定」「随便怎么处理」）不构成定性' \"$RS\""
+
+# 断言 9c：链路内重跑免跑——Step 1 之前的凭据新鲜度检查句（判据与收尾技能免跑同构）
+ck "iv-freshness-skip" "grep -qF '凭据记录的 HEAD 与当前 HEAD 一致' \"$IV\" && grep -qF '附一句依据免跑本技能' \"$IV\" && grep -qF '凭据缺失或任一不满足' \"$IV\""
 
 # 断言 10：T1 四层名 + 单测层（分级只覆盖三运行层，单测层由 Step 1 覆盖）
 for w in 集成层 接口兼容层 可运行层 端到端层 单测层; do
