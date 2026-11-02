@@ -1,6 +1,6 @@
 # 集成验证与全量回归 — 完整测试过程
 
-> 记录 `integration-verification` 与 `regression-sweep` 两个技能交付过程中的全部测试活动：每个测试用例的目的、输入、断言与来源。与被测资产同目录存放：静态断言见 `test-integration-verification.sh`（90 项），真实会话场景见 `drills.md`（13 条），本文件是两者的溯源与导读。
+> 记录 `integration-verification` 与 `regression-sweep` 两个技能交付过程中的全部测试活动：每个测试用例的目的、输入、断言与来源。被测资产在 `tests/integration-verification/`：静态断言见 `test-integration-verification.sh`（90 项），真实会话场景见 `drills.md`（13 条），本文件是两者的溯源与导读。
 >
 > 上游：设计 `docs/superpowers/specs/2026-11-01-integration-gate-and-regression-design.md`（成功判断标准 1-9、§3 第 10 条、§5 风险 3/7、决策 2/5/10/11）；计划 `docs/superpowers/plans/2026-11-02-integration-verification-and-regression.md`（Task 5 断言清单）。
 
