@@ -27,16 +27,12 @@
         "path": "skills/executing-plans/SKILL.md"
       },
       {
+        "id": "final-review",
+        "path": "skills/final-review/SKILL.md"
+      },
+      {
         "id": "finishing-a-development-branch",
         "path": "skills/finishing-a-development-branch/SKILL.md"
-      },
-      {
-        "id": "receiving-code-review",
-        "path": "skills/receiving-code-review/SKILL.md"
-      },
-      {
-        "id": "requesting-code-review",
-        "path": "skills/requesting-code-review/SKILL.md"
       },
       {
         "id": "subagent-driven-development",
