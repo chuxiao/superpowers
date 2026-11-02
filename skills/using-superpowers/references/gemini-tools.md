@@ -36,7 +36,7 @@ Gemini CLI 通过 `invoke_agent` 工具派发子代理，该工具接受 `agent_
 | 技能派发形式 | Gemini CLI 中的对应工具 |
 |---------------------|----------------------|
 | 引用 `*-prompt.md` 模板（implementer、task-reviewer、code-reviewer 等） | 先填充模板，然后以 `agent_name: "generalist"` 与填充后的提示词调用 `invoke_agent` |
-| 引用 `superpowers:requesting-code-review` 的 `./code-reviewer.md` | 以 `agent_name: "generalist"` 与填充后的审查模板调用 `invoke_agent` |
+| 引用 `superpowers:final-review` 的 `./code-reviewer.md` | 以 `agent_name: "generalist"` 与填充后的审查模板调用 `invoke_agent` |
 | 内联提示词（未引用模板） | 以 `agent_name: "generalist"` 与你的内联提示词调用 `invoke_agent` |
 
 ### 提示词填充

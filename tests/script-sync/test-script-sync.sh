@@ -22,6 +22,7 @@ check_pair() {
 
 check_pair check-tables.sh skills/brainstorming/scripts/check-tables.sh skills/writing-plans/scripts/check-tables.sh
 check_pair check-mermaid.sh skills/brainstorming/scripts/check-mermaid.sh skills/writing-plans/scripts/check-mermaid.sh
+check_pair review-package skills/subagent-driven-development/scripts/review-package skills/final-review/scripts/review-package
 
 if [ "$fail" -eq 0 ]; then echo "=== script sync: all green ==="; fi
 exit "$fail"

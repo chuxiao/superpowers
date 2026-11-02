@@ -5,11 +5,11 @@ description: 在当前会话中执行含独立任务的实施计划时使用
 
 # 子代理驱动开发
 
-执行计划的方式：为每个任务派发一个全新的实施者（implementer）子代理，每个任务之后进行一次任务审查（设计文档符合性 + 代码质量），最后进行一次全面的整分支终审。
+执行计划的方式：为每个任务派发一个全新的实施者（implementer）子代理，每个任务之后进行一次任务审查（设计文档符合性 + 代码质量），全部任务完成后接力进入 superpowers:final-review 收官把关（整分支终审、安全门与收尾）。
 
 **为什么用子代理：**你把任务委托给拥有隔离上下文的专用 agent。通过精心构造它们的指令与上下文，你确保它们保持专注并完成自己的任务。它们绝不应继承你会话的上下文或历史——你要精确构建出它们所需的一切。这也为你自己的协调工作保住了上下文。
 
-**核心原则：**每任务一个全新子代理 + 任务审查（设计文档 + 质量）+ 全面终审 = 高质量、快速迭代
+**核心原则：**每任务一个全新子代理 + 任务审查（设计文档 + 质量）+ superpowers:final-review 收官把关 = 高质量、快速迭代
 
 **叙述：**工具调用之间至多叙述一行简短文字——记录由台账与工具结果承载。
 
@@ -50,9 +50,7 @@ flowchart TD
 flowchart TD
     prep["准备：工作树、台账检查、读计划、预检"]
     tasks_remaining{"还有剩余任务？"}
-    final_review["终审并收尾：读 references/final-review.md"]
-    cleanup["终审通过：删除本计划的工作区"]
-    finish["使用 superpowers:finishing-a-development-branch"]
+    final_handoff["全部任务完成：接力 superpowers:final-review<br/>整分支终审、安全门与收尾"]
 
     subgraph per_task["每任务"]
         dispatch_implementer["派发实施者子代理 (./implementer-prompt.md)"]
@@ -77,10 +75,8 @@ flowchart TD
     fix_loop -->|已处理，或在上限处搁置| update_ledger
     update_ledger --> tasks_remaining
     tasks_remaining -->|是| dispatch_implementer
-    tasks_remaining -->|否| final_review
-    final_review --> cleanup
-    cleanup --> finish
-    style finish fill:#90ee90
+    tasks_remaining -->|否| final_handoff
+    style final_handoff fill:#90ee90
 ```
 
 ## 准备
@@ -107,7 +103,7 @@ flowchart TD
 
 **集成与判断类任务**（多文件协调、模式匹配、调试）：使用标准档模型。
 
-**架构与设计任务**：使用可用的最强档模型。整分支终审就属于这一类——用可用的最强档模型派发它，而不是会话默认模型。
+**架构与设计任务**：使用可用的最强档模型。
 
 **审查任务**：以同样的判断力选模型，按 diff 的规模、复杂度与风险调节。小型机械性 diff 不需要最强档模型；细微的并发改动需要。针对小型修复 diff 的限定范围重审用最低档到中档。
 
@@ -184,9 +180,9 @@ flowchart TD
 
 然后把待办标记为完成并继续。只要审查中仍有 Critical/Important 未决问题既未修复、也未在轮数上限处附裁决搁置，就绝不进入下一个任务。
 
-## 终审
+## 审查把关
 
-全部任务完成后，读 [references/final-review.md](references/final-review.md) 并照做。它涵盖整分支终审、其中唯一的一轮集中修复（fix wave），以及你如何收尾。
+全部任务完成后，使用 superpowers:final-review 接力：整分支终审、安全门与收尾在那里完成，缺子代理工具只降级形态、不免除环节。
 
 ## 常见合理化借口
 

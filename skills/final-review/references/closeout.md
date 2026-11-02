@@ -4,6 +4,8 @@
 
 整分支终审同样有审查包：运行 `bash scripts/review-package PLAN_FILE MERGE_BASE HEAD`（MERGE_BASE = 分支的起始提交，例如 `git merge-base main HEAD`），并把打印出的路径写进终审的派发内容，这样终审审查者读一个文件即可，不必再用 git 命令重新推导分支 diff。派发到可用的最强档模型上（见 SKILL.md 的 Model Selection（模型选择）），使用 [code-reviewer.md](../code-reviewer.md)。向它指出台账中暂缓的 minor 行与搁置行，以便它甄别哪些必须在合并前修复。
 
+在动手处理任何发现项之前，先按影响重新分级：审查者的严重度标签只是建议，闸门在你手里；一个发现项的级别取决于「若交付，使用这款软件的通情达理的人会得到什么」，而不是设计文档是否点名了触发它的输入——因为设计文档沉默而把某发现项定为 Minor 的审查者，给设计文档评了级，而不是给影响评级。它的「Declined to judge」（不予判定）清单同样归你，每一行都要由你做出裁决并记入台账。
+
 如果整分支终审返回发现项，派发仅一个修复子代理，附上完整的发现项清单——而不是每个发现项各派一个修复者。逐发现项的修复者，每个都要重建上下文并重跑测试套件；某个真实会话中，终审那一轮集中修复（fix wave）的成本超过了该会话全部任务的总和。
 
 **没有子代理工具时：**由你亲自修复全部发现项，每项修复 RED→GREEN + 全绿测试套件，把 `Final: fix self (no subagent tool)` 写入台账，并在最终消息说明这一点：自查修复弱于派发修复者的全新上下文，由你的需求方在合并前决定这是否足够。然后对这轮集中修复运行恰好一次限定范围的复审（用 `bash scripts/review-package PLAN_FILE FIX_BASE HEAD` 覆盖修复范围，配合 [re-review-prompt.md](../../subagent-driven-development/re-review-prompt.md)）。

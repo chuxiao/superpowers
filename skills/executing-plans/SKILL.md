@@ -5,9 +5,9 @@ description: 在当前会话中由你亲自以实施者身份执行实施计划�
 
 # 执行计划
 
-在本会话中由你自己逐个任务地执行计划：每个任务不派实施者子代理，也不派审查者。最后对整个分支做一次全新上下文的审查。
+在本会话中由你自己逐个任务地执行计划：每个任务不派实施者子代理，也不派审查者。全部任务完成后，接力进入 superpowers:final-review 对整个分支做收官把关。
 
-**为何会话内执行：** 子代理驱动开发为每个任务都要付出一名全新实施者和一名全新审查者，两者都要从零重读代码库。会话内执行付出的只是一个上下文（你的），外加最后的一名审查者。它放弃的是每个任务一个全新上下文，以及每个任务的第二双眼睛。本技能用其他手段把全新实施者与全新审查者买到的东西保住：简报就是设计文档，台账就是你的记忆，TDD 是每个任务的闸门，终审审查者就是那第二双眼睛。
+**为何会话内执行：** 子代理驱动开发为每个任务都要付出一名全新实施者和一名全新审查者，两者都要从零重读代码库。会话内执行付出的只是一个上下文（你的），外加收官把关的一名全新审查者。它放弃的是每个任务一个全新上下文，以及每个任务的第二双眼睛。本技能用其他手段把全新实施者与全新审查者买到的东西保住：简报就是设计文档，台账就是你的记忆，TDD 是每个任务的闸门，final-review 的收官审查者就是那第二双眼睛。
 
 **核心原则：** 计划已经完成了思考。严格按它执行，每一步都要有你亲眼看着先失败、后通过的测试来证明，并留下在你自己遗忘之后仍然存在的记录。
 
@@ -25,7 +25,7 @@ description: 在当前会话中由你亲自以实施者身份执行实施计划�
 - 你的 harness 没有子代理工具（见 `../using-superpowers/references/` 中的各平台参考）。绝不伪造派发；就在这里执行计划。
 - 任务大体相互独立——与 superpowers:subagent-driven-development 的前提条件相同。
 
-一份把决策写尽的任务规格（Files、Interfaces、边界条件、验收标准）会让会话内执行变成按图施工加测试：即使会话内用的是中档模型，它也运行良好，而最强档模型唯一物有所值之处是终审，本技能会把终审单独派发出去。需求方选择会话内执行时，把这一点告诉他们。
+一份把决策写尽的任务规格（Files、Interfaces、边界条件、验收标准）会让会话内执行变成按图施工加测试：即使会话内用的是中档模型，它也运行良好，而最强档模型唯一物有所值之处是收官把关，本技能会把 superpowers:final-review 单独接力出去。需求方选择会话内执行时，把这一点告诉他们。
 
 当需求方希望每个任务都有审查闸门，或计划长到其后面的任务会在压缩后的上下文上运行时，优先选 superpowers:subagent-driven-development。长计划上的会话内执行仍然可行——台账正是让它可恢复的东西——但最后几个任务能从你这里得到的，已经所剩无几。
 
@@ -35,12 +35,7 @@ description: 在当前会话中由你亲自以实施者身份执行实施计划�
 flowchart TD
     prep["准备：工作树、工作区 + 台账、阅读计划 + 设计文档、预检扫描"]
     more_tasks{"还有更多任务？"}
-    branch_review["整分支终审（如有全新审查者可用）"]
-    triage_and_fix["重新分级，然后：Critical/Important → 仅一轮修复，每项修复 RED→GREEN + 全绿测试套件；Minor → 记入台账"]
-    security_gate{"安全门"}
-    sg_fix["安全修复轮：恰好一轮 RED→GREEN + 全绿套件，随后安全复审"]
-    cleanup["终审与安全门通过：删除本计划的工作区"]
-    finish["使用 superpowers:finishing-a-development-branch"]
+    final_handoff["全部任务完成：接力 superpowers:final-review<br/>整分支终审、安全门与收尾"]
 
     subgraph per_task["每个任务"]
         task_start["task-start：简报 + BASE；阅读简报"]
@@ -63,14 +58,8 @@ flowchart TD
     contract_met -->|是| task_done
     task_done --> more_tasks
     more_tasks -->|是| task_start
-    more_tasks -->|否| branch_review
-    branch_review --> triage_and_fix
-    triage_and_fix --> security_gate
-    security_gate -->|快速放行 / 仅 Minor| cleanup
-    security_gate -->|Critical/Important| sg_fix
-    sg_fix --> cleanup
-    cleanup --> finish
-    style finish fill:#90ee90
+    more_tasks -->|否| final_handoff
+    style final_handoff fill:#90ee90
 ```
 
 ## 准备
@@ -142,36 +131,9 @@ flowchart TD
 
 失败的运行什么也不记录；任务即未完成。记录成功后，把待办标记为完成，领取下一个任务。
 
-## 终审
+## 审查把关
 
-运行 `../subagent-driven-development/scripts/review-package PLAN_FILE MERGE_BASE HEAD`（MERGE_BASE = 分支的起始提交，例如 `git merge-base main HEAD`），并从它打印出的那份文件开始审查。
-
-**有子代理工具时：** 使用 superpowers:requesting-code-review 的 [code-reviewer.md](../requesting-code-review/code-reviewer.md)，把审查者派发到可用的最强档模型上——整分支终审是一项判断型任务。审查基准是双层的：设计文档是**意图基准**（实现是否符合其功能清单所列的用户可见行为与「明确不做」清单），计划是**规格基准**（各任务的验收标准与边界条件是否被实现与测试兑现）。随附：审查包路径、计划与设计文档的路径；把计划中各任务的「边界条件」小节指给审查者（那是设计文档暗示、却最容易被测试遗漏的输入类型与失败模式的清单——审查者会刻意逐一核查）；再附一个指向台账中 `Ruling:` 行的指引，让审查者能权衡你做出的取舍。要显式指定模型；若不指定，就会继承会话当前的模型，而那未必是最强档。这是整轮运行买到的唯一一份全新上下文。不要跳过它，也不要用你自己对 diff 的阅读替代它。
-
-**没有子代理工具时：** 阅读 code-reviewer.md，亲自对照审查包执行那次审查，作为最后一个任务的台账行之后的独立一轮。把 `Final review: self-review (no subagent tool)` 写入台账，并在你的最终消息中说明这一点：作者的自我审查弱于全新审查者的审查，由你的需求方在合并前决定这是否足够。
-
-在动手处理任何发现项之前，先给它们分级。审查者的严重度标签只是建议；闸门在你手里。它的「Declined to judge」（不予判定）清单同样归你：其中每一行都要由你做出裁决并记入台账，处理方式与「计划错了」时完全相同——`Final: Ruling: <behavior the reviewer set aside> — <what a reasonable person using this software gets, and why that stands or why it is now a finding> — <cost if wrong>`。先按影响重新分级：设计文档是一份愿景文档，一个发现项的级别取决于「若交付，使用这款软件的通情达理的人会得到什么」，而不是设计文档是否点名了触发它的输入——因为设计文档沉默而把某发现项定为 Minor 的审查者，给设计文档评了级，而不是给影响评级。然后：
-
-- **Critical（必须修复）和 Important（应当修复）**进入修复轮。
-- **Minor（最好能有）**以 `Final: minor (deferred): <one-liner>` 记入台账，并进入你最终消息的「Deferred minors」（搁置的 Minor）一栏。Minor 绝不进入修复轮，也绝不变成裁决——裁决是对冲突的决定，不是一条记录你婉拒了某个打磨建议的备注。
-
-Critical 和 Important 发现项由你自己修复——在这里你就是实施者——且仅用一轮。每项修复都由 TDD 验证，而不是由第二名审查者验证：写出复现该发现项的测试，看着它失败，让它通过，然后运行整个测试套件。把每一项以 `Final: fixed <finding> — <test name> RED→GREEN, suite <N>/<N>` 记入台账。修复若没有先失败过的测试，就没有得到验证；这一轮之后测试套件不是全绿，就意味着这一轮尚未结束。不要派发复审：它会去重读一个 diff，而覆盖该 diff 的测试已经回答了「已解决」，其测试套件运行也已经回答了「没弄坏任何东西」。
-
-你决定不修的发现项就是一项裁决——`Final: Ruling: <finding> — <why the code stands> — <cost if wrong>`——并经由裁决清单送达你的需求方。不存在第二轮修复。
-
-### 安全门
-
-终审及其后的一切修复/复审工作收尾之后、编制裁决清单与删除工作区之前，执行安全门——它是合并前的最后一道安全把关：所有分支必过；缺子代理工具只降级形态，不免除把关。完整规则（审查者派发与输入、Clean-Pass 与分级处置、恰好一轮安全修复与安全复审、台账行格式、移交渠道）见 `../subagent-driven-development/references/final-review.md` 的「安全门」一节，照做，不在此处复述。
-
-## 收尾
-
-在删除任何东西之前，把台账中所有含 `Ruling:` 的行都收进你最终消息的「Rulings I made」（我做出的裁决）一栏，按你做出它们的顺序排列，每条都写明错了的代价；并把每一行 `minor (deferred)` 收进「Deferred minors」一栏。两份清单都必须完整收录、无一遗漏。你的最终消息是唯一渠道：你代表需求方做出的决定，以及你选择不处理的发现项，都只有靠它才能传到他们那里。
-
-当终审干净、其修复也已提交之后，删除本计划的工作区目录——git 历史从现在起就是记录。同级目录属于其他计划；别去动它们。
-
-安全门的全部行（clean-pass、裁决、minor deferred、self-review）收进你最终消息的 Security gate 小节，其中裁决行同时进 Rulings I made。
-
-使用 superpowers:finishing-a-development-branch。
+全部任务完成后，使用 superpowers:final-review 接力：整分支终审、安全门与收尾在那里完成，缺子代理工具只降级形态、不免除环节。
 
 ## 常见合理化借口
 
