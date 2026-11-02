@@ -53,7 +53,7 @@ ck "ep-no-gate-rules"           "! grep -Eq '### 安全门|Final: security-gate:
 ck "ep-gate-must-pass"          "grep -q '所有分支必过' \"$SDD\""
 
 # 断言 6：台账行格式三条 + [已修复] 前缀（权威源 closeout.md）；收集追加句
-# 仅权威源查、且位于 finishing 句之前
+# 仅权威源查、且位于 integration-verification 句之前
 APPEND='安全门的全部行（clean-pass、裁决、minor deferred、self-review）收进你最终消息的 Security gate 小节，其中裁决行同时进 Rulings I made。'
 ck "ledger-clean-pass"     "grep -q 'Final: security-gate: clean-pass:' \"$SDD\""
 ck "ledger-minor-deferred" "grep -q 'Final: security-gate: minor (deferred):' \"$SDD\""
@@ -62,7 +62,7 @@ ck "fixed-prefix"          "grep -qF '\`[已修复] \` 前缀' \"$SDD\""
 for f in "$SDD"; do
   n=$(basename "$f")
   ck "append-sentence:$n"       "grep -qF \"$APPEND\" \"$f\""
-  ck "append-before-finishing:$n" "[ \"\$(grep -nF \"$APPEND\" \"$f\" | head -1 | cut -d: -f1)\" -lt \"\$(grep -n '使用 superpowers:integration-verification' \"$f\" | tail -1 | cut -d: -f1)\" ]"
+  ck "append-before-integration-verification:$n" "[ \"\$(grep -nF \"$APPEND\" \"$f\" | head -1 | cut -d: -f1)\" -lt \"\$(grep -n '使用 superpowers:integration-verification' \"$f\" | tail -1 | cut -d: -f1)\" ]"
 done
 
 # 断言 6b：行为承重句持久锁——门模板的四条行为边界、「文件」窄解，

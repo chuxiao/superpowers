@@ -38,7 +38,7 @@ flowchart TD
     DS["diagnosing-superpowers<br/>（会话出问题时，旁路）"]
 ```
 
-两条人工确认门是链路上仅有的强制停顿点：设计文档确认（意图）、计划确认（规格）。其余环节任务之间都不停顿。
+两条人工确认门是链路上仅有的强制停顿点：设计文档确认（意图）、计划确认（规格）。其余环节任务之间都不停顿——例外是集成验证存在稳定失败：一遍跑完后集中呈现，待需求方逐项定性才继续。
 
 产物链：设计文档 → 实施计划 → 台账与审查包（`.superpowers/sdd/`，git 忽略，随工作区删除）→ 提交 → 审查报告 → Rulings / Deferred minors 清单 → 合并或 PR。
 
@@ -78,7 +78,7 @@ flowchart TD
 
 **executing-plans** —— 由原会话亲自逐任务执行：简报即需求、台账即记忆，每任务从验收标准展开 TDD，全部任务完成后接力 superpowers:requesting-code-review 收官把关。
 - 触发：需求方在计划交接时选了会话内执行，或 harness 没有子代理工具。
-- 输出：逐任务提交 + 台账（progress.md，含全部 Ruling）+ requesting-code-review 收官把关（修复/裁决）+ 移交 finishing-a-development-branch。
+- 输出：逐任务提交 + 台账（progress.md，含全部 Ruling）+ requesting-code-review 收官把关（修复/裁决）+ 集成验证（integration-verification）衔接收尾。
 
 **subagent-driven-development** —— 控制者逐任务派发全新实施者子代理，任务审查作为每任务闸门（修复循环有轮数上限和熔断），全部任务完成后接力 superpowers:requesting-code-review 收官把关。
 - 触发：有实施计划、任务大体独立、有子代理工具、需求方未选会话内执行。
@@ -118,7 +118,7 @@ flowchart TD
 
 **requesting-code-review** —— 审查域单户，三入口。收官把关 = 整分支终审（code-reviewer 模板，双层基准：设计文档=意图、计划=规格，文档未提及的行为按理性之人预期评）→ 恰好一轮集中修复 → 限定复审 → 安全门（security-reviewer 模板，五面判据，所有分支必过）→ 收尾（穷尽裁决清单）；缺子代理工具只降级形态，不免除环节。
 - 触发：实施计划全部任务完成后（两执行技能一句接力）；完成任务、重大功能、合并之前的审查请求；收到任何代码审查反馈、实施建议之前（接收纪律见其 references/receiving-feedback.md）。
-- 输出：收官 =「Rulings I made」穷尽清单 + Security gate 小节 + 移交 finishing-a-development-branch；临时审查 = 报告（每条发现项带 file:line）；反馈 = 逐项验证后的实施或有理有据的反驳。
+- 输出：收官 =「Rulings I made」穷尽清单 + Security gate 小节 + 移交 integration-verification（集成验证）；临时审查 = 报告（每条发现项带 file:line）；反馈 = 逐项验证后的实施或有理有据的反驳。
 
 ## 集成验证（收官之后、收尾之前）
 
@@ -128,7 +128,7 @@ flowchart TD
 
 ## ⑤ 收尾集成
 
-**finishing-a-development-branch** —— 测试全绿后把集成决定交还需求方：菜单逐字呈现（本地合并 / 推送建 PR / 保留），绝不自作主张合并或丢弃；合并后在合并结果上重跑测试。
+**finishing-a-development-branch** —— 测试全绿后（集成验证出口凭据 + HEAD 一致 + 工作区干净三判据满足则免跑套件）把集成决定交还需求方：菜单逐字呈现（本地合并 / 推送建 PR / 保留），绝不自作主张合并或丢弃；合并后在合并结果上重跑测试；选择合并或 PR 后把本次验证方案并入场景登记册。
 - 触发：实现完成、完整测试套件通过、需要决定如何集成。
 - 输出：所选选项的执行结果（合并 + 删分支 / PR URL / 保留报告）+ 工作树清理。
 
