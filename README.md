@@ -339,7 +339,11 @@ Restart any active Muse sessions after installing so the `SessionStart` hook tak
 
 6. **requesting-code-review** - Activates for code review requests, after all plan tasks (whole-branch final review, security gate, and closeout), and when receiving review feedback.
 
-7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
+7. **integration-verification** - Activates after review closeout and before finishing. Runs the full test suite, then layered integration checks (module assembly, API compatibility, runnable build, E2E smoke paths); stable failures are presented together for the requester to rule on.
+
+8. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
+
+9. **regression-sweep** - Activates only on an explicit trigger (by the requester or an external scheduler). Reruns the whole project scenario registry on the baseline and produces a persisted report.
 
 **The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
 
@@ -375,9 +379,11 @@ Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of t
 - **executing-plans** - Inline plan execution: one context, one final review
 - **dispatching-parallel-agents** - Concurrent subagent workflows
 - **requesting-code-review** - Code review: whole-branch final review, security gate, feedback receiving
+- **integration-verification** - Branch integration gate: full test suite plus layered verification (assembly, API compatibility, runnable build, E2E) between review closeout and finishing
 - **using-git-worktrees** - Parallel development branches
 - **finishing-a-development-branch** - Merge/PR decision workflow
 - **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
+- **regression-sweep** - Explicitly triggered full-project regression: reruns the scenario registry on the baseline, writes a persisted report
 
 **Meta**
 - **writing-skills** - Create new skills following best practices (includes testing methodology)

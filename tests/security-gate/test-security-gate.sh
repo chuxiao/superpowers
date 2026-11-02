@@ -62,7 +62,7 @@ ck "fixed-prefix"          "grep -qF '\`[已修复] \` 前缀' \"$SDD\""
 for f in "$SDD"; do
   n=$(basename "$f")
   ck "append-sentence:$n"       "grep -qF \"$APPEND\" \"$f\""
-  ck "append-before-finishing:$n" "[ \"\$(grep -nF \"$APPEND\" \"$f\" | head -1 | cut -d: -f1)\" -lt \"\$(grep -n '使用 superpowers:finishing-a-development-branch。' \"$f\" | tail -1 | cut -d: -f1)\" ]"
+  ck "append-before-finishing:$n" "[ \"\$(grep -nF \"$APPEND\" \"$f\" | head -1 | cut -d: -f1)\" -lt \"\$(grep -n '使用 superpowers:integration-verification' \"$f\" | tail -1 | cut -d: -f1)\" ]"
 done
 
 # 断言 6b：行为承重句持久锁——门模板的四条行为边界、「文件」窄解，

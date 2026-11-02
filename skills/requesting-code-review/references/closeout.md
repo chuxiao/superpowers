@@ -52,4 +52,4 @@
 
 安全门的全部行（clean-pass、裁决、minor deferred、self-review）收进你最终消息的 Security gate 小节，其中裁决行同时进 Rulings I made。
 
-使用 superpowers:finishing-a-development-branch。
+使用 superpowers:integration-verification。集成验证完成后再移交 superpowers:finishing-a-development-branch。

@@ -55,7 +55,8 @@ flowchart LR
     RR --> SG{"安全门<br/>所有分支必过"}
     SG -->|"Clean-Pass / 仅 Minor"| CO["收尾<br/>穷尽裁决清单+删工作区"]
     SG -->|"Critical/Important"| SF["安全修复轮<br/>恰好一轮+安全复审"] --> CO
-    CO --> FIN["使用 superpowers:finishing-a-development-branch"]
+    CO --> IV["使用 superpowers:integration-verification"]
+    IV --> FIN["使用 superpowers:finishing-a-development-branch"]
     style FIN fill:#90ee90
 ```
 

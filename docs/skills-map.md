@@ -27,7 +27,8 @@ flowchart TD
     LOOP --> CR
 
     SDD --> CR["requesting-code-review 接力：整分支终审<br/>→ 恰好一轮集中修复 → 限定复审<br/>→ 安全门（五面判据，所有分支必过）<br/>→ 收尾：穷尽裁决清单 + 删工作区"]
-    CR --> FIN["⑤ finishing-a-development-branch<br/>在合并结果上重跑全量测试"]
+    CR --> IV["integration-verification<br/>Step 1 全量测试套件（失败即停）<br/>Step 2 分层验证（按需求级验证方案）<br/>稳定失败一遍跑完集中呈现 → 需求方定性裁决"]
+    IV --> FIN["⑤ finishing-a-development-branch<br/>Step 1 条件免跑：集成验证出口凭据<br/>+ HEAD 一致 + 工作区干净；合并或 PR 后并入场景登记册"]
     FIN --> DEC{"需求方选择"}
     DEC -- "本地合并" --> M([合并回基准分支])
     DEC -- "推送建 PR" --> P([Pull Request])
@@ -119,6 +120,12 @@ flowchart TD
 - 触发：实施计划全部任务完成后（两执行技能一句接力）；完成任务、重大功能、合并之前的审查请求；收到任何代码审查反馈、实施建议之前（接收纪律见其 references/receiving-feedback.md）。
 - 输出：收官 =「Rulings I made」穷尽清单 + Security gate 小节 + 移交 finishing-a-development-branch；临时审查 = 报告（每条发现项带 file:line）；反馈 = 逐项验证后的实施或有理有据的反驳。
 
+## 集成验证（收官之后、收尾之前）
+
+**integration-verification** —— 补「集成层成立」这道闸：单任务 TDD 证明单任务行为、终审与安全门证明代码质量与安全，没有谁证明过模块组装、接口兼容、构建产物可运行、关键路径端到端——本技能 Step 1 跑全量测试套件（失败即停），Step 2 按需求级验证方案分层验证（集成层 L1 / 接口兼容层 / 可运行层 L2 / 端到端层 L3，按形态路由执行）；稳定失败一遍跑完后集中呈现，需求方逐项定性裁决（非 bug → 调方案增量重跑；bug → 回修或带残留继续）；无集成面的分支附一句依据快速放行。
+- 触发：审查收官（requesting-code-review）收尾段移交；或需求方单独调用（开发中途验证分支集成状态、失败修复后复查）。
+- 输出：链路接力出口 = 移交 finishing-a-development-branch（全绿或带残留继续，残留随移交呈现）+ 台账出口凭据（收尾技能免跑判据的输入）；单独调用出口 = 验证报告。
+
 ## ⑤ 收尾集成
 
 **finishing-a-development-branch** —— 测试全绿后把集成决定交还需求方：菜单逐字呈现（本地合并 / 推送建 PR / 保留），绝不自作主张合并或丢弃；合并后在合并结果上重跑测试。
@@ -134,6 +141,10 @@ flowchart TD
 **diagnosing-superpowers** —— 解剖一场出问题的会话（重复劳动、技能没触发、结果差、太贵），定位原因或产出可提交的 bug 报告。
 - 触发：会话出了问题、需求方想知道为什么，或要给上游报 bug。
 - 输出：诊断案件文档 / bug 报告（含脱敏流程）。
+
+**regression-sweep** —— 全量回归：按项目级场景登记册（`docs/verification/` 文件集）在基线上全量重跑，检测跨分支的历史累积回归；一遍跑完后集中呈现，需求方逐项定性裁决（非 bug → 调方案增量重跑；bug → 回修走正常工作流，或登记为已知不修）；回归不修代码。
+- 触发：仅显式触发——需求方口头明示或外部调度器显式调用，绝不隐式自动运行。
+- 输出：留痕报告落盘 `docs/verification/reports/`（当次结果、失败项归因与裁决、待合并与已知不修清单）。
 
 ---
 
