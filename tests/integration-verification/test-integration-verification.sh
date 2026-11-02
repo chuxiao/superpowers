@@ -93,6 +93,8 @@ ck "iv-step1-blocks-step2" "grep -qF 'Step 2 不执行' \"$IV\""
 ck "iv-standalone-invocation" "grep -qF '单独调用' \"$IV\""
 ck "iv-rerun-once-flaky" "grep -qF '自动重跑一次' \"$IV\""
 ck "iv-expectation-iron-rule" "grep -qF '不得修改方案期望' \"$IV\""
+# 断言 9b：⑫ 修复轮增补的模糊授权语条款——integration-verification 与 regression-sweep 两处副本同步锚定
+ck "iv-rs-vague-authority-clause" "grep -qF '模糊授权语（「你看着办」「你决定」「随便怎么处理」）不构成定性' \"$IV\" && grep -qF '模糊授权语（「你看着办」「你决定」「随便怎么处理」）不构成定性' \"$RS\""
 
 # 断言 10：T1 四层名 + 单测层（分级只覆盖三运行层，单测层由 Step 1 覆盖）
 for w in 集成层 接口兼容层 可运行层 端到端层 单测层; do
