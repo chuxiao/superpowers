@@ -13,10 +13,14 @@ description: 在需求方明示要求全量回归整个项目、或外部调度�
 flowchart TD
     TR["显式触发<br/>需求方口头明示或外部调度器调用"] --> RD["读登记册文件集<br/>模块文件与跨模块文件"]
     RD -->|"登记册无场景"| EMPTY["报告写明登记册无场景<br/>出口正常"]
-    RD --> RUN["全量重跑全部场景<br/>一遍跑完、互相不阻断"]
+    RD --> BASE["核对工作区处于基线状态<br/>不符则先切到基线"]
+    BASE -->|"切不到基线"| STOP["停下移交需求方<br/>不执行重跑"]
+    BASE --> RUN["全量重跑全部场景<br/>一遍跑完、互相不阻断"]
     RUN -->|"全绿，偶发已记台账"| GREEN["报告：当次全绿<br/>附不证明无缺陷句"]
     RUN -->|"存在稳定失败"| ALL["集中呈现失败项<br/>证据对照+推荐裁定"]
-    ALL -->|"定性非bug：调方案，增量重跑"| RUN
+    ALL -->|"定性非bug：调方案"| INC["增量重跑<br/>仅重跑被定性条目"]
+    INC -->|"仍失败"| ALL
+    INC -->|"通过，并入当次结果"| GREEN
     ALL -->|"定性bug：回修"| FLOW["走正常工作流<br/>作为新需求进入计划"]
     ALL -->|"定性bug：已知不修"| KNOWN["登记册标注状态<br/>此后单列呈现不计失败"]
     GREEN --> OUT["报告落盘<br/>docs/verification/reports/"]
@@ -43,9 +47,11 @@ flowchart TD
 
 ## 执行（全量重跑）
 
+回归重跑发生在基线上，不跑在触发时恰好所在的分支工作区——执行前先核对工作区处于基线状态：HEAD 为基线最新提交（默认主开发线，需求方可指定）且工作区干净（`git status --porcelain` 为空），不符则先切到基线；切不到基线（基线不可达、存在无法安全搁置的未提交改动）→ 停下移交需求方，不执行重跑。
+
 读登记册文件集全部场景文件，`normal` 场景全量重跑——重跑整个场景，不是失败步骤。执行手段按项目声明（`environment.md`）；项目声明可覆盖执行器选择，覆盖后资产化标准不变。进门禁的必须是确定性脚本资产（进版本库、可重复执行、断言确定性）；登记册指向人工验证清单的条目不伪装自动化，汇总呈现由需求方人工执行。
 
-形态路由：按各场景归属模块的形态加载 superpowers:integration-verification 的形态参考——后端 `skills/integration-verification/references/backend.md`、Web `references/web.md`、App `references/mobile.md`；混合形态按模块各自路由；跨模块场景由涉及模块的路由共同执行；Electron/Tauri 走 Web 路由；形态外项目不走路由，按项目声明执行。
+形态路由：按各场景归属模块的形态加载 superpowers:integration-verification 的形态参考——后端 `skills/integration-verification/references/backend.md`、Web `skills/integration-verification/references/web.md`、App `skills/integration-verification/references/mobile.md`；混合形态按模块各自路由；跨模块场景由涉及模块的路由共同执行；Electron/Tauri 走 Web 路由；形态外项目不走路由，按项目声明执行。
 
 执行规则（与集成验证同判据）：
 
