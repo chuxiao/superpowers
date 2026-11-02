@@ -9,9 +9,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SR="$REPO_ROOT/skills/final-review/security-reviewer.md"
-RR="$REPO_ROOT/skills/final-review/security-re-review-prompt.md"
-SDD="$REPO_ROOT/skills/final-review/references/closeout.md"
+SR="$REPO_ROOT/skills/requesting-code-review/security-reviewer.md"
+RR="$REPO_ROOT/skills/requesting-code-review/security-re-review-prompt.md"
+SDD="$REPO_ROOT/skills/requesting-code-review/references/closeout.md"
 EP="$REPO_ROOT/skills/executing-plans/SKILL.md"
 
 fail=0
@@ -41,10 +41,10 @@ ck "gate-face-source-mapping" "[ \"$MAP_OK\" = 1 ]"
 
 # 断言 4：禁句正则（两模板）
 for f in "$SR" "$RR"; do
-  ck "no-after-final-review:$(basename "$f")" "! grep -Eq '(还会|之后|后续)[^。]*终审' \"$f\""
+  ck "no-after-requesting-code-review:$(basename "$f")" "! grep -Eq '(还会|之后|后续)[^。]*终审' \"$f\""
 done
 
-# 断言 5：单一权威源——安全门规则全文唯一存在于 final-review 技能的收口规程
+# 断言 5：单一权威源——安全门规则全文唯一存在于 requesting-code-review 技能的收口规程
 # （references 文件无 SKILL.md 的 compaction 字节上限），两执行技能只保留接力句。
 # 单一源使两执行方式的措辞漂移在结构上不可能（设计风险 2 的更强解）。
 extract() { awk 'f && /^#/{exit} /^### 安全门/{f=1} f' "$1"; }

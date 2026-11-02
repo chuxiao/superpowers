@@ -337,7 +337,7 @@ Restart any active Muse sessions after installing so the `SessionStart` hook tak
 
 5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
 
-6. **final-review** - Activates for code review requests, after all plan tasks (whole-branch final review, security gate, and closeout), and when receiving review feedback.
+6. **requesting-code-review** - Activates for code review requests, after all plan tasks (whole-branch final review, security gate, and closeout), and when receiving review feedback.
 
 7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
 
@@ -374,7 +374,7 @@ Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of t
 - **writing-plans** - Detailed implementation plans
 - **executing-plans** - Inline plan execution: one context, one final review
 - **dispatching-parallel-agents** - Concurrent subagent workflows
-- **final-review** - Code review: whole-branch final review, security gate, feedback receiving
+- **requesting-code-review** - Code review: whole-branch final review, security gate, feedback receiving
 - **using-git-worktrees** - Parallel development branches
 - **finishing-a-development-branch** - Merge/PR decision workflow
 - **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)

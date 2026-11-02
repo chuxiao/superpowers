@@ -1,6 +1,8 @@
 # 终审并收尾
 
-本文是 superpowers:final-review 的一部分。计划中的每个任务均已完成。
+本文是 superpowers:requesting-code-review 的一部分。计划中的每个任务均已完成。
+
+### 整分支终审
 
 整分支终审同样有审查包：运行 `bash scripts/review-package PLAN_FILE MERGE_BASE HEAD`（MERGE_BASE = 分支的起始提交，例如 `git merge-base main HEAD`），并把打印出的路径写进终审的派发内容，这样终审审查者读一个文件即可，不必再用 git 命令重新推导分支 diff。派发到可用的最强档模型上（见 SKILL.md 的 Model Selection（模型选择）），使用 [code-reviewer.md](../code-reviewer.md)。向它指出台账中暂缓的 minor 行与搁置行，以便它甄别哪些必须在合并前修复。
 
@@ -26,14 +28,14 @@
 
 用与终审相同的方式生成整分支审查包（`review-package PLAN_FILE MERGE_BASE HEAD`，MERGE_BASE = 分支的起始提交）。
 
-**有子代理工具时：** 把审查者派发到可用的最强档模型上（安全门是判断型任务，与终审同级；按 Model Selection 显式指定模型），使用 `skills/final-review/security-reviewer.md` 模板。随附三样输入：审查包路径；终审发现清单（从台账与修复记录整理——已被修复的项加 `[已修复] ` 前缀，未修复项无标记）；台账中搁置/暂缓行的指引。
+**有子代理工具时：** 把审查者派发到可用的最强档模型上（安全门是判断型任务，与终审同级；按 Model Selection 显式指定模型），使用 `skills/requesting-code-review/security-reviewer.md` 模板。随附三样输入：审查包路径；终审发现清单（从台账与修复记录整理——已被修复的项加 `[已修复] ` 前缀，未修复项无标记）；台账中搁置/暂缓行的指引。
 
-**没有子代理工具时：** 阅读 `skills/final-review/security-reviewer.md`，亲自按模板对照审查包执行安全自查，把 `Final: security-gate: self-review (no subagent tool)` 写入台账，并在最终消息说明这一点：自查弱于全新审查者的审查，由你的需求方在合并前决定这是否足够。
+**没有子代理工具时：** 阅读 `skills/requesting-code-review/security-reviewer.md`，亲自按模板对照审查包执行安全自查，把 `Final: security-gate: self-review (no subagent tool)` 写入台账，并在最终消息说明这一点：自查弱于全新审查者的审查，由你的需求方在合并前决定这是否足够。
 
 按报告处置：
 
 - **Clean-Pass** → 记台账行 `Final: security-gate: clean-pass: <一句依据>`。
-- **Critical / Important** → 恰好一轮安全修复：有子代理工具时派单个修复子代理携带完整发现清单，没有时由你亲自修复。每项修复 RED→GREEN + 全绿测试套件；修复报告必须含覆盖测试的命令与输出证据；每项发现项记台账行 `Final: security-gate: finding (<severity>): <one-liner>`。随后恰好一次安全复审：有子代理工具时用 `skills/final-review/security-re-review-prompt.md` 派发最强档子代理（Model Selection 中「限定范围重审用最低档到中档」的规则不适用于安全门复审，依据为设计文档决策 6），没有时由你亲自按模板执行，以台账中的安全修复行及其测试输出作为 `[REPORT_FILE]` 的等价物。
+- **Critical / Important** → 恰好一轮安全修复：有子代理工具时派单个修复子代理携带完整发现清单，没有时由你亲自修复。每项修复 RED→GREEN + 全绿测试套件；修复报告必须含覆盖测试的命令与输出证据；每项发现项记台账行 `Final: security-gate: finding (<severity>): <one-liner>`。随后恰好一次安全复审：有子代理工具时用 `skills/requesting-code-review/security-re-review-prompt.md` 派发最强档子代理（Model Selection 中「限定范围重审用最低档到中档」的规则不适用于安全门复审，依据为设计文档决策 6），没有时由你亲自按模板执行，以台账中的安全修复行及其测试输出作为 `[REPORT_FILE]` 的等价物。
 - **复审后的 NOT ADDRESSED 残留与新安全问题** → 记台账裁决行 `Final: security-gate: Ruling: <finding> — <decision> — <cost>`，移交需求方。不存在第二轮安全修复——熔断有界，残留项沿收尾渠道可见。
 - **Minor** → 记台账行 `Final: security-gate: minor (deferred): <one-liner>`，绝不进入安全修复轮。
 - **非安全观察与范围外安全观察**（门与复审两处）→ 记入台账：非安全观察不阻塞；范围外安全观察按 `Final: security-gate: finding (<severity>): <one-liner>` 记录、进 Security gate 小节，承重者由你做出裁决。

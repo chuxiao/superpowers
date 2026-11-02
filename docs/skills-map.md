@@ -26,7 +26,7 @@ flowchart TD
     EP --> LOOP["逐任务（TDD 是闸门）：<br/>test-driven-development 批量红绿 → 提交<br/>出 bug → systematic-debugging<br/>独立失败 → dispatching-parallel-agents<br/>声称完成前 → verification-before-completion"]
     LOOP --> CR
 
-    SDD --> CR["final-review 接力：整分支终审<br/>→ 恰好一轮集中修复 → 限定复审<br/>→ 安全门（五面判据，所有分支必过）<br/>→ 收尾：穷尽裁决清单 + 删工作区"]
+    SDD --> CR["requesting-code-review 接力：整分支终审<br/>→ 恰好一轮集中修复 → 限定复审<br/>→ 安全门（五面判据，所有分支必过）<br/>→ 收尾：穷尽裁决清单 + 删工作区"]
     CR --> FIN["⑤ finishing-a-development-branch<br/>在合并结果上重跑全量测试"]
     FIN --> DEC{"需求方选择"}
     DEC -- "本地合并" --> M([合并回基准分支])
@@ -73,13 +73,13 @@ flowchart TD
 |---|---|---|
 | 何时选 | 强耦合小改动；探索性强到写不出稳定验收标准；没有子代理工具 | 任务边界清晰、验收标准稳定；想要每任务一双独立的眼睛 |
 | 上下文成本 | 一个上下文 + 收官把关的全新审查者 | 每任务一个实施者 + 一次审查 + 收官把关 |
-| 审查时机 | 只在最后：final-review 收官把关 | 每任务后任务审查 + 最后 final-review 收官把关 |
+| 审查时机 | 只在最后：requesting-code-review 收官把关 | 每任务后任务审查 + 最后 requesting-code-review 收官把关 |
 
-**executing-plans** —— 由原会话亲自逐任务执行：简报即需求、台账即记忆，每任务从验收标准展开 TDD，全部任务完成后接力 superpowers:final-review 收官把关。
+**executing-plans** —— 由原会话亲自逐任务执行：简报即需求、台账即记忆，每任务从验收标准展开 TDD，全部任务完成后接力 superpowers:requesting-code-review 收官把关。
 - 触发：需求方在计划交接时选了会话内执行，或 harness 没有子代理工具。
-- 输出：逐任务提交 + 台账（progress.md，含全部 Ruling）+ final-review 收官把关（修复/裁决）+ 移交 finishing-a-development-branch。
+- 输出：逐任务提交 + 台账（progress.md，含全部 Ruling）+ requesting-code-review 收官把关（修复/裁决）+ 移交 finishing-a-development-branch。
 
-**subagent-driven-development** —— 控制者逐任务派发全新实施者子代理，任务审查作为每任务闸门（修复循环有轮数上限和熔断），全部任务完成后接力 superpowers:final-review 收官把关。
+**subagent-driven-development** —— 控制者逐任务派发全新实施者子代理，任务审查作为每任务闸门（修复循环有轮数上限和熔断），全部任务完成后接力 superpowers:requesting-code-review 收官把关。
 - 触发：有实施计划、任务大体独立、有子代理工具、需求方未选会话内执行。
 - 输出：同上，外加每任务的审查包与修复循环记录；中断后可由台账恢复。
 
@@ -105,17 +105,17 @@ flowchart TD
 
 ### 五份审查模板的分工
 
-每任务审查由执行技能内置的派发模板承担；整分支与安全模板由 final-review 技能承载。五份模板各管一段：
+每任务审查由执行技能内置的派发模板承担；整分支与安全模板由 requesting-code-review 技能承载。五份模板各管一段：
 
 | 模板 | 位置 | 审什么 | 输出 |
 |---|---|---|---|
 | `task-reviewer-prompt.md` | subagent-driven-development | 每任务闸门：规格符合性（缺失/多余/误解，对照任务简报）+ 代码质量 | Spec Compliance（✅/❌/⚠️）+ Issues + Approved / Needs fixes |
-| `code-reviewer.md` | final-review | 整分支终审（两种执行方式共用）：双层基准（设计文档=意图、计划=规格）+ Declined to judge | Ready to merge? Yes / No / With fixes |
+| `code-reviewer.md` | requesting-code-review | 整分支终审（两种执行方式共用）：双层基准（设计文档=意图、计划=规格）+ Declined to judge | Ready to merge? Yes / No / With fixes |
 | `re-review-prompt.md` | subagent-driven-development | 修复轮之后的限定范围复审，只验证修复本身 | 复审判定 |
-| `security-reviewer.md` | final-review | 安全门（两种执行方式共用，终审链收尾后）：数据流（源→汇有无校验/参数化/转义）+ 认证授权 + 密钥/依赖；五面判据不合才查 | Clean-Pass（一句依据）或分级安全发现项（四要素） |
-| `security-re-review-prompt.md` | final-review | 安全修复轮之后的限定复审，只验证修复本身与新安全问题；该分支最后一次审查 | ADDRESSED / NOT ADDRESSED + 新安全问题 + Verdict |
+| `security-reviewer.md` | requesting-code-review | 安全门（两种执行方式共用，终审链收尾后）：数据流（源→汇有无校验/参数化/转义）+ 认证授权 + 密钥/依赖；五面判据不合才查 | Clean-Pass（一句依据）或分级安全发现项（四要素） |
+| `security-re-review-prompt.md` | requesting-code-review | 安全修复轮之后的限定复审，只验证修复本身与新安全问题；该分支最后一次审查 | ADDRESSED / NOT ADDRESSED + 新安全问题 + Verdict |
 
-**final-review** —— 审查域单户，三入口。收官把关 = 整分支终审（code-reviewer 模板，双层基准：设计文档=意图、计划=规格，文档未提及的行为按理性之人预期评）→ 恰好一轮集中修复 → 限定复审 → 安全门（security-reviewer 模板，五面判据，所有分支必过）→ 收尾（穷尽裁决清单）；缺子代理工具只降级形态，不免除环节。
+**requesting-code-review** —— 审查域单户，三入口。收官把关 = 整分支终审（code-reviewer 模板，双层基准：设计文档=意图、计划=规格，文档未提及的行为按理性之人预期评）→ 恰好一轮集中修复 → 限定复审 → 安全门（security-reviewer 模板，五面判据，所有分支必过）→ 收尾（穷尽裁决清单）；缺子代理工具只降级形态，不免除环节。
 - 触发：实施计划全部任务完成后（两执行技能一句接力）；完成任务、重大功能、合并之前的审查请求；收到任何代码审查反馈、实施建议之前（接收纪律见其 references/receiving-feedback.md）。
 - 输出：收官 =「Rulings I made」穷尽清单 + Security gate 小节 + 移交 finishing-a-development-branch；临时审查 = 报告（每条发现项带 file:line）；反馈 = 逐项验证后的实施或有理有据的反驳。
 

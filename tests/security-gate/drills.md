@@ -7,13 +7,13 @@
 ### ① 触发路径：预埋数据流缺陷
 
 - 前置：临时 worktree 中构造一个分支，含一个最小脚本文件——环境变量的值未经校验拼接进 shell 命令执行（如 `sh -c "grep $USER_INPUT data.txt"`，USER_INPUT 来自脚本参数）。
-- 执行：按 final-review 的收口规程对该分支派发真实安全审查者子代理（security-reviewer.md 模板，输入 = 审查包 + 空终审发现清单 + 台账指引）。
+- 执行：按 requesting-code-review 的收口规程对该分支派发真实安全审查者子代理（security-reviewer.md 模板，输入 = 审查包 + 空终审发现清单 + 台账指引）。
 - 期望（可判真伪）：报告含至少一条 Critical 级发现项；该发现项含四要素（位置/缺陷/可被利用路径/修复方向）；Verdict 不是 Clean-Pass。随后派单个修复者修复 → 安全复审 → 全部 ADDRESSED，全程恰好一轮。
 
 ### ② 放行路径：纯文档/测试改动
 
 - 前置：一个只含文档与测试文件改动的分支（无源代码改动）。
-- 执行：按 final-review 的收口规程派发真实安全审查者子代理。
+- 执行：按 requesting-code-review 的收口规程派发真实安全审查者子代理。
 - 期望（可判真伪）：Verdict 为 Clean-Pass；依据恰为一句，写明五面均未触及。
 
 ### ③ 召回路径：隐蔽变体（留 eval 仓库执行）

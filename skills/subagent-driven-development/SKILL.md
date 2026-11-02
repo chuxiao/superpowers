@@ -5,11 +5,11 @@ description: 在当前会话中执行含独立任务的实施计划时使用
 
 # 子代理驱动开发
 
-执行计划的方式：为每个任务派发一个全新的实施者（implementer）子代理，每个任务之后进行一次任务审查（设计文档符合性 + 代码质量），全部任务完成后接力进入 superpowers:final-review 收官把关（整分支终审、安全门与收尾）。
+执行计划的方式：为每个任务派发一个全新的实施者（implementer）子代理，每个任务之后进行一次任务审查（设计文档符合性 + 代码质量），全部任务完成后接力进入 superpowers:requesting-code-review 收官把关（整分支终审、安全门与收尾）。
 
 **为什么用子代理：**你把任务委托给拥有隔离上下文的专用 agent。通过精心构造它们的指令与上下文，你确保它们保持专注并完成自己的任务。它们绝不应继承你会话的上下文或历史——你要精确构建出它们所需的一切。这也为你自己的协调工作保住了上下文。
 
-**核心原则：**每任务一个全新子代理 + 任务审查（设计文档 + 质量）+ superpowers:final-review 收官把关 = 高质量、快速迭代
+**核心原则：**每任务一个全新子代理 + 任务审查（设计文档 + 质量）+ superpowers:requesting-code-review 收官把关 = 高质量、快速迭代
 
 **叙述：**工具调用之间至多叙述一行简短文字——记录由台账与工具结果承载。
 
@@ -50,7 +50,7 @@ flowchart TD
 flowchart TD
     prep["准备：工作树、台账检查、读计划、预检"]
     tasks_remaining{"还有剩余任务？"}
-    final_handoff["全部任务完成：接力 superpowers:final-review<br/>整分支终审、安全门与收尾"]
+    final_handoff["全部任务完成：接力 superpowers:requesting-code-review<br/>整分支终审、安全门与收尾"]
 
     subgraph per_task["每任务"]
         dispatch_implementer["派发实施者子代理 (./implementer-prompt.md)"]
@@ -182,7 +182,7 @@ flowchart TD
 
 ## 审查把关
 
-全部任务完成后，使用 superpowers:final-review 接力：整分支终审、安全门与收尾在那里完成，缺子代理工具只降级形态、不免除环节。
+全部任务完成后，使用 superpowers:requesting-code-review 接力：整分支终审、安全门与收尾在那里完成，缺子代理工具只降级形态、不免除环节。
 
 ## 常见合理化借口
 
