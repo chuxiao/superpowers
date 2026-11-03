@@ -130,14 +130,21 @@ git push -u origin <feature-branch>
 
 基准分支不是 main/master，或需求方选「保持分支原样」不并入——按原流程走，方案留作分支上的需求级文档，也不做规格目录归档。detached HEAD 的两项菜单同理对应：「推送为新分支并创建 PR」→ 基准分支为 main/master 时按上述时序并入，「保持原样」→ 不并入。
 
-### 规格目录归档（并入执行后）
+### 规格目录归档（合并到 main/master 执行后）
 
-需求级文档目录 `docs/superpowers/specs/<date-feature>/`（`design.md` + `plan.md` + `verification.md`）在 feature 分支实际并入 main/master 时归档——整目录移入 `docs/superpowers/archived/<date-feature>/`：
+feature 分支合并到 main/master 执行后，把 `docs/superpowers/specs/` 下全部内容原样移入 `docs/superpowers/archived/`——`<date-feature>` 目录照搬、遗留平面文件照搬，不要求先按新目录结构规范化；specs/ 清空，下次需求从空目录开始。归档移动并提交：
 
-- **本地合并（选项 1）**：合并执行后当场归档——`git mv docs/superpowers/specs/<date-feature> docs/superpowers/archived/<date-feature>` 并提交。
-- **推送并创建 PR（选项 2）**：推送时不归档——工作流不感知 forge 的合并事件。归档条件机械化：该 date-feature 的登记册条目均已到基线（无「待合并」状态）即归档，由下一次基线侧的收尾并入步骤或回归触发时顺带移动并提交。
+```bash
+if [ -n "$(ls -A docs/superpowers/specs 2>/dev/null)" ]; then
+  mkdir -p docs/superpowers/archived
+  git mv docs/superpowers/specs/* docs/superpowers/archived/
+fi
+```
 
-「保持分支原样」与丢弃路径不归档——目录留在 `docs/superpowers/specs/`。
+- **本地合并（选项 1）**：合并执行后当场归档——上方命令移动全部内容并提交。
+- **推送并创建 PR（选项 2）**：推送时不归档——工作流不感知 forge 的合并事件；由下次 feature 分支合并到 main 时全量归档顺带完成。
+
+「保持分支原样」与丢弃路径不归档——specs/ 内容留在原地。
 
 ### 如果需求方要求丢弃工作成果
 
