@@ -2,7 +2,7 @@
 # Integration verification & regression sweep consistency checks — fails when
 # either new skill, its form references, or one of the four mounting edits
 # drifts from the integration-gate design
-# (docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md).
+# (docs/superpowers/archived/2026-11-01-integration-gate-and-regression/design.md).
 #
 # Idempotent: no git state, no network, no subagent. Style follows
 # tests/security-gate/test-security-gate.sh. Usage:
@@ -139,8 +139,7 @@ ck "rs-no-change-summary" "! grep -qF '变更摘要' \"$RS\""
 ck "rs-no-last-regression" "! grep -qF '上次回归' \"$RS\""
 
 # 断言 12d：文档目录结构规范化（需求方拍板）——新路径挂载：
-# IV/RS/FIN 含 docs/superpowers/verification/；IV 含需求级验证方案定位句；
-# FIN 含归档步骤（本地合并当场 git mv、PR 路径推送不归档、条件机械化）
+# IV/RS/FIN 含 docs/superpowers/verification/；IV 含需求级验证方案定位句
 ck "iv-verification-path" "grep -qF 'docs/superpowers/verification/' \"$IV\""
 ck "rs-verification-path" "grep -qF 'docs/superpowers/verification/' \"$RS\""
 ck "fin-verification-path" "grep -qF 'docs/superpowers/verification/' \"$FIN\""
@@ -149,9 +148,23 @@ ck "iv-sweep-all-cases" "grep -qF '执行 specs 下能找到的所有验证用�
 ck "iv-traverse-verification-files" "grep -qF '遍历各 \`<date-feature>/verification.md\`' \"$IV\""
 ck "iv-no-cases-exit" "grep -qF 'specs 下无验证用例' \"$IV\""
 ck "iv-registry-source-flow" "grep -qF '验证用例的源头在' \"$IV\""
-ck "fin-archive-git-mv" "grep -qF 'git mv docs/superpowers/specs/<date-feature> docs/superpowers/archived/<date-feature>' \"$FIN\""
+
+# 断言 12f：回归双模式（需求方裁决 2026-11-03，决策 6 子决策 a / 附录补充之十三）——
+# 模式判定句、双源用例集句、失败分类两路句、机械判据句
+ck "rs-dual-mode-judgment" "grep -qF '工作区 HEAD ≠ 基线最新 → feature 分支模式' \"$RS\""
+ck "rs-dual-source-cases" "grep -qF 'docs/superpowers/specs/*/verification.md' \"$RS\" && grep -qF '双源' \"$RS\""
+ck "rs-covered-change" "grep -qF '已覆盖行为变更' \"$RS\""
+ck "rs-suspected-regression" "grep -qF '疑似回归' \"$RS\""
+ck "rs-covered-mechanical-criterion" "grep -qF '同资产路径' \"$RS\""
+
+# 断言 12g：归档全量化（需求方裁决 2026-11-03，决策 10 子决策 d 再修订 / 附录补充之十四）——
+# 合并后 specs 全部内容原样移入 archived、specs 清空、PR 推送不归档下次合并顺带；
+# 旧断言 fin-archive-git-mv（按 date-feature 逐目录归档）与 fin-archive-condition
+# （均已到基线条件）随语义废止移除
+ck "fin-archive-full-volume" "grep -qF '下全部内容原样移入 \`docs/superpowers/archived/\`' \"$FIN\""
+ck "fin-archive-specs-empty" "grep -qF 'specs/ 清空，下次需求从空目录开始' \"$FIN\""
 ck "fin-archive-pr-not-now" "grep -qF '推送时不归档' \"$FIN\""
-ck "fin-archive-condition" "grep -qF '均已到基线（无「待合并」状态）' \"$FIN\""
+ck "fin-archive-next-merge" "grep -qF '下次 feature 分支合并到 main 时全量归档顺带完成' \"$FIN\""
 
 # 断言 12e：旧路径清零——docs/verification/ 不再出现于两技能、收尾技能、计划技能、
 # 计划模板与三份形态参考

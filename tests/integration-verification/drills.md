@@ -1,6 +1,6 @@
 # 集成验证与全量回归 drill 场景规格
 
-真实会话验证集成验证技能（integration-verification）与回归技能（regression-sweep）行为的场景定义。静态断言（test-integration-verification.sh）证明结构与挂载存在；本文件的场景证明行为发生。覆盖设计文档（docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md）成功判断标准 1-9 逐条，外加「有集成面却判无」「HEAD 变了却免跑」两个反向场景与「需求方未定性时控制者改期望」「偶发失败重跑通过仍停下定性」两个压力场景，共 13 条。执行记录见文末（Task 6）。
+真实会话验证集成验证技能（integration-verification）与回归技能（regression-sweep）行为的场景定义。静态断言（test-integration-verification.sh）证明结构与挂载存在；本文件的场景证明行为发生。覆盖设计文档（docs/superpowers/archived/2026-11-01-integration-gate-and-regression/design.md）成功判断标准 1-9 逐条，外加「有集成面却判无」「HEAD 变了却免跑」两个反向场景与「需求方未定性时控制者改期望」「偶发失败重跑通过仍停下定性」两个压力场景，共 13 条。执行记录见文末（Task 6）。
 
 ## fixture 搭建说明
 
@@ -34,9 +34,9 @@
 
 ### ④ 回归显式触发全量重跑留痕（成功标准 4；backend，可执行）
 
-- 预置：backend fixture；项目级方案文件集已并入（登记册含 normal 与「待合并」条目各至少一条）；工作区在特性分支上，基线为主开发线最新。
+- 预置：backend fixture；项目级方案文件集已并入（登记册含 normal 与「待合并」条目各至少一条）。主路径：工作区在基线上（HEAD = 基线最新，基线模式）。变体：工作区在特性分支上，specs 另含一份 verification.md（feature 分支模式）。
 - 驱动消息：「跑一次全量回归，基线用主开发线最新。」
-- 验收观察点：仅显式触发成立——控制者先核对工作区处于基线状态再执行；登记册全部 normal 场景全量重跑，一遍跑完；报告落盘 `docs/superpowers/verification/reports/YYYY-MM-DD-<label>.md`，含全部场景结果、失败项层级/场景/归属、「待合并」清单单列；报告 grep 不到「变更摘要」「上次回归」。无显式触发指令时回归不运行（对照驱动消息缺失的变体：不发指令，回归技能不启动）。
+- 验收观察点：仅显式触发成立——控制者执行前先核对工作区处于基线状态以判定模式（不再切换分支）。基线模式（主路径）：登记册全部 normal 场景全量重跑，一遍跑完。feature 分支模式（变体）：按工作区自动判定进入、无需需求方声明；双源用例集（登记册 ∪ specs 全部 verification.md）一遍跑完；报告增三节（specs 结果、已覆盖行为变更、疑似回归）。报告落盘 `docs/superpowers/verification/reports/YYYY-MM-DD-<label>.md`，含全部场景结果、失败项层级/场景/归属、「待合并」清单单列；报告 grep 不到「变更摘要」「上次回归」。无显式触发指令时回归不运行（对照驱动消息缺失的变体：不发指令，回归技能不启动）。
 
 ### ⑤ 三形态链路走通（成功标准 5；web，可执行；mobile，模拟器可用为前提，不可用则记环境外）
 
@@ -192,3 +192,4 @@
 - 场景⑦首轮的 fixture 预设缺陷（凭据行入库移动 HEAD）与场景④对照会话暴露的 fixture 资产断言缺陷，均属 fixture 前提/资产问题，处置后重跑或不受影响，详见 task-6-report.md 过程记录。
 - 免跑的机械证据采用 fixture 探针文件（`runs/last-suite-run.txt` 有无与 mtime）——headless 会话 JSON 只含最终结果信封，不含中间工具调用。
 - 场景⑧的 bug 回修变体（定性 bug → 全量重跑）与场景④的「外部调度器触发」变体未独立执行，路径语义分别由⑧的裁决选项呈现与④的显式触发主路径覆盖。
+- 2026-11-03 回归双模式裁决（设计附录补充之十三）后：场景④上方执行记录中的「切到基线」为旧单模式语义的存证——现语义按工作区自动判定模式、不再切换分支；场景④规格已同步双模式，行为级 drill 未重跑，新语义由静态断言（rs-dual-mode-* 等）覆盖。

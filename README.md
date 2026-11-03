@@ -338,7 +338,7 @@ Superpowers 作为 Muse 原生插件提供——同一仓库、同一套技能�
 
 8. **finishing-a-development-branch** - 在任务完成时激活。验证测试，呈现选项（合并/创建 PR/保留/丢弃），清理工作区。
 
-9. **regression-sweep** - 仅在显式触发时激活（由需求方或外部调度器触发）。在基线上重跑整个项目的场景登记册，产出留痕报告。
+9. **regression-sweep** - 仅在显式触发时激活（由需求方或外部调度器触发）。基线工作区按场景登记册全量重跑（基线模式）；feature 分支上显式触发则登记册 ∪ specs 双源执行（feature 分支模式），产出留痕报告。
 
 **agent 在做任何任务之前都会检查有无相关技能。**这是强制工作流，不是建议。
 
@@ -349,7 +349,7 @@ Superpowers 作为 Muse 原生插件提供——同一仓库、同一套技能�
 **技能之间：**
 
 - **integration-verification** 承接审查收官（`requesting-code-review`）的移交，并向 `finishing-a-development-branch` 移交。也支持单独调用（出口为验证报告，无移交语义）。它的出口凭据（台账行 + HEAD）正是 `finishing-a-development-branch` 判断能否免跑全量套件的依据——连同 HEAD 一致与工作区干净两项一起核对。
-- **regression-sweep** 不在任何链路里：仅显式触发，没有任何技能向它移交，它也不向任何技能移交。它读取 `docs/superpowers/verification/` 下的场景登记册，以及 `skills/integration-verification/references/` 中按形态路由的参考文件（backend / web / mobile）。
+- **regression-sweep** 不在任何链路里：仅显式触发，没有任何技能向它移交，它也不向任何技能移交。它读取 `docs/superpowers/verification/` 下的场景登记册（feature 分支模式另读 `docs/superpowers/specs/*/verification.md`，双源并集），以及 `skills/integration-verification/references/` 中按形态路由的参考文件（backend / web / mobile）。
 
 **在被验证项目上（运行时——由项目自身提供；插件不安装任何东西）：**
 
@@ -394,7 +394,7 @@ Superpowers 由 [Jesse Vincent](https://blog.fsck.com) 与 [Prime Radiant](https
 - **using-git-worktrees** - 并行开发分支
 - **finishing-a-development-branch** - 合并/PR 决策工作流
 - **subagent-driven-development** - 两阶段审查的快速迭代（先规格符合性，后代码质量）
-- **regression-sweep** - 显式触发的全项目回归：在基线上重跑场景登记册，落盘留痕报告
+- **regression-sweep** - 显式触发的全项目回归：基线上重跑场景登记册，feature 分支上双源执行，落盘留痕报告
 
 **元技能**
 - **writing-skills** - 按最佳实践创建新技能（含测试方法论）

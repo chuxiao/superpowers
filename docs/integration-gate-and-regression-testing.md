@@ -1,8 +1,8 @@
 # 集成验证与全量回归 — 完整测试过程
 
-> 记录 `integration-verification` 与 `regression-sweep` 两个技能交付过程中的全部测试活动：每个测试用例的目的、输入、断言与来源。被测资产在 `tests/integration-verification/`：静态断言见 `test-integration-verification.sh`（117 项），真实会话场景见 `drills.md`（13 条），本文件是两者的溯源与导读。
+> 记录 `integration-verification` 与 `regression-sweep` 两个技能交付过程中的全部测试活动：每个测试用例的目的、输入、断言与来源。被测资产在 `tests/integration-verification/`：静态断言见 `test-integration-verification.sh`（123 项），真实会话场景见 `drills.md`（13 条），本文件是两者的溯源与导读。
 >
-> 上游：设计 `docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md`（成功判断标准 1-9、§3 第 10 条、§5 风险 3/7、决策 2/5/10/11）；计划 `docs/superpowers/specs/2026-11-01-integration-gate-and-regression/plan.md`（Task 5 断言清单）。
+> 上游：设计 `docs/superpowers/archived/2026-11-01-integration-gate-and-regression/design.md`（成功判断标准 1-9、§3 第 10 条、§5 风险 3/7、决策 2/5/10/11）；计划 `docs/superpowers/archived/2026-11-01-integration-gate-and-regression/plan.md`（Task 5 断言清单）。
 
 ## 0. 测试策略：三层分工
 
@@ -29,9 +29,10 @@
 | 需求方裁决「链路内重跑免跑取强读」（终审 I-1） | 终审报告 + 裁决记录 | 静态断言 iv-freshness-skip |
 | 任务审查发现项（T3 Important-1 基线锚定缺失） | T3 审查报告 | 静态断言 rs-baseline-check |
 | drill ⑫ 运行时发现（模糊授权语被当作定性） | drill ⑫ 首轮 FAIL | 静态断言 iv-rs-vague-authority-clause（两副本同步） |
+| 需求方裁决 2026-11-03（回归双模式 + 归档全量化） | 设计决策 6 子决策 a、决策 10 子决策 d 再修订、附录补充之十三/十四 | 静态断言 12f 组（rs-dual-mode-* 等 5 项）、12g 组（fin-archive-* 4 项）；旧 fin-archive-git-mv / fin-archive-condition 随语义废止移除 |
 | 仓库工程红线 | skill-size：harness 压缩截断 #2481；mermaid 红线：本分支第五轮 TAGSTART 实例 | 套件级断言 13/14 |
 
-## 2. 静态断言层 — `test-integration-verification.sh`（117 项）
+## 2. 静态断言层 — `test-integration-verification.sh`（123 项）
 
 **输入（全组统一）：** 当前 HEAD 工作树中的 10 个受管文件——两技能 SKILL.md、三份 references、requesting-code-review 两文件、finishing SKILL.md、writing-plans 两文件；外加两个子测试实跑（skill-size、check-mermaid）。无网络、无子代理、幂等；`FAIL` 输出到 stderr，退出码聚合（1 = 任一失败）。
 
@@ -157,6 +158,22 @@
 | suite-skill-size-passes | 全仓库 SKILL.md ≤ 20000 字节（harness 压缩截断 #2481） | 仓库工程红线 |
 | iv/rs-mermaid-clean | 两技能图过词法红线（subgraph 形态/引号/`<br/>`） | 本分支第五轮 TAGSTART 实例 |
 
+### 2.15 回归双模式与归档全量化（9 项，2026-11-03 裁决波）
+
+| 断言 | 目的 | 来源 |
+|------|------|------|
+| rs-dual-mode-judgment | 模式判定句「工作区 HEAD ≠ 基线最新 → feature 分支模式」——判定机械、无需需求方声明 | 决策 6 子决策 a、附录补充之十三 |
+| rs-dual-source-cases | 双源用例集句（登记册 ∪ `docs/superpowers/specs/*/verification.md`） | 同上 |
+| rs-covered-change | 「已覆盖行为变更」清单在册 | 同上 |
+| rs-suspected-regression | 「疑似回归」分类在册 | 同上 |
+| rs-covered-mechanical-criterion | 覆盖判定机械判据「同资产路径」在册 | 同上（红线：判据机械可查、模糊保守归疑似回归） |
+| fin-archive-full-volume | 合并后 specs 下全部内容原样移入 archived | 决策 10 子决策 d 再修订、附录补充之十四 |
+| fin-archive-specs-empty | specs/ 清空、下次需求从空目录开始 | 同上 |
+| fin-archive-pr-not-now | PR 路径推送不归档（既有断言保留，语义改为下次合并顺带） | 同上 |
+| fin-archive-next-merge | 「下次 feature 分支合并到 main 时全量归档顺带完成」在册 | 同上 |
+
+废止记录：旧 `fin-archive-git-mv`（按 date-feature 逐目录 git mv）与 `fin-archive-condition`（登记册条目均已到基线即归档）随归档全量化语义废止移除；红绿自证破坏 rs 双模式判定句与 fin 归档句 → 恰红两条、无误报扩散。
+
 ## 3. 真实会话 drill 层 — `drills.md`（13 场景）
 
 **输入（每场景）：** 按 drills.md「fixture 搭建说明」在临时目录搭建的 fixture 项目（backend = pytest + testcontainers 双模块注入破坏点；web = compose + Playwright；mobile = Appium，模拟器不可达时走环境外；docs-only = 纯文档分支）+ 逐场景的驱动消息（原文见 drills.md 各场景）。会话经 headless CLI 驱动，只回显最终信封；fixture 侧中间态用机械探针补证（如 `runs/last-suite-run.txt` 证明套件跑没跑）。
@@ -193,7 +210,7 @@
 
 ## 5. 结果汇总与已知边界
 
-- **静态层：** 90/90 全绿（红绿自证三轮精确命中）；2026-11-03 验证方案拆分波修订断言集后复跑 117/117 全绿（载体迁移 plan 章 → verification.md、并入时序限定——drill 场景规格同步：fixture 搭建说明改 verification.md 独立文件、场景⑤ 预置措辞；场景⑥「菜单之前并入即 FAIL」等既有 FAIL 条款语义不受影响，行为级 drill 未重跑）。
+- **静态层：** 90/90 全绿（红绿自证三轮精确命中）；2026-11-03 验证方案拆分波修订断言集后复跑 117/117 全绿（载体迁移 plan 章 → verification.md、并入时序限定——drill 场景规格同步：fixture 搭建说明改 verification.md 独立文件、场景⑤ 预置措辞；场景⑥「菜单之前并入即 FAIL」等既有 FAIL 条款语义不受影响，行为级 drill 未重跑）；同日回归双模式 + 归档全量化波修订断言集后复跑 123/123 全绿（新增 12f/12g 两组 9 项、废止旧归档断言 2 项；drill 场景④规格同步双模式语义，行为级 drill 未重跑——见 drills.md 执行口径备注）。
 - **drill 层：** 13 executed / 13 passed / 0 failed / 1 环境外（mobile，工具链缺失已取证）——其中 ⑫ 为「首轮 FAIL → 铁律增补 → 重跑通过」的真实闭环。
 - **已知边界（Cannot verify）：** headless drill 只回显最终信封，fixture 侧中间态（台账行、登记册终态）靠机械探针与自洽性核对；两个变体（bug 回修全量重跑、外部调度器触发）未独立执行（执行口径备注在 drills.md，静态文案覆盖同构语义）；shellcheck 本机不可用。
 - **测试资产自身的演化记录：** 两处断言来源于运行时发现（⑫ 模糊授权条款、T3 基线锚定）——drill 与审查不只是消费测试，也反向生产了测试。
