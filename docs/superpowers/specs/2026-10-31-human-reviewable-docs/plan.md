@@ -1,6 +1,6 @@
 # 人工可审阅的设计与计划文档：技术实现方案
 
-> 读者假设：已读产品功能说明 `docs/superpowers/specs/2026-10-31-human-reviewable-docs-design.md`（为什么要改、改什么、不做什么、主要取舍）。
+> 读者假设：已读产品功能说明 `docs/superpowers/specs/2026-10-31-human-reviewable-docs/design.md`（为什么要改、改什么、不做什么、主要取舍）。
 >
 > 实施前决策记录 + 日期：2026-10-31。
 
@@ -10,7 +10,7 @@
 
 **技术栈：** Markdown 技能文档；仓库现有 shell 测试（skill-size、render-graphs、shell-lint）。
 
-**设计文档（Spec）：** `docs/superpowers/specs/2026-10-31-human-reviewable-docs-design.md`
+**设计文档（Spec）：** `docs/superpowers/specs/2026-10-31-human-reviewable-docs/design.md`
 
 ## 1. 改动地图
 
@@ -260,7 +260,7 @@ writing-plans/SKILL.md ──► references/plan-template.md
 
 建议**会话内执行**：两个技能的措辞需要跨文件逐字对齐，任务之间强耦合；子代理驱动会让每个任务缺少其他任务的上下文，反而增加返工。实施完成后，由一名未参与实施的独立审查者按 `superpowers:requesting-code-review` 的代码审查流程做一次整分支终审。
 
-计划已完成并保存到 `docs/superpowers/plans/2026-10-31-human-reviewable-docs.md`。请审查：五个章节、任务边界与验收标准是否忠实覆盖产品功能说明的功能清单与「明确不做」清单。明确确认后，选择执行方式：会话内执行，还是子代理驱动？
+计划已完成并保存到 `docs/superpowers/specs/2026-10-31-human-reviewable-docs/plan.md`。请审查：五个章节、任务边界与验收标准是否忠实覆盖产品功能说明的功能清单与「明确不做」清单。明确确认后，选择执行方式：会话内执行，还是子代理驱动？
 
 ---
 

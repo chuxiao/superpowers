@@ -5,7 +5,7 @@
   with maintainer sign-off after the RED baseline did not reproduce blind
   stale-ledger adoption. 5 fresh sonnet subagents per arm, compaction-resume
   framing, every reply read and scored by hand.
-- **Spec:** 2026-07-06-sdd-plan-scoped-workspace.md
+- **Spec:** design.md（同目录）
 
 ## Scenarios
 

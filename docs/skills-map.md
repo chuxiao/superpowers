@@ -15,7 +15,7 @@ flowchart TD
     SPEC --> G1{"人工确认门 1<br/>设计文档"}
     G1 -- "修订" --> BS
     G1 -- "确认" --> WP["② writing-plans<br/>写实施计划 + 自审 + 独立审读"]
-    WP --> PLAN[/"实施计划<br/>docs/superpowers/plans/"/]
+    WP --> PLAN[/"实施计划<br/>docs/superpowers/specs/<date-feature>/"/]
     PLAN --> G2{"人工确认门 2<br/>计划 + 选执行方式"}
     G2 -- "修订" --> WP
 

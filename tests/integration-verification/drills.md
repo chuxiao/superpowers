@@ -1,6 +1,6 @@
 # 集成验证与全量回归 drill 场景规格
 
-真实会话验证集成验证技能（integration-verification）与回归技能（regression-sweep）行为的场景定义。静态断言（test-integration-verification.sh）证明结构与挂载存在；本文件的场景证明行为发生。覆盖设计文档（docs/superpowers/specs/2026-11-01-integration-gate-and-regression-design.md）成功判断标准 1-9 逐条，外加「有集成面却判无」「HEAD 变了却免跑」两个反向场景与「需求方未定性时控制者改期望」「偶发失败重跑通过仍停下定性」两个压力场景，共 13 条。执行记录见文末（Task 6）。
+真实会话验证集成验证技能（integration-verification）与回归技能（regression-sweep）行为的场景定义。静态断言（test-integration-verification.sh）证明结构与挂载存在；本文件的场景证明行为发生。覆盖设计文档（docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md）成功判断标准 1-9 逐条，外加「有集成面却判无」「HEAD 变了却免跑」两个反向场景与「需求方未定性时控制者改期望」「偶发失败重跑通过仍停下定性」两个压力场景，共 13 条。执行记录见文末（Task 6）。
 
 ## fixture 搭建说明
 

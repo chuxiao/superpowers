@@ -2,7 +2,7 @@
 # Integration verification & regression sweep consistency checks — fails when
 # either new skill, its form references, or one of the four mounting edits
 # drifts from the integration-gate design
-# (docs/superpowers/specs/2026-11-01-integration-gate-and-regression-design.md).
+# (docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md).
 #
 # Idempotent: no git state, no network, no subagent. Style follows
 # tests/security-gate/test-security-gate.sh. Usage:

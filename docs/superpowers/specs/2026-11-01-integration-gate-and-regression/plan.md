@@ -3,7 +3,7 @@
 - **目标：** 需求方走完工作流的分支，在并入 main 前多一道集成层验证关：需求级验证方案在计划阶段生成、任务期资产化、独立技能执行；收尾阶段并入项目级场景登记册；回归技能显式触发后在基线上全量重跑整个项目。
 - **架构：** 两个新技能（`integration-verification`、`regression-sweep`）+ 四处既有文件挂载改动（requesting-code-review 接力句、finishing 免跑与并入、writing-plans 验证方案要求、skills-map/README 同步）+ 静态测试与真实会话 drill 证据。项目级方案为运行时生成的文件集（`docs/verification/`），本仓库不预置。
 - **技术栈：** Markdown 技能与提示词模板；bash 静态测试（仿 `tests/security-gate/test-security-gate.sh` 与 `tests/skill-size/test-skill-size.sh` 体例）。
-- **设计文档（Spec）：** `docs/superpowers/specs/2026-11-01-integration-gate-and-regression-design.md`
+- **设计文档（Spec）：** `docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md`
 - **实施前决策记录 + 日期：** 2026-11-02（设计文档已获批；计划层决策见 §3）
 
 ## 1. 改动地图

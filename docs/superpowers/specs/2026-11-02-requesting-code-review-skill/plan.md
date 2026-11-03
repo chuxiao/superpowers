@@ -5,7 +5,7 @@
 - **目标：** 审查域收敛为单一 `final-review` 技能——整分支终审、安全门、收尾从两执行技能迁入；requesting-code-review 与 receiving-code-review 删除、内容并入；两执行技能以一句接力进入。完成后审查域单户，失效 1-5（漂移、分居、寄居、收尾分裂、零耦合维护面）全部消除。
 - **架构：** 纯文档与结构测试重组，无运行时代码。新增一个审查域技能（主文件 + 收口规程参考文件 + 接收反馈纪律参考文件 + 三模板随迁 + 审查包脚本副本），删除两个技能目录，结构测试重钉、防漂移测试加一对。
 - **技术栈：** Markdown 技能文案、mermaid 流程图、bash 结构测试。
-- **设计文档（Spec）：** `docs/superpowers/specs/2026-11-02-requesting-code-review-skill-design.md`（需求方已拍板核心决策，随本计划一并确认细化项）。
+- **设计文档（Spec）：** `docs/superpowers/specs/2026-11-02-requesting-code-review-skill/design.md`（需求方已拍板核心决策，随本计划一并确认细化项）。
 - **实施前决策记录 + 日期：** 2026-11-02。执行方式由需求方选定（本计划推荐会话内执行）。
 
 ## 1. 改动地图
