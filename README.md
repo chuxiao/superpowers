@@ -353,7 +353,7 @@ Superpowers 作为 Muse 原生插件提供——同一仓库、同一套技能�
 
 **在被验证项目上（运行时——由项目自身提供；插件不安装任何东西）：**
 
-- 计划级：含跨任务组装点或外部接口的计划必须带验证方案章节（由 `writing-plans` 生成）；`integration-verification` 依据它执行。计划中缺失的层会被标注「未声明」并呈现，绝不静默跳过。
+- 计划级：含跨任务组装点或外部接口的需求，`writing-plans` 在计划同目录产出需求级验证方案文件 `verification.md`（specs/<date-feature>/ 三件套）；`integration-verification` 遍历 specs 下全部验证用例执行。计划中缺失的层会被标注「未声明」并呈现，绝不静默跳过。
 - 项目级资产位于 `docs/superpowers/verification/`：`environment.md`（各层怎么跑）、`modules/<module>.md` + `cross-module.md`（场景登记册），以及 `docs/superpowers/verification/reports/` 下的报告。登记册行格式被 `integration-verification`、`regression-sweep`、`finishing-a-development-branch` 三者逐字共享——后者在合并时写入条目并初始化登记册。
 - 按形态的工具链：backend——pytest/Jest + testcontainers；web——docker-compose + Playwright；mobile——Appium + Android 模拟器。工具由被验证的项目安装，绝不由本插件安装；工具缺失时降级为明确的环境外移交项，而不是自动安装。
 - 这些耦合关系由 `tests/integration-verification/test-integration-verification.sh` 的静态断言锁定。

@@ -1,6 +1,6 @@
 # 集成验证与全量回归 — 完整测试过程
 
-> 记录 `integration-verification` 与 `regression-sweep` 两个技能交付过程中的全部测试活动：每个测试用例的目的、输入、断言与来源。被测资产在 `tests/integration-verification/`：静态断言见 `test-integration-verification.sh`（90 项），真实会话场景见 `drills.md`（13 条），本文件是两者的溯源与导读。
+> 记录 `integration-verification` 与 `regression-sweep` 两个技能交付过程中的全部测试活动：每个测试用例的目的、输入、断言与来源。被测资产在 `tests/integration-verification/`：静态断言见 `test-integration-verification.sh`（117 项），真实会话场景见 `drills.md`（13 条），本文件是两者的溯源与导读。
 >
 > 上游：设计 `docs/superpowers/specs/2026-11-01-integration-gate-and-regression/design.md`（成功判断标准 1-9、§3 第 10 条、§5 风险 3/7、决策 2/5/10/11）；计划 `docs/superpowers/specs/2026-11-01-integration-gate-and-regression/plan.md`（Task 5 断言清单）。
 
@@ -31,7 +31,7 @@
 | drill ⑫ 运行时发现（模糊授权语被当作定性） | drill ⑫ 首轮 FAIL | 静态断言 iv-rs-vague-authority-clause（两副本同步） |
 | 仓库工程红线 | skill-size：harness 压缩截断 #2481；mermaid 红线：本分支第五轮 TAGSTART 实例 | 套件级断言 13/14 |
 
-## 2. 静态断言层 — `test-integration-verification.sh`（90 项）
+## 2. 静态断言层 — `test-integration-verification.sh`（117 项）
 
 **输入（全组统一）：** 当前 HEAD 工作树中的 10 个受管文件——两技能 SKILL.md、三份 references、requesting-code-review 两文件、finishing SKILL.md、writing-plans 两文件；外加两个子测试实跑（skill-size、check-mermaid）。无网络、无子代理、幂等；`FAIL` 输出到 stderr，退出码聚合（1 = 任一失败）。
 
@@ -73,23 +73,31 @@
 | iv-handoff-chain-in-closeout | 移交链句完整（集成验证完成后再移交收尾） | 同上 |
 | no-direct-finishing-handoff（反向） | closeout 不得回退为直连收尾——锁死挂载不回退 | 终审 Strengths 第 1 条确认的反向防线设计；红绿自证覆盖 |
 
-### 2.6 收尾技能免跑与并入（6 项）
+### 2.6 收尾技能免跑与并入（10 项）
 
 | 断言 | 目的 | 来源 |
 |------|------|------|
 | fin-exit-credential / fin-head-match / fin-worktree-clean | 免跑三判据逐词在册 | 设计决策 10 子决策 c、风险 7 |
 | fin-expired-handoff | 「结果过期」移交语义在册 | 设计功能 2 |
-| fin-merge-section | 并入小节存在且标题按选项名表述（本地合并与推送 PR 执行后） | 设计决策 10 子决策 b；M-3 修复同步 |
+| fin-merge-section | 并入小节存在且标题带前置条件（基准分支为 main/master 且选合并或 PR） | 设计决策 10 子决策 b（第五轮补充之十二再修订）；M-3 修复同步 |
+| fin-merge-precondition | 前置条件句「基准分支为 main/master」在册 | 同上（目标限定） |
+| fin-atomic-order | 原子化时序在册：合并/推送之前登记 + 「功能代码 + 登记册更新」原子到达 | 同上（原子化） |
+| fin-no-merge-non-main | 非 main/master 基准不并入不归档 | 同上（目标限定） |
+| fin-verification-source | 并入源头指向 `specs/<date-feature>/verification.md` | 决策 10 子决策 f |
 | fin-no-merge-on-keep | 「保持分支原样」不并入——并入只发生在选择之后 | 子决策 b、§3 第 9 条 |
 
-### 2.7 计划阶段验证方案要求（7 项）
+### 2.7 计划阶段验证方案要求（11 项）
 
 | 断言 | 目的 | 来源 |
 |------|------|------|
-| wp-plan-requirement | 计划完整性要求句（六项 + 触发判据 + N 上限） | 设计功能 3/7、决策 11 |
+| wp-plan-requirement | 触发判据句 + 同目录另产出 verification.md | 设计功能 3、决策 10 子决策 f |
+| wp-verification-pointer | 指针句指向 plan-template「验证方案文件」段 | 同上 |
+| wp-saves-verification | 计划保存到段三件套句（design / plan / verification 同目录） | 同上 |
 | wp-self-review-item-10 | 自审第十项「验证方案专项」已增补 | 设计决策 11 自审专项 |
+| wp-self-review-target | 自审第十项核查对象指向 verification.md | 决策 10 子决策 f |
 | wp-no-plan-no-requirement | 纯单模块计划不加——防形式任务 | 设计 §3 第 5 条 |
-| pt-section / pt-provenance / pt-bidirectional-map / pt-content-requirements | 模板「验证方案」章：出处锚定、双向映射、内容要求六项落模板 | 设计决策 11 机制 1/2 与内容要求 |
+| pt-verification-file-section / pt-points-to-verification | 模板「验证方案文件」段存在并指向 verification.md 独立文件规范 | 决策 10 子决策 f（内嵌章废止） |
+| pt-provenance / pt-bidirectional-map / pt-content-requirements | 「验证方案文件」段：出处锚定、双向映射、内容要求六项 | 设计决策 11 机制 1/2 与内容要求 |
 
 ### 2.8 IV 承重句（8 项）
 
@@ -185,7 +193,7 @@
 
 ## 5. 结果汇总与已知边界
 
-- **静态层：** 90/90 全绿（红绿自证三轮精确命中）。
+- **静态层：** 90/90 全绿（红绿自证三轮精确命中）；2026-11-03 验证方案拆分波修订断言集后复跑 117/117 全绿（载体迁移 plan 章 → verification.md、并入时序限定——drill 场景规格同步：fixture 搭建说明改 verification.md 独立文件、场景⑤ 预置措辞；场景⑥「菜单之前并入即 FAIL」等既有 FAIL 条款语义不受影响，行为级 drill 未重跑）。
 - **drill 层：** 13 executed / 13 passed / 0 failed / 1 环境外（mobile，工具链缺失已取证）——其中 ⑫ 为「首轮 FAIL → 铁律增补 → 重跑通过」的真实闭环。
 - **已知边界（Cannot verify）：** headless drill 只回显最终信封，fixture 侧中间态（台账行、登记册终态）靠机械探针与自洽性核对；两个变体（bug 回修全量重跑、外部调度器触发）未独立执行（执行口径备注在 drills.md，静态文案覆盖同构语义）；shellcheck 本机不可用。
 - **测试资产自身的演化记录：** 两处断言来源于运行时发现（⑫ 模糊授权条款、T3 基线锚定）——drill 与审查不只是消费测试，也反向生产了测试。

@@ -10,7 +10,7 @@
 - **web fixture**：docker-compose 栈（app + db）+ Playwright 冒烟集（登录 + 一条关键路径）；集成层场景 = compose 拉起后 Playwright 断言跨页行为；登记册条目指向 Playwright 资产。
 - **mobile fixture**：Appium 场景 + Android 模拟器启动配置。**模拟器可用为前提，不可用则记环境外**——集成验证走环境受限降级，剩余层级以「环境外验证项」移交（逐项写明人工验证步骤），该次执行按环境外记录、不计场景失败。
 - **docs-only fixture**：任意最小项目上只含文档/注释改动的分支（无组装点、外部接口、运行边界触及），用于快速放行与免跑判据场景。
-- 需求级验证方案随实施计划存放（场景按需给出方案状态：有方案/无方案/方案含缺口）；项目级方案文件集在涉及登记册的场景中预先并入（`docs/superpowers/verification/`：environment.md + modules/*.md + cross-module.md）。
+- 需求级验证方案为独立文件，随实施计划同目录存放（`docs/superpowers/specs/<date-feature>/verification.md`；场景按需给出方案状态：有方案/无方案/方案含缺口）；项目级方案文件集在涉及登记册的场景中预先并入（`docs/superpowers/verification/`：environment.md + modules/*.md + cross-module.md）。
 
 ## 场景
 
@@ -40,7 +40,7 @@
 
 ### ⑤ 三形态链路走通（成功标准 5；web，可执行；mobile，模拟器可用为前提，不可用则记环境外）
 
-- 预置：web fixture 与 mobile fixture 各一份，均含计划阶段生成的需求级验证方案。
+- 预置：web fixture 与 mobile fixture 各一份，均含计划阶段生成的需求级验证方案文件 verification.md。
 - 驱动消息：「对当前分支跑集成验证。」（两个 fixture 各执行一遍）
 - 验收观察点：web fixture 走通「生成需求级验证方案 → 资产化执行 → 集成验证通过」全链，全绿出口附固定免责句「集成层全绿提高把握、不证明无缺陷」；mobile fixture 在模拟器可达时同链路走通（Appium 场景执行）——模拟器不可达时走环境受限降级：「环境外验证项」逐项写明人工验证步骤、随移交呈现，不静默跳过、不阻塞，该次按环境外记录。
 

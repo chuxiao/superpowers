@@ -65,21 +65,29 @@ ck "iv-handoff-chain-in-closeout" "grep -qF '集成验证完成后再移交 supe
 # 反向：closeout 不得回退为直接移交 finishing（移交对象仍是集成验证技能）
 ck "no-direct-finishing-handoff" "! grep -qF '使用 superpowers:finishing-a-development-branch。' \"$CO\""
 
-# 断言 6：finishing 免跑三判据词 + 结果过期移交 + 验证方案并入小节
+# 断言 6：finishing 免跑三判据词 + 结果过期移交 + 验证方案并入小节（原子化时序 + main/master 目标限定）
 ck "fin-exit-credential" "grep -qF '台账存在集成验证出口凭据' \"$FIN\""
 ck "fin-head-match" "grep -qF '与当前 HEAD 一致' \"$FIN\""
 ck "fin-worktree-clean" "grep -qF 'git status --porcelain' \"$FIN\""
 ck "fin-expired-handoff" "grep -qF '集成验证结果过期' \"$FIN\""
-ck "fin-merge-section" "grep -qF '### 验证方案并入（本地合并与推送并创建 PR 执行后）' \"$FIN\""
+ck "fin-merge-section" "grep -qF '### 验证方案并入（基准分支为 main/master 且选「本地合并」或「推送并创建 PR」时）' \"$FIN\""
+ck "fin-merge-precondition" "grep -qF '前置条件：基准分支为 main/master' \"$FIN\""
+ck "fin-atomic-order" "grep -qF '合并/推送之前' \"$FIN\" && grep -qF '「功能代码 + 登记册更新」原子到达' \"$FIN\""
+ck "fin-no-merge-non-main" "grep -qF '基准分支不是 main/master' \"$FIN\""
+ck "fin-verification-source" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$FIN\""
 ck "fin-no-merge-on-keep" "grep -qF '「保持分支原样」不并入' \"$FIN\""
 
-# 断言 7：writing-plans 验证方案要求句 + 自审第十项
-ck "wp-plan-requirement" "grep -qF '计划存在跨任务组装点或触及外部接口 → 计划须含「验证方案」内嵌章节' \"$WP\""
+# 断言 7：writing-plans 验证方案指针句 + 触发判据句 + 三件套保存句 + 自审第十项（核查对象 verification.md）
+ck "wp-plan-requirement" "grep -qF '计划存在跨任务组装点或触及外部接口 → 同目录另产出验证方案文件 \`verification.md\`' \"$WP\""
+ck "wp-verification-pointer" "grep -qF '见 \`references/plan-template.md\`「验证方案文件」段' \"$WP\""
+ck "wp-saves-verification" "grep -qF '同目录同时产出 \`verification.md\`' \"$WP\""
 ck "wp-self-review-item-10" "grep -qF '**10. 验证方案专项：**' \"$WP\""
+ck "wp-self-review-target" "grep -qF '计划产出 verification.md 时逐项核对' \"$WP\""
 ck "wp-no-plan-no-requirement" "grep -qF '纯单模块无接口的计划不加' \"$WP\""
 
-# 断言 8：plan-template 验证方案章——出处标注、双向映射、内容要求句
-ck "pt-section" "grep -qF '## 验证方案（可选章）' \"$PT\""
+# 断言 8：plan-template「验证方案文件」说明段——存在性、指向 verification.md、出处标注、双向映射、内容要求句
+ck "pt-verification-file-section" "grep -qF '## 验证方案文件' \"$PT\""
+ck "pt-points-to-verification" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$PT\""
 ck "pt-provenance" "grep -qF '每条期望标注设计出处（设计文档章节或需求条目），无出处不得入方案' \"$PT\""
 ck "pt-bidirectional-map" "grep -qF '集成面与场景清单的双向映射表' \"$PT\""
 ck "pt-content-requirements" "grep -qF '内容要求六项逐项落实——确定性固定策略、保真度声明、副作用隔离、顺序依赖显式化、既有登记册查重、失败证据采集' \"$PT\""
@@ -136,7 +144,11 @@ ck "rs-no-last-regression" "! grep -qF '上次回归' \"$RS\""
 ck "iv-verification-path" "grep -qF 'docs/superpowers/verification/' \"$IV\""
 ck "rs-verification-path" "grep -qF 'docs/superpowers/verification/' \"$RS\""
 ck "fin-verification-path" "grep -qF 'docs/superpowers/verification/' \"$FIN\""
-ck "iv-plan-locating-sentence" "grep -qF '随实施计划存放：\`docs/superpowers/specs/<date-feature>/plan.md\` 的验证方案章' \"$IV\""
+ck "iv-source-locating-sentence" "grep -qF 'specs 下各 \`docs/superpowers/specs/<date-feature>/verification.md\`' \"$IV\""
+ck "iv-sweep-all-cases" "grep -qF '执行 specs 下能找到的所有验证用例' \"$IV\""
+ck "iv-traverse-verification-files" "grep -qF '遍历各 \`<date-feature>/verification.md\`' \"$IV\""
+ck "iv-no-cases-exit" "grep -qF 'specs 下无验证用例' \"$IV\""
+ck "iv-registry-source-flow" "grep -qF '验证用例的源头在' \"$IV\""
 ck "fin-archive-git-mv" "grep -qF 'git mv docs/superpowers/specs/<date-feature> docs/superpowers/archived/<date-feature>' \"$FIN\""
 ck "fin-archive-pr-not-now" "grep -qF '推送时不归档' \"$FIN\""
 ck "fin-archive-condition" "grep -qF '均已到基线（无「待合并」状态）' \"$FIN\""

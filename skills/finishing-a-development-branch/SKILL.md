@@ -80,6 +80,8 @@ WORKTREE_PATH=$(git rev-parse --show-toplevel)
 
 ### 选项 1：本地合并
 
+基准分支为 main/master 时，先做并入登记再合并：按下方「验证方案并入」小节把登记册三态登记提交到特性分支，然后才执行这里的合并命令——merge commit 使「功能代码 + 登记册更新」原子到达基准分支。
+
 ```bash
 # 获取主仓库根目录，确保 CWD（当前目录）安全
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
@@ -104,6 +106,8 @@ git branch -d <feature-branch>
 
 ### 选项 2：推送并创建 PR
 
+推送之前先做并入登记：按下方「验证方案并入」小节把登记册三态登记提交到特性分支（基准分支为 main/master 时），登记提交随分支一起推送、随 forge 的合并原子到达基准分支。
+
 ```bash
 git push -u origin <feature-branch>
 # 从 detached HEAD 出发时，为远程上的新分支命名：
@@ -118,17 +122,17 @@ git push -u origin <feature-branch>
 
 报告："保留分支 <name>。工作树保留在 <path>。"
 
-### 验证方案并入（本地合并与推送并创建 PR 执行后）
+### 验证方案并入（基准分支为 main/master 且选「本地合并」或「推送并创建 PR」时）
 
-需求方选「本地合并」或「推送并创建 PR」并执行完毕后，把本次需求级验证方案并入项目级方案文件集 `docs/superpowers/verification/`：逐场景按登记册条目格式（`- <场景id> | <层级 L1|L2|L3|兼容> | <资产路径> | <状态 normal|待合并|已知不修> | <期望一句话>`）三态登记进对应模块的 `modules/<module>.md` 或跨模块的 `cross-module.md`——新增（新场景）、合并（与既有场景覆盖面重复）、废弃（本次需求推翻既有行为 → 条目直接移除，不留记录）；登记册尚不存在时先初始化。资产不在基线的场景（如 PR 尚未合并）状态标注「待合并」——不计为回归失败，回归报告单列呈现。登记册改动随特性分支提交、经 PR 到达基线后自下次回归起生效；「待合并」仅适用于回归时资产路径在基线不可定位的其他情形。
+前置条件：基准分支为 main/master，且需求方在菜单选「本地合并」或「推送并创建 PR」。两条件同时满足时，在合并/推送之前、仍在特性分支上把本次需求级验证方案（`docs/superpowers/specs/<date-feature>/verification.md`）并入项目级方案文件集 `docs/superpowers/verification/`，并作为一次提交落在特性分支上：逐场景按登记册条目格式（`- <场景id> | <层级 L1|L2|L3|兼容> | <资产路径> | <状态 normal|待合并|已知不修> | <期望一句话>`）三态登记进对应模块的 `modules/<module>.md` 或跨模块的 `cross-module.md`——新增（新场景）、合并（与既有场景覆盖面重复）、废弃（本次需求推翻既有行为 → 条目直接移除，不留记录）；登记册尚不存在时先初始化。登记提交先行落地，随后的 merge commit（或 forge 的合并）使「功能代码 + 登记册更新」原子到达 main/master。资产不在基线的场景状态标注「待合并」——不计为回归失败，回归报告单列呈现；「待合并」仅适用于回归时资产路径在基线不可定位的其他情形。
 
 登记册写操作串行，不接受并行并入：写入前先同步基线上的最新登记册；仍有冲突时，能机械判定的合并（互不重叠的新增条目）自行处理，覆盖面重叠或同场景相冲突的非机械合并，与需求方讨论后决定。
 
-需求方选「保持分支原样」不并入——方案留作分支上的需求级文档。detached HEAD 的两项菜单同理对应：「推送为新分支并创建 PR」→ 并入，「保持原样」→ 不并入。
+基准分支不是 main/master，或需求方选「保持分支原样」不并入——按原流程走，方案留作分支上的需求级文档，也不做规格目录归档。detached HEAD 的两项菜单同理对应：「推送为新分支并创建 PR」→ 基准分支为 main/master 时按上述时序并入，「保持原样」→ 不并入。
 
 ### 规格目录归档（并入执行后）
 
-需求级文档目录 `docs/superpowers/specs/<date-feature>/`（`design.md` + `plan.md`）在 feature 分支实际并入 main/master 时归档——整目录移入 `docs/superpowers/archived/<date-feature>/`：
+需求级文档目录 `docs/superpowers/specs/<date-feature>/`（`design.md` + `plan.md` + `verification.md`）在 feature 分支实际并入 main/master 时归档——整目录移入 `docs/superpowers/archived/<date-feature>/`：
 
 - **本地合并（选项 1）**：合并执行后当场归档——`git mv docs/superpowers/specs/<date-feature> docs/superpowers/archived/<date-feature>` 并提交。
 - **推送并创建 PR（选项 2）**：推送时不归档——工作流不感知 forge 的合并事件。归档条件机械化：该 date-feature 的登记册条目均已到基线（无「待合并」状态）即归档，由下一次基线侧的收尾并入步骤或回归触发时顺带移动并提交。
