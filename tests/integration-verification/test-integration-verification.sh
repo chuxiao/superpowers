@@ -206,6 +206,15 @@ ck "bs-archived-frozen" "grep -qF '归档后冻结零改动' \"$BS\" && grep -qF
 ck "bs-change-classification" "grep -qF '收到新问题时先分类' \"$BS\" && grep -qF 'bugfix 路径' \"$BS\""
 ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN\" && grep -qF '未经需求方明确同意，绝不在 main/master 分支上开始实施' \"$FIN\" && grep -qF '设计决策（存放位置与改动分类）归 brainstorming' \"$FIN\""
 
+# 断言 18：分支治理纪律——路由与冻结的上位落点（需求方拍板：三规则各归其位）
+USK="$REPO_ROOT/skills/using-superpowers/SKILL.md"
+BRS="$REPO_ROOT/skills/brainstorming/SKILL.md"
+ck "us-routing-feature-workflow" "grep -qF '三件套（design.md + plan.md + verification.md）' \"$USK\""
+ck "us-routing-fix-branch-gate" "grep -qF 'bugfix 分支上进行，合并前过集成验证门槛' \"$USK\""
+ck "us-main-no-direct-dev" "grep -qF 'main/master 上不直接开发' \"$USK\""
+ck "brs-archived-frozen" "grep -qF '归档后冻结零改动' \"$BRS\""
+ck "fin-discipline-pointer" "grep -qF '上位载体' \"$FIN\""
+
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
   exit 1
