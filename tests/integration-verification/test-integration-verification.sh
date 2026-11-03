@@ -193,6 +193,12 @@ ck "rs-dirty-worktree-gate" "grep -qF '## 执行前置' \"$RS\" && grep -qF '停
 ck "rs-gate-covers-both-modes" "grep -qF '基线模式与 feature 分支模式均受此门约束' \"$RS\""
 ck "rs-gate-before-mode-judgment" "awk '/## 执行前置/{p=NR} /## 双模式判定/{m=NR} END{if (p && m && p < m) exit 0; exit 1}' \"$RS\""
 
+# 断言 16：分支纪律三条规则——archived 冻结与设计决策走向、main/master 集成动作限定、
+# 改动二分（新 feature 完整工作流 / bugfix 过集成验证门槛）
+ck "fin-discipline-archived-frozen" "grep -qF '归档后冻结，零改动' \"$FIN\" && grep -qF '随新 feature 的 \`docs/superpowers/specs/<date-feature>/design.md\` 走完整工作流' \"$FIN\""
+ck "fin-discipline-main-integration-only" "grep -qF 'main/master 只承载集成动作，不直接开发' \"$FIN\" && grep -qF '分支合并、验证方案并入登记册、规格目录归档移动' \"$FIN\" && grep -qF '任何开发性改动不得直接在 main/master 上提交' \"$FIN\""
+ck "fin-discipline-binary-classification" "grep -qF '改动二分' \"$FIN\" && grep -qF '走 brainstorming → writing-plans → 集成验证 → 收尾完整工作流' \"$FIN\" && grep -qF '无新需求文档，合并前同样过集成验证门槛' \"$FIN\""
+
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
   exit 1

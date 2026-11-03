@@ -146,6 +146,14 @@ fi
 
 「保持分支原样」与丢弃路径不归档——specs/ 内容留在原地。
 
+### 分支纪律
+
+三条纪律逐条约束每一笔新改动：
+
+- **`docs/superpowers/archived/` 归档后冻结，零改动。** 今后的设计决策随新 feature 的 `docs/superpowers/specs/<date-feature>/design.md` 走完整工作流，不回写已归档文档。
+- **main/master 只承载集成动作，不直接开发。** 集成动作指分支合并、验证方案并入登记册、规格目录归档移动。任何开发性改动不得直接在 main/master 上提交——先开特性分支再动手。
+- **改动二分。** 每一笔新改动要么是新 feature（新建 `docs/superpowers/specs/<date-feature>/` 目录，走 brainstorming → writing-plans → 集成验证 → 收尾完整工作流），要么是 bugfix（修复 main/master 上已交付内容的缺陷——无新需求文档，合并前同样过集成验证门槛）。不存在第三类。
+
 ### 如果需求方要求丢弃工作成果
 
 只有在需求方明确要求丢弃时，才会走这条路径。先确认：
