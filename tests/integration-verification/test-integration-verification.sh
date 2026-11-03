@@ -179,6 +179,20 @@ ck "suite-skill-size-passes" "bash \"$SIZE\" >/dev/null"
 ck "iv-mermaid-clean" "bash \"$MERMAID\" \"$IV\" >/dev/null"
 ck "rs-mermaid-clean" "bash \"$MERMAID\" \"$RS\" >/dev/null"
 
+# 断言 15：干净工作区执行前置（需求方裁决 2026-11-03，决策 5 执行前置条目 +
+# 决策 6 子决策 b + 附录第五轮补充之十五）——IV 执行前置小节与 porcelain 停下句、
+# 回修先提交句、方案修改先提交句、统一重跑前置句；RS 双模式共用的脏工作区门句
+ck "iv-precondition-section" "grep -qF '## 执行前置' \"$IV\""
+ck "iv-precondition-porcelain-stop" "grep -qF '\`git status --porcelain\` 非空（工作区不干净）→ 停下移交需求方——先提交（或自行处置未提交改动）后再跑集成验证' \"$IV\""
+ck "iv-precondition-committed-target" "grep -qF '验证对象统一为**已提交状态**' \"$IV\""
+ck "iv-precondition-no-dirty-run" "grep -qF '❌「工作区脏也照跑，把未提交改动当验证对象」' \"$IV\" && grep -qF '✅「porcelain 非空即停下，要求先提交」' \"$IV\""
+ck "iv-bug-fix-commit-before-rerun" "grep -qF '回修完成后先提交（修复作为一次提交），再全量重跑本技能' \"$IV\""
+ck "iv-non-bug-plan-commit-before-rerun" "grep -qF '方案修改先提交（verification.md 修改作为一次提交）' \"$IV\""
+ck "iv-every-rerun-clean-worktree" "grep -qF '每次重跑前工作区必须干净' \"$IV\""
+ck "rs-dirty-worktree-gate" "grep -qF '## 执行前置' \"$RS\" && grep -qF '停下移交需求方，不执行重跑——先提交或自行处置后再触发' \"$RS\""
+ck "rs-gate-covers-both-modes" "grep -qF '基线模式与 feature 分支模式均受此门约束' \"$RS\""
+ck "rs-gate-before-mode-judgment" "awk '/## 执行前置/{p=NR} /## 双模式判定/{m=NR} END{if (p && m && p < m) exit 0; exit 1}' \"$RS\""
+
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
   exit 1
