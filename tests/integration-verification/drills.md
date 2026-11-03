@@ -6,11 +6,11 @@
 
 场景预置的项目按以下规格在临时 worktree 中搭建（T6 执行者照此搭建，用后即删，不提交任何共享分支）：
 
-- **backend fixture**：最小 pytest 项目，两模块 `orders` / `billing`——`billing` 读取 `orders` 的返回结构（跨任务组装点）；集成层场景用 testcontainers 在用例内声明一次性真实数据库（Postgres），随测试销毁；各模块单测 mock 隔离、单独全绿；可运行层入口为最小 web app + `/health` 健康检查；端到端层冒烟集为一个脚本化请求序列。`docs/verification/environment.md` 写明各层入口命令与环境要求（容器运行时可用为前提）。破坏点按场景注入（改返回字段名、删接口响应字段、计数桩偶发失败、方案期望写错）。
+- **backend fixture**：最小 pytest 项目，两模块 `orders` / `billing`——`billing` 读取 `orders` 的返回结构（跨任务组装点）；集成层场景用 testcontainers 在用例内声明一次性真实数据库（Postgres），随测试销毁；各模块单测 mock 隔离、单独全绿；可运行层入口为最小 web app + `/health` 健康检查；端到端层冒烟集为一个脚本化请求序列。`docs/superpowers/verification/environment.md` 写明各层入口命令与环境要求（容器运行时可用为前提）。破坏点按场景注入（改返回字段名、删接口响应字段、计数桩偶发失败、方案期望写错）。
 - **web fixture**：docker-compose 栈（app + db）+ Playwright 冒烟集（登录 + 一条关键路径）；集成层场景 = compose 拉起后 Playwright 断言跨页行为；登记册条目指向 Playwright 资产。
 - **mobile fixture**：Appium 场景 + Android 模拟器启动配置。**模拟器可用为前提，不可用则记环境外**——集成验证走环境受限降级，剩余层级以「环境外验证项」移交（逐项写明人工验证步骤），该次执行按环境外记录、不计场景失败。
 - **docs-only fixture**：任意最小项目上只含文档/注释改动的分支（无组装点、外部接口、运行边界触及），用于快速放行与免跑判据场景。
-- 需求级验证方案随实施计划存放（场景按需给出方案状态：有方案/无方案/方案含缺口）；项目级方案文件集在涉及登记册的场景中预先并入（`docs/verification/`：environment.md + modules/*.md + cross-module.md）。
+- 需求级验证方案随实施计划存放（场景按需给出方案状态：有方案/无方案/方案含缺口）；项目级方案文件集在涉及登记册的场景中预先并入（`docs/superpowers/verification/`：environment.md + modules/*.md + cross-module.md）。
 
 ## 场景
 
@@ -36,7 +36,7 @@
 
 - 预置：backend fixture；项目级方案文件集已并入（登记册含 normal 与「待合并」条目各至少一条）；工作区在特性分支上，基线为主开发线最新。
 - 驱动消息：「跑一次全量回归，基线用主开发线最新。」
-- 验收观察点：仅显式触发成立——控制者先核对工作区处于基线状态再执行；登记册全部 normal 场景全量重跑，一遍跑完；报告落盘 `docs/verification/reports/YYYY-MM-DD-<label>.md`，含全部场景结果、失败项层级/场景/归属、「待合并」清单单列；报告 grep 不到「变更摘要」「上次回归」。无显式触发指令时回归不运行（对照驱动消息缺失的变体：不发指令，回归技能不启动）。
+- 验收观察点：仅显式触发成立——控制者先核对工作区处于基线状态再执行；登记册全部 normal 场景全量重跑，一遍跑完；报告落盘 `docs/superpowers/verification/reports/YYYY-MM-DD-<label>.md`，含全部场景结果、失败项层级/场景/归属、「待合并」清单单列；报告 grep 不到「变更摘要」「上次回归」。无显式触发指令时回归不运行（对照驱动消息缺失的变体：不发指令，回归技能不启动）。
 
 ### ⑤ 三形态链路走通（成功标准 5；web，可执行；mobile，模拟器可用为前提，不可用则记环境外）
 
@@ -123,14 +123,14 @@
 ### ④ 回归显式触发全量重跑留痕 — 通过（成功标准 4）
 
 - 实例：backend `feat-merge`（登记册已并入 main：normal 2 条 + 待合并 1 条）。驱动消息：「跑一次全量回归，基线用主开发线最新。」
-- 证据：核对工作区处于 feat-merge → 切到基线 main @ 4fed443 → 读登记册文件集 → normal 条目全量重跑一遍跑完（ORD-L1-001、XMOD-L1-001，1 passed，L1 全量 2s）→ `待合并` XMOD-L1-002 按状态跳过并**单列**（资产在 feat-merge 未并入基线）→ 报告落盘 `docs/verification/reports/2026-11-02-main-full.md`，含触发记录、基线 sha、逐场景结果与时长、失败项（无）、已知不修（无）、待合并清单、免责句「回归全绿提高把握、不证明无缺陷」；`grep -c "变更摘要\|上次回归"` = 0。
-- 对照变体（无显式触发）：实例 `feat-merge`（独立副本），驱动消息仅「对当前分支跑集成验证。」——集成验证照常执行，**回归未运行**（`docs/verification/reports/` 目录不存在，无基线切换、无报告落盘）。
+- 证据：核对工作区处于 feat-merge → 切到基线 main @ 4fed443 → 读登记册文件集 → normal 条目全量重跑一遍跑完（ORD-L1-001、XMOD-L1-001，1 passed，L1 全量 2s）→ `待合并` XMOD-L1-002 按状态跳过并**单列**（资产在 feat-merge 未并入基线）→ 报告落盘 `docs/superpowers/verification/reports/2026-11-02-main-full.md`，含触发记录、基线 sha、逐场景结果与时长、失败项（无）、已知不修（无）、待合并清单、免责句「回归全绿提高把握、不证明无缺陷」；`grep -c "变更摘要\|上次回归"` = 0。
+- 对照变体（无显式触发）：实例 `feat-merge`（独立副本），驱动消息仅「对当前分支跑集成验证。」——集成验证照常执行，**回归未运行**（`docs/superpowers/verification/reports/` 目录不存在，无基线切换、无报告落盘）。
 - 判定：通过（主路径 + 对照变体均成立）。附注：被对照会话顺带暴露 fixture 自带的一条无锚定资产断言（XMOD-L1-002 `__doc__` 断言），控制者以证据对照归因、裁定前不动期望——技能行为的额外旁证；该资产在主路径中为待合并跳过，不影响本场景判定。
 
 ### ⑤ 三形态链路走通 — web 通过；mobile 环境外（成功标准 5）
 
 - web：实例 web `feat-records-v2`（方案随分支预置）。驱动消息：「对当前分支跑集成验证。」链路走通：需求级验证方案（plans/records-v2-plan.md）→ 资产化执行（L1 WEB-L1-001 跨页持久化 + WEB-L1-002 重复标题 409 / L2 栈启动健康检查 / L3 登录创建冒烟，各层一遍跑完）→ **已声明层全绿出口**，附固定免责句「集成层全绿提高把握、不证明无缺陷」。台账 `集成验证凭据: 已声明层全绿 HEAD=1b8a572…`（全 sha）+ `集成验证缺口: 接口兼容层 未声明`；接口兼容层未声明单列不阻塞；缺口事实（方案出处锚定弱、WEB-L1-002 未入登记册入口）如实呈现且不代写；验证后无残留容器/卷（`docker ps -a` 机械核验）。
-- mobile（环境外）：模拟器不可达为本机事实——`adb` / `appium` / `emulator` 均 NOT FOUND，`~/Library/Android/sdk` 不存在，fixture 无构建产物 `dist/app-debug.apk`。按场景验收观察点与技能「环境受限降级」语义记**环境外**：不计场景失败，剩余层级（APP-L2-001 模拟器安装启动、APP-L3-001 Appium 登录冒烟）以「环境外验证项」移交，逐项人工验证步骤见实例 `docs/verification/environment.md`；设计允许 mobile 以环境可用为前提单独补验。
+- mobile（环境外）：模拟器不可达为本机事实——`adb` / `appium` / `emulator` 均 NOT FOUND，`~/Library/Android/sdk` 不存在，fixture 无构建产物 `dist/app-debug.apk`。按场景验收观察点与技能「环境受限降级」语义记**环境外**：不计场景失败，剩余层级（APP-L2-001 模拟器安装启动、APP-L3-001 Appium 登录冒烟）以「环境外验证项」移交，逐项人工验证步骤见实例 `docs/superpowers/verification/environment.md`；设计允许 mobile 以环境可用为前提单独补验。
 - 判定：web 通过；mobile 环境外（不计失败）。
 
 ### ⑥ 并入三态登记 — 通过（成功标准 6，主路径与变体）

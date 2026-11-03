@@ -54,13 +54,13 @@ flowchart TD
 
 **brainstorming** —— 通过逐轮提问弄清需求方真正想要什么，先复述、再定稿，避免把理解偏差直接建成代码。
 - 触发：任何创造性工作开始之前——功能、组件、计划，软件内外都算。
-- 输出：项目级工作产出设计文档 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`（写完过 builder check 再交付）；小改动止于聊天内确认。
+- 输出：项目级工作产出设计文档 `docs/superpowers/specs/<date-feature>/design.md`（`<date-feature>` = `YYYY-MM-DD-<主题>`，写完过 builder check 再交付）；小改动止于聊天内确认。
 
 ## ② 计划
 
 **writing-plans** —— 把设计文档转成「可判真伪」的实施计划：任务写到 Files / Interfaces / 边界条件 / 验收标准为止，红绿循环不预写；写完自审八项，再派未参与的子代理独立审读。
 - 触发：已有设计文档或需求、多步骤任务、动代码之前。
-- 输出：实施计划 `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`（固定五章 + 执行交接）+ 独立审读处置记录 + 执行方式建议（子代理驱动 / 会话内）。
+- 输出：实施计划 `docs/superpowers/specs/<date-feature>/plan.md`（与设计文档同目录；固定五章 + 执行交接）+ 独立审读处置记录 + 执行方式建议（子代理驱动 / 会话内）。
 
 ## ③ 执行准备
 
@@ -142,9 +142,9 @@ flowchart TD
 - 触发：会话出了问题、需求方想知道为什么，或要给上游报 bug。
 - 输出：诊断案件文档 / bug 报告（含脱敏流程）。
 
-**regression-sweep** —— 全量回归：按项目级场景登记册（`docs/verification/` 文件集）在基线上全量重跑，检测跨分支的历史累积回归；一遍跑完后集中呈现，需求方逐项定性裁决（非 bug → 调方案增量重跑；bug → 回修走正常工作流，或登记为已知不修）；回归不修代码。
+**regression-sweep** —— 全量回归：按项目级场景登记册（`docs/superpowers/verification/` 文件集）在基线上全量重跑，检测跨分支的历史累积回归；一遍跑完后集中呈现，需求方逐项定性裁决（非 bug → 调方案增量重跑；bug → 回修走正常工作流，或登记为已知不修）；回归不修代码。
 - 触发：仅显式触发——需求方口头明示或外部调度器显式调用，绝不隐式自动运行。
-- 输出：留痕报告落盘 `docs/verification/reports/`（当次结果、失败项归因与裁决、待合并与已知不修清单）。
+- 输出：留痕报告落盘 `docs/superpowers/verification/reports/`（当次结果、失败项归因与裁决、待合并与已知不修清单）。
 
 ---
 

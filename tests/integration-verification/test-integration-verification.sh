@@ -114,7 +114,7 @@ ck "iv-fast-release-override" "grep -qF '以推导为准' \"$IV\""
 
 # 断言 12：regression-sweep——显式触发句、报告落盘路径、定性三路句、无场景句
 ck "rs-explicit-trigger" "grep -qF '仅显式触发——需求方口头明示或外部调度器显式调用，绝不隐式自动运行' \"$RS\""
-ck "rs-report-path" "grep -qF 'docs/verification/reports/YYYY-MM-DD-<label>.md' \"$RS\""
+ck "rs-report-path" "grep -qF 'docs/superpowers/verification/reports/YYYY-MM-DD-<label>.md' \"$RS\""
 ck "rs-three-way-ruling" "grep -qF '定性裁决三路' \"$RS\""
 ck "rs-empty-registry-exit" "grep -qF '登记册无场景，无可回归项' \"$RS\""
 ck "rs-baseline-check" "grep -qF '执行前先核对工作区处于基线状态' \"$RS\""
@@ -129,6 +129,23 @@ done
 # 断言 12c：反向——不做记录裁决（变更摘要、上次回归）零命中
 ck "rs-no-change-summary" "! grep -qF '变更摘要' \"$RS\""
 ck "rs-no-last-regression" "! grep -qF '上次回归' \"$RS\""
+
+# 断言 12d：文档目录结构规范化（需求方拍板）——新路径挂载：
+# IV/RS/FIN 含 docs/superpowers/verification/；IV 含需求级验证方案定位句；
+# FIN 含归档步骤（本地合并当场 git mv、PR 路径推送不归档、条件机械化）
+ck "iv-verification-path" "grep -qF 'docs/superpowers/verification/' \"$IV\""
+ck "rs-verification-path" "grep -qF 'docs/superpowers/verification/' \"$RS\""
+ck "fin-verification-path" "grep -qF 'docs/superpowers/verification/' \"$FIN\""
+ck "iv-plan-locating-sentence" "grep -qF '随实施计划存放：\`docs/superpowers/specs/<date-feature>/plan.md\` 的验证方案章' \"$IV\""
+ck "fin-archive-git-mv" "grep -qF 'git mv docs/superpowers/specs/<date-feature> docs/superpowers/archived/<date-feature>' \"$FIN\""
+ck "fin-archive-pr-not-now" "grep -qF '推送时不归档' \"$FIN\""
+ck "fin-archive-condition" "grep -qF '均已到基线（无「待合并」状态）' \"$FIN\""
+
+# 断言 12e：旧路径清零——docs/verification/ 不再出现于两技能、收尾技能、计划技能、
+# 计划模板与三份形态参考
+for f in "$IV" "$RS" "$FIN" "$WP" "$PT" "$BK" "$WB" "$MB"; do
+  ck "no-old-verification-path:$(basename "$(dirname "$f")")/$(basename "$f")" "! grep -qF 'docs/verification/' \"$f\""
+done
 
 # 断言 13：既有测试套件——全仓库 SKILL.md 字节上限
 ck "suite-skill-size-passes" "bash \"$SIZE\" >/dev/null"

@@ -23,7 +23,7 @@ flowchart TD
     INC -->|"通过，并入当次结果"| GREEN
     ALL -->|"定性bug：回修"| FLOW["走正常工作流<br/>作为新需求进入计划"]
     ALL -->|"定性bug：已知不修"| KNOWN["登记册标注状态<br/>此后单列呈现不计失败"]
-    GREEN --> OUT["报告落盘<br/>docs/verification/reports/"]
+    GREEN --> OUT["报告落盘<br/>docs/superpowers/verification/reports/"]
     EMPTY --> OUT
     FLOW --> OUT
     KNOWN --> OUT
@@ -33,11 +33,11 @@ flowchart TD
 
 仅显式触发——需求方口头明示或外部调度器显式调用，绝不隐式自动运行。回归是全项目成本动作，隐式触发会让需求方失去对成本的控制：本技能不在任何链路内自动接力，不随收尾或并入发生，也没有内置定时调度——外部调度器要触发回归，同样走显式调用本技能这一条路。
 
-输入：显式触发指令 + 基线（默认主开发线最新，需求方可指定）+ 项目级整体验证方案文件集（`docs/verification/`）。
+输入：显式触发指令 + 基线（默认主开发线最新，需求方可指定）+ 项目级整体验证方案文件集（`docs/superpowers/verification/`）。
 
 ## 项目级方案文件集
 
-文件集目录与登记册条目格式以 superpowers:integration-verification 的「项目级方案文件集与登记册约定」为准：目录 `docs/verification/`，含 `environment.md`（项目声明：各层一行怎么跑——入口命令、环境要求）与场景登记册文件集——`modules/<module>.md`（模块场景登记册）+ `cross-module.md`（跨模块场景），每条一行：
+文件集目录与登记册条目格式以 superpowers:integration-verification 的「项目级方案文件集与登记册约定」为准：目录 `docs/superpowers/verification/`，含 `environment.md`（项目声明：各层一行怎么跑——入口命令、环境要求）与场景登记册文件集——`modules/<module>.md`（模块场景登记册）+ `cross-module.md`（跨模块场景），每条一行：
 
 ```
 - <场景id> | <层级 L1|L2|L3|兼容> | <资产路径> | <状态 normal|待合并|已知不修> | <期望一句话>
@@ -98,7 +98,7 @@ flowchart TD
 
 ## 报告落盘
 
-报告写入 `docs/verification/reports/YYYY-MM-DD-<label>.md`——`<label>` 为当次触发的简短标识（需求方给定，或按当次回归范围拟定），限文件名安全字符——字母数字、连字符、下划线。报告只呈现当次结果：
+报告写入 `docs/superpowers/verification/reports/YYYY-MM-DD-<label>.md`——`<label>` 为当次触发的简短标识（需求方给定，或按当次回归范围拟定），限文件名安全字符——字母数字、连字符、下划线。报告只呈现当次结果：
 
 - **当次结果**：登记册全部场景的重跑结果（通过/偶发/稳定失败，各层执行时长）。
 - **失败项**：每个稳定失败项的层级、场景、归属，加归因、证据对照、推荐裁定与需求方裁决。

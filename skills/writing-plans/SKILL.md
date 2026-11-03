@@ -17,7 +17,7 @@ description: 当你已有一份面向多步骤任务的设计文档或需求，�
 
 **上下文：** 如果在隔离的工作树中工作，该工作树应当已由 `superpowers:using-git-worktrees` 技能在开始执行本计划时创建。
 
-**计划保存到：** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
+**计划保存到：** `docs/superpowers/specs/<date-feature>/plan.md`（`<date-feature>` = `YYYY-MM-DD-<主题>`，目录随需求建立；设计文档在同目录 `design.md`）
 - （需求方对计划存放位置的偏好覆盖此默认值）
 
 ## 范围检查
@@ -137,13 +137,13 @@ description: 当你已有一份面向多步骤任务的设计文档或需求，�
 - **子代理驱动（Subagent-driven）** ——任务边界清晰、每个任务都能写出稳定验收标准的计划，适用于这种方式。每个任务由一名全新的子代理实施，在下一个任务开始之前由一名全新审查者检查，最后再做一次整分支终审。最彻底；每个任务与每次审查各要消耗一份全新上下文。
 - **会话内执行（Native）** ——强耦合的小改动、探索性强到写不出稳定验收标准的任务，适用这种方式。由你（原计划者）在本会话中亲自实施每一个任务，然后由一名运行在最强档模型上的全新审查者检查整个分支。最便宜也最快；直到最后才有一次独立审查。
 
-**「计划已完成并保存到 `docs/superpowers/plans/<filename>.md`。请审查：各任务的边界条件与验收标准是否忠实覆盖了设计文档的功能清单与「明确不做」清单。明确确认后，选择执行方式：子代理驱动，还是会话内执行？**
+**「计划已完成并保存到 `docs/superpowers/specs/<date-feature>/plan.md`。请审查：各任务的边界条件与验收标准是否忠实覆盖了设计文档的功能清单与「明确不做」清单。明确确认后，选择执行方式：子代理驱动，还是会话内执行？**
 
 **对这份计划，我推荐 <one of the two>，理由是 <one sentence from the plan: how much the tasks depend on each other's interfaces, how many there are, what a shipped mistake would cost>。」**
 
 **已给定执行方式时：**
 
-**「计划已完成并保存到 `docs/superpowers/plans/<filename>.md`。它是否忠实体现了设计文档？请确认。」**
+**「计划已完成并保存到 `docs/superpowers/specs/<date-feature>/plan.md`。它是否忠实体现了设计文档？请确认。」**
 
 **若选择了子代理驱动：**
 - **必需子技能（REQUIRED SUB-SKILL）：** 使用 superpowers:subagent-driven-development
