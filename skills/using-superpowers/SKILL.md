@@ -29,9 +29,23 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 
 - 「我们来构建 X」→ 先用 superpowers:brainstorming，再用实现技能。
 - 「修复这个 bug」→ 先用 superpowers:systematic-debugging，再用领域技能。
-- 构建类走完整工作流：brainstorming 建 specs/<date-feature>/ 三件套（design.md + plan.md + verification.md）→ writing-plans → 执行 → requesting-code-review 收官把关 → 集成验证 → finishing 收尾（验证方案并入登记册 + 规格目录归档）。
+- 构建类走完整工作流：brainstorming 建 specs/<date-feature>/（design.md + plan.md；验证方案按集成面判据决定是否产出）→ writing-plans → 执行 → requesting-code-review 收官把关 → 集成验证 → finishing 收尾（验证方案并入登记册 + 规格目录归档）。
 - 修复类在 bugfix 分支上进行，合并前过收官把关与集成验证门槛。
 - 共同约束：feature 与 bugfix 均在各自分支上进行，main/master 上不直接开发（main 只承载集成动作：分支合并、验证方案并入登记册、规格目录归档移动）；docs/superpowers/archived/ 归档后冻结，不回写——今后的设计决策随新 feature 的 design.md 走完整工作流。
+
+## 流程闸门与定性
+
+本工作流只适用于软件开发项目。
+
+收到开发类请求时，会话入口先把任务定性为 feature、bugfix 或非开发任务三类之一，并用一句话宣布类型与依据，再进入对应流程：
+
+- **feature：** 产出新行为、新能力或新文档产物。
+- **bugfix：** 修复基线分支上已交付内容的缺陷。
+- **非开发任务：** 问答、探索、回归执行——正常应答，不建树。
+
+「小」「快」「顺手」「只是改一下」不构成降级理由：一行改动也是 feature，定性后建树、走完整流程。
+
+流程闸门的全部十一个环节不接受「跳过」类直接请求：定性、建树、设计起步、设计文档、独立审读、设计确认、计划、执行、收官把关、集成验证、收尾。可豁免的只有实现层的做法（执行方式、审查模板细节等）；需求方坚持跳过时，说明理由并继续流程。
 
 ## 危险信号
 
@@ -65,4 +79,4 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 
 ## 用户指令
 
-用户指令（CLAUDE.md、AGENTS.md、GEMINI.md 等，以及直接请求）优先于技能，而技能又覆盖默认行为。只有当你的需求方明确要求你跳过时，才可以跳过技能工作流或技能指令。
+用户指令（CLAUDE.md、AGENTS.md、GEMINI.md 等，以及直接请求）优先于技能，而技能又覆盖默认行为。但流程闸门的十一个环节不接受「跳过」类直接请求——可豁免的只有实现层的做法（见「流程闸门与定性」）。

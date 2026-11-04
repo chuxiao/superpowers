@@ -210,7 +210,7 @@ ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN
 USK="$REPO_ROOT/skills/using-superpowers/SKILL.md"
 BRS="$REPO_ROOT/skills/brainstorming/SKILL.md"
 TPL="$REPO_ROOT/skills/brainstorming/references/design-doc-template.md"
-ck "us-routing-feature-workflow" "grep -qF '三件套（design.md + plan.md + verification.md）' \"$USK\""
+ck "us-routing-feature-workflow" "grep -qF '验证方案按集成面判据决定是否产出' \"$USK\""
 ck "us-routing-feature-closeout-relay" "grep -qF 'requesting-code-review 收官把关' \"$USK\""
 ck "us-routing-fix-branch-gate" "grep -qF 'bugfix 分支上进行，合并前过收官把关与集成验证门槛' \"$USK\""
 ck "us-main-no-direct-dev" "grep -qF 'main/master 上不直接开发' \"$USK\""
