@@ -15,3 +15,8 @@
 - REC-L3-011 | L3 | tests/integration-verification/drills.md | normal | HEAD 变化或工作区脏时结果过期，照跑套件并移交
 - REC-L3-012 | L3 | tests/integration-verification/drills.md | normal | 未定性（含模糊授权语）不得修改方案期望
 - REC-L3-013 | L3 | tests/integration-verification/drills.md | normal | 偶发重跑通过不被误拉进定性裁决
+
+并入来源：`docs/superpowers/specs/2026-11-03-uniform-full-workflow/verification.md`（2026-11-04 并入；机械场景 S-01~S-07/S-09 同一资产一次执行故合组一条，会话场景 S-08 证据性资产单列）。
+
+- UFQ-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S-01~S-07/S-09）：断言电池全绿——小改动豁免清零三断言、存活锚点在场、正文与全仓旧短语零命中
+- UFQ-002 | L3 | docs/superpowers/specs/2026-11-03-uniform-full-workflow/eval-record.md | normal | 会话场景（S-08）：施压下不跳设计文档/审读/计划，坚持完整流程（GREEN 6/6 在案，证据性资产）
