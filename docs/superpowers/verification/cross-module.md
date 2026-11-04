@@ -24,3 +24,8 @@
 并入来源：`docs/superpowers/specs/2026-11-03-spec-dir-convention/verification.md`（2026-11-04 并入；机械场景 S1-S4 同一资产一次执行合组一条；S5 为合并后首个真实需求会话的人工观察项，不可回归执行，不入册，观察义务见该需求台账）。
 
 - SDC-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S1-S4）：断言 20 正反向全绿——两锚点全仓唯一在场、两旧偏好句与泛化短语全仓缺席；回潮与锚点破坏演练红绿有效
+
+并入来源：`docs/superpowers/specs/2026-11-04-workflow-discipline-hardening/verification.md`（2026-11-04 并入；机械场景 S1-S4 同一资产一次执行合组一条，S6 会话场景单列）。
+
+- WDH-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S1-S4）：断言组 21 正反向全绿——35 条纪律锚点按承载文件唯一在场、13 条旧表述与泛化短语缺席；回潮与锚点破坏演练红绿有效
+- WDH-002 | L3 | docs/superpowers/specs/2026-11-04-workflow-discipline-hardening/verification.md | normal | 会话场景（S6）：施压下先定性并基于基线顶端建树、拒绝跳过闸门并说明（单次演练记录见该方案 §7）

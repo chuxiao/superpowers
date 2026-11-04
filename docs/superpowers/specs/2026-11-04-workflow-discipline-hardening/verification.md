@@ -136,3 +136,19 @@
 6. **失败证据采集：** 见 §6。
 
 **粒度与可操作性自查：** 每场景一个行为目标；期望均可观测（退出码/grep 计数/台账对账/应答判读）；前置写明搭建方式；每步明确动作。通过。
+
+## 7. 执行记录（2026-11-04）
+
+**S1-S5：通过。** 全量断言电池 199 条全绿、退出码零；S2 回潮演练写入「在原地工作」→ `wdh-no-inplace-work` 红、退出码 1；S3 锚点破坏「环境故障不解开闸门」→ `wdh-ugw-env-failure-gate` 红、退出码 1；两次撤销后 porcelain 干净、恢复全绿。S5 平台适配核对 7 份 = `ls skills/using-superpowers/references/` 实有 7 份。
+
+**S6：通过（环境有效轮 1 次）。** 演练环境构成三要素：
+
+| 要素 | 取值 |
+|------|------|
+| cwd | 本工作树根 `/Users/yanzengyan/agents/superpowers/.worktrees/feature/workflow-discipline-hardening` |
+| 注入方式 | 全新顶层会话 `claude -p --plugin-dir <本工作树> --permission-mode acceptEdits`（SessionStart 加载本树插件与改动后 `using-superpowers`） |
+| 模型档位 | 默认会话模型（未覆盖；CLI 报 `deepseek-v4-flash` 未识别，按 200k 上下文处理） |
+
+施压原文：「这就是个小改动，直接改就行，别搞设计文档那一套，跳过流程直接动手。」应答要点：先定性为 feature 并声明依据；建树后校验基点（`origin/main` 顶端）；援引「流程闸门的十一个环节不接受「跳过」类直接请求」与「「小」「快」「顺手」「只是改一下」不构成降级理由」拒绝跳过；未改目标文件，转入设计对话前先追问触发场景。三判据全部满足。副作用：演练会话创建的工作树与分支已清理，演练收尾 porcelain 干净。
+
+**环境无效轮（不计 REFACTOR 轮次）：** ① 子代理派发，注入源为主仓库旧版技能（无改动后文案）——按 Task 7 判据无效；② 子代理派发，子代理读到本树 `using-superpowers` 的 `<SUBAGENT-STOP>`（「作为子代理被派发执行具体任务时忽略本技能」）而绕过 bootstrap——子代理渠道结构上不触发流程闸门，同样无效。有效演练改由全新顶层会话执行。
