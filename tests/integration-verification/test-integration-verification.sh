@@ -224,6 +224,12 @@ ck "brs-no-exemption-phrases" "! grep -qF '简短版' \"$BRS\" && ! grep -qF '�
 ck "brs-discipline-sentences" "grep -qF '跳过的是对话，不是流程' \"$BRS\" && grep -qF '不解除闸门' \"$BRS\" && grep -qF '所有改动统一完整版' \"$BRS\""
 ck "tpl-no-small-change" "! grep -qF '小改动' \"$TPL\" && ! grep -qF '简短版' \"$TPL\""
 
+# 断言 20：产物目录唯一约定（需求方裁决 2026-11-03，spec-dir-convention）——
+# 正向：两技能固定句锚点在场；反向：两旧偏好句整句缺席、泛化短语缺席
+# （泛化短语「偏好优先」「偏好覆盖」经全仓核实 2026-11-04 零命中后纳入）
+ck "spec-dir-fixed-convention" "grep -qF '不接受需求方另行指定' \"$BS\" && grep -qF '有软件仓库时计划一律落此处' \"$WP\""
+ck "spec-dir-no-preference" "! grep -qF '需求方的偏好优先于以上两者' \"$BS\" && ! grep -qF '需求方对计划存放位置的偏好覆盖此默认值' \"$WP\" && ! grep -qF '偏好优先' \"$BS\" && ! grep -qF '偏好覆盖' \"$WP\" && ! grep -qF '偏好优先' \"$WP\" && ! grep -qF '偏好覆盖' \"$BS\""
+
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
   exit 1
