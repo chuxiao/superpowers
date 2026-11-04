@@ -230,6 +230,75 @@ ck "tpl-no-small-change" "! grep -qF '小改动' \"$TPL\" && ! grep -qF '简短�
 ck "spec-dir-fixed-convention" "grep -qF '设计文档一律落此处' \"$BS\" && grep -qF '有软件仓库时计划一律落此处' \"$WP\""
 ck "spec-dir-no-preference" "! grep -qF '需求方的偏好优先于以上两者' \"$BS\" && ! grep -qF '需求方对计划存放位置的偏好覆盖此默认值' \"$WP\" && ! grep -qF '偏好优先' \"$BS\" && ! grep -qF '偏好覆盖' \"$WP\" && ! grep -qF '偏好优先' \"$WP\" && ! grep -qF '偏好覆盖' \"$BS\""
 
+# 断言 21：流程纪律加固（workflow-discipline-hardening，2026-11-04）——
+# 正向：Task 1-4 提交信息登记的全部锚点子串（35 个）按承载文件逐字在场；
+# 反向：被删除/被替换的旧表述按真实字面拦截、按承载文件限定
+# （spec 三份文档引用旧句原文属合法自引用，故不做全仓 grep）
+UGW="$REPO_ROOT/skills/using-git-worktrees/SKILL.md"
+SDG="$REPO_ROOT/skills/systematic-debugging/SKILL.md"
+EP="$REPO_ROOT/skills/executing-plans/SKILL.md"
+SDD="$REPO_ROOT/skills/subagent-driven-development/SKILL.md"
+# using-superpowers——流程闸门与定性（Task 1）
+ck "wdh-us-routing-conditional" "grep -qF '验证方案按集成面判据决定是否产出' \"$USK\""
+ck "wdh-us-scope-software" "grep -qF '只适用于软件开发项目' \"$USK\""
+ck "wdh-us-announce-type" "grep -qF '用一句话宣布类型与依据' \"$USK\""
+ck "wdh-us-no-downgrade" "grep -qF '不构成降级理由' \"$USK\""
+ck "wdh-us-eleven-gates" "grep -qF '流程闸门的全部十一个环节' \"$USK\""
+ck "wdh-us-exempt-impl-only" "grep -qF '可豁免的只有实现层的做法' \"$USK\""
+# writing-plans——无集成面的推导依据（Task 1）
+ck "wdh-wp-derivation" "grep -qF '把推导依据写进计划' \"$WP\""
+# using-git-worktrees——建树纪律（Task 2）
+ck "wdh-ugw-mandatory-tree" "grep -qF '一律建立专属工作树' \"$UGW\""
+ck "wdh-ugw-branch-prefix" "grep -qF '分支名带类型前缀' \"$UGW\""
+ck "wdh-ugw-reclassify-rename" "grep -qF '重定性时树保留改名' \"$UGW\""
+ck "wdh-ugw-synced-base" "grep -qF '同步后的基线分支顶端' \"$UGW\""
+ck "wdh-ugw-single-writer" "grep -qF '只允许一个会话开发写入' \"$UGW\""
+ck "wdh-ugw-post-create-verify" "grep -qF '建树后核验合并基' \"$UGW\""
+ck "wdh-ugw-refuse-in-place" "grep -qF '说明隔离工作区与流程闸门的必要性' \"$UGW\""
+ck "wdh-ugw-env-failure-gate" "grep -qF '环境故障不解开闸门' \"$UGW\""
+ck "wdh-ugw-never-reuse" "grep -qF '绝不复用他人之树' \"$UGW\""
+# brainstorming——定性即建树（Task 2）
+ck "wdh-brs-no-bypass" "grep -qF '来绕开三件套' \"$BS\""
+ck "wdh-brs-reclassify-defect" "grep -qF '设计期发现实为缺陷修复' \"$BS\""
+# systematic-debugging——修复链入口四态（Task 3）
+ck "wdh-sdg-tree-default" "grep -qF '定性即建默认工作树' \"$SDG\""
+ck "wdh-sdg-state-baseline" "grep -qF '缺陷在基线已交付代码' \"$SDG\""
+ck "wdh-sdg-state-current" "grep -qF '缺陷由当前需求引入' \"$SDG\""
+ck "wdh-sdg-state-other" "grep -qF '缺陷由其他进行中需求引入' \"$SDG\""
+ck "wdh-sdg-state-rejudged" "grep -qF '修复提交后宿主改判' \"$SDG\""
+ck "wdh-sdg-need-new-behavior" "grep -qF '需要新行为或新能力' \"$SDG\""
+# executing-plans——停止条件与分支前置（Task 3）
+ck "wdh-ep-branch-only" "grep -qF '实施只能在本需求分支上进行' \"$EP\""
+ck "wdh-ep-missing-spec-stop" "grep -qF '停止实施并回到设计确认门' \"$EP\""
+# subagent-driven-development——停止条件与分支前置（Task 3）
+ck "wdh-sdd-branch-only" "grep -qF '实施地点只能在本需求分支上' \"$SDD\""
+ck "wdh-sdd-missing-spec-stop" "grep -qF '没有可获取设计文档的计划不得开始执行' \"$SDD\""
+# finishing-a-development-branch——收尾链（Task 4）
+ck "wdh-fin-base-tree-merge" "grep -qF '合并一律在基准分支所在工作树内执行' \"$FIN\""
+ck "wdh-fin-merge-event" "grep -qF '合并事件记录' \"$FIN\""
+ck "wdh-fin-four-states" "grep -qF '影响分析四态判定' \"$FIN\""
+ck "wdh-fin-source-zero-change" "grep -qF '源与目标的原方案文件零字节改动' \"$FIN\""
+ck "wdh-fin-net-result" "grep -qF '规格目录下全部方案的净结果集' \"$FIN\""
+ck "wdh-fin-dirty-stop" "grep -qF '吸收分支工作树脏' \"$FIN\""
+ck "wdh-fin-pr-backfill" "grep -qF '外来规格目录无对应合并事件文件' \"$FIN\""
+# 反向拦截：旧表述按真实字面缺席（UGW「在原地工作」原覆盖偏好口子、沙箱回退正文、回退表行三处；
+# 「裁决只是暂定的」为 EP/SDD 两文件各自旧句的共有子串；「非软件项目到此停止」在 BRS 原为两处）
+ck "wdh-no-inplace-work" "! grep -qF '在原地工作' \"$UGW\""
+ck "wdh-no-tentative-ruling-ep" "! grep -qF '裁决只是暂定的' \"$EP\""
+ck "wdh-no-tentative-ruling-sdd" "! grep -qF '裁决只是暂定的' \"$SDD\""
+ck "wdh-no-never-create-another-tree" "! grep -qF '绝不要再创建另一个工作树' \"$UGW\""
+ck "wdh-no-skip-create-row" "! grep -qF '已处于链接工作树中 | 跳过创建' \"$UGW\""
+ck "wdh-no-software-anywhere-phrase" "! grep -qF '软件内外皆然' \"$BS\""
+ck "wdh-no-nonsoftware-stop-brs" "! grep -qF '非软件项目到此停止' \"$BS\""
+ck "wdh-no-nonsoftware-stop-wp" "! grep -qF '非软件项目止于设计文档' \"$WP\""
+ck "wdh-no-nonsoftware-stop-template" "! grep -qF '非软件项目止于设计文档' \"$PT\""
+ck "wdh-no-nonsoftware-reject" "! grep -qF '收到非软件项目时，拒绝并返回设计阶段' \"$WP\""
+# 泛化短语（入断言前全仓 grep 核实计数）：「非软件项目」2026-11-04 全仓 skills/ 零命中；
+# 「跳过创建」同日全仓零命中（codex 参考已改述）——故可作词级缺席断言
+ck "wdh-no-nonsoftware-term-brs" "! grep -qF '非软件项目' \"$BS\""
+ck "wdh-no-nonsoftware-term-wp" "! grep -qF '非软件项目' \"$WP\" && ! grep -qF '非软件项目' \"$PT\""
+ck "wdh-no-skip-create-term" "! grep -qF '跳过创建' \"$UGW\""
+
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
   exit 1
