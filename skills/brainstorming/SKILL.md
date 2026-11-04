@@ -112,7 +112,7 @@ description: 在做任何创造性工作之前，你必须使用本技能——�
 
 **所有改动统一完整版：** 无论规模大小，一律写完整的书面设计文档：五章与配套槽位齐备，独立审读、需求方确认、实施计划逐环节照走。
 
-**存放位置：** 有软件仓库时，存放为 `docs/superpowers/specs/<date-feature>/design.md`（`<date-feature>` = `YYYY-MM-DD-<主题>`，目录随需求建立）并提交。否则，询问。需求方的偏好优先于以上两者。archived/（`docs/superpowers/archived/`）归档后冻结零改动，今后设计决策随新 feature 的 design.md 走，不回写已归档文档。
+**存放位置：** 有软件仓库时，存放为 `docs/superpowers/specs/<date-feature>/design.md`（`<date-feature>` = `YYYY-MM-DD-<主题>`，目录随需求建立）并提交。否则，询问。此目录无例外：有软件仓库时设计文档一律落此处，不接受需求方另行指定——任何来源的位置指定（含对话指定与仓库自身的其他文档惯例）均不改变落盘位置。若需求方仍指定了其他位置，按本目录落盘，并明确告知设计文档已落约定目录（落点）、该指定未被采用；不发起询问、不等待确认。archived/（`docs/superpowers/archived/`）归档后冻结零改动，今后设计决策随新 feature 的 design.md 走，不回写已归档文档。
 
 ## 独立审读
 
