@@ -197,14 +197,14 @@ ck "rs-gate-before-mode-judgment" "awk '/## 执行前置/{p=NR} /## 双模式判
 # 断言 16：分支纪律三条规则——archived 冻结与设计决策走向、main/master 集成动作限定、
 # 改动二分（新 feature 完整工作流 / bugfix 过收官把关与集成验证门槛）
 ck "fin-discipline-archived-frozen" "grep -qF '归档后冻结，零改动' \"$FIN\" && grep -qF '随新 feature 的 \`docs/superpowers/specs/<date-feature>/design.md\` 走完整工作流' \"$FIN\""
-ck "fin-discipline-main-integration-only" "grep -qF 'main/master 只承载集成动作，不直接开发' \"$FIN\" && grep -qF '分支合并、验证方案并入登记册、规格目录归档移动' \"$FIN\" && grep -qF '任何开发性改动不得直接在 main/master 上提交' \"$FIN\""
+ck "fin-discipline-main-integration-only" "grep -qF 'main/master 只承载集成动作，不直接开发' \"$FIN\" && grep -qF '分支合并、验证方案并入登记册、合并事件文件落盘、基线分支快进、规格目录归档移动' \"$FIN\" && grep -qF '任何开发性改动不得直接在 main/master 上提交' \"$FIN\""
 ck "fin-discipline-binary-classification" "grep -qF '改动二分' \"$FIN\" && grep -qF '走 brainstorming → writing-plans → 收官把关 → 集成验证 → 收尾完整工作流' \"$FIN\" && grep -qF '无新需求文档，合并前同样过收官把关与集成验证门槛' \"$FIN\""
 
 # 断言 17：分支纪律上移（需求方裁决 2026-11-03）——brainstorming 含 archived 冻结句与
 # 改动分类句；FIN 分支纪律小节段尾含上位载体指向句
 ck "bs-archived-frozen" "grep -qF '归档后冻结零改动' \"$BS\" && grep -qF '不回写已归档文档' \"$BS\""
 ck "bs-change-classification" "grep -qF '收到新问题时先分类' \"$BS\" && grep -qF 'bugfix 路径' \"$BS\""
-ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN\" && grep -qF '未经需求方明确同意，绝不在 main/master 分支上开始实施' \"$FIN\" && grep -qF '设计决策（存放位置与改动分类）归 brainstorming' \"$FIN\""
+ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN\" && grep -qF '实施只能在本需求分支上' \"$FIN\" && grep -qF '设计决策（存放位置与改动分类）归 brainstorming' \"$FIN\""
 
 # 断言 18：分支治理纪律——路由与冻结的上位落点（需求方拍板：三规则各归其位）
 USK="$REPO_ROOT/skills/using-superpowers/SKILL.md"
