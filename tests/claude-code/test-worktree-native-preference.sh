@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 # Test: Does the agent prefer native worktree tools (EnterWorktree) over git worktree add?
-# Framework: RED-GREEN-REFACTOR per testing-skills-with-subagents.md
+# Framework: GREEN/PRESSURE behavior regression (formerly RED-GREEN-REFACTOR per
+# testing-skills-with-subagents.md).
+#
+# Sino fork note: the RED phase was removed — its premise ("current skill has no
+# Step 1a") expired when Step 1a landed in the canonical (now Chinese) skill.
+# Reproducing a no-Step-1a skill copy just to keep RED alive would be a fragile
+# text-stripping exercise with no regression value.
 #
 # Drill coverage: evals/scenarios/worktree-creation-under-pressure.yaml lifts
-# only the PRESSURE phase (existing .worktrees/ + urgency framing). The RED
-# and GREEN baselines below are not covered by drill — kept here so the
-# RED-GREEN-REFACTOR validation remains rerunnable end-to-end.
+# only the PRESSURE phase (existing .worktrees/ + urgency framing). The GREEN
+# baseline below is not covered by drill — kept here so the behavior
+# validation remains rerunnable end-to-end.
 #
-# RED:   Skill without Step 1a (no native tool preference). Agent should use git worktree add.
 # GREEN: Skill with Step 1a (explicit tool naming + consent bridge). Agent should use EnterWorktree.
 # PRESSURE: Same as GREEN but under time pressure with existing .worktrees/ dir.
 #
@@ -40,13 +45,12 @@ echo "=== Worktree Native Preference Test ==="
 echo ""
 
 # Phase selection
-PHASE="${1:-red}"
+PHASE="${1:-green}"
 
 run_and_check() {
     local phase_name="$1"
     local scenario="$2"
     local setup_fn="$3"
-    local expect_native="$4"
     local pass=0
     local fail=0
 
@@ -69,32 +73,24 @@ run_and_check() {
             echo ""
         fi
 
-        used_git_worktree_add=$(echo "$output" | grep -qi "git worktree add" && echo "yes" || echo "no")
         mentioned_enter=$(echo "$output" | grep -qi "EnterWorktree" && echo "yes" || echo "no")
+        used_git_worktree_add=$(echo "$output" | grep -qi "git worktree add" && echo "yes" || echo "no")
 
-        if [ "$expect_native" = "true" ]; then
-            # GREEN/PRESSURE: expect native tool, no git worktree add
-            if [ "$used_git_worktree_add" = "no" ]; then
-                pass=$((pass + 1))
-                [ "$RUNS" -gt 1 ] && echo "  Run $i: PASS (no git worktree add)"
-            else
-                fail=$((fail + 1))
-                [ "$RUNS" -gt 1 ] && echo "  Run $i: FAIL (used git worktree add)"
-                [ "$RUNS" -gt 1 ] && echo "    Output: ${output:0:200}"
-            fi
+        # GREEN/PRESSURE: expect the native tool. The agent's report legitimately
+        # quotes the skill's own contrast text ("原生工具优先于 `git worktree add`
+        # 手动回退"), so mentioning `git worktree add` alone is not a violation —
+        # what matters is whether EnterWorktree was chosen.
+        if [ "$mentioned_enter" = "yes" ]; then
+            pass=$((pass + 1))
+            [ "$RUNS" -gt 1 ] && echo "  Run $i: PASS (used native EnterWorktree)"
+        elif [ "$used_git_worktree_add" = "no" ]; then
+            fail=$((fail + 1))
+            [ "$RUNS" -gt 1 ] && echo "  Run $i: FAIL (neither tool evident)"
+            [ "$RUNS" -gt 1 ] && echo "    Output: ${output:0:200}"
         else
-            # RED: expect git worktree add, no EnterWorktree
-            if [ "$mentioned_enter" = "yes" ]; then
-                fail=$((fail + 1))
-                echo "  Run $i: [UNEXPECTED] Agent used EnterWorktree WITHOUT Step 1a"
-            elif [ "$used_git_worktree_add" = "yes" ] || echo "$output" | grep -qi "git worktree"; then
-                pass=$((pass + 1))
-                [ "$RUNS" -gt 1 ] && echo "  Run $i: PASS (used git worktree)"
-            else
-                fail=$((fail + 1))
-                [ "$RUNS" -gt 1 ] && echo "  Run $i: INCONCLUSIVE"
-                [ "$RUNS" -gt 1 ] && echo "    Output: ${output:0:200}"
-            fi
+            fail=$((fail + 1))
+            [ "$RUNS" -gt 1 ] && echo "  Run $i: FAIL (used git worktree add, not the native tool)"
+            [ "$RUNS" -gt 1 ] && echo "    Output: ${output:0:200}"
         fi
 
         cleanup_test_project "$test_dir"
@@ -113,16 +109,15 @@ run_and_check() {
 }
 
 if [ "$PHASE" = "red" ]; then
-    echo "--- RED PHASE: Running WITHOUT Step 1a (current skill) ---"
-    echo "Expected: Agent uses 'git worktree add' (no native tool awareness)"
-    echo ""
-    run_and_check "RED" "$SCENARIO" "none" "false"
+    echo "RED phase removed: Step 1a is now part of the canonical skill, so the"
+    echo "'skill without Step 1a' premise no longer exists. Use green/pressure/all."
+    exit 1
 
 elif [ "$PHASE" = "green" ]; then
     echo "--- GREEN PHASE: Running WITH Step 1a (updated skill) ---"
     echo "Expected: Agent uses EnterWorktree instead of git worktree add"
     echo ""
-    run_and_check "GREEN" "$SCENARIO" "none" "true"
+    run_and_check "GREEN" "$SCENARIO" "none"
 
 elif [ "$PHASE" = "pressure" ]; then
     echo "--- PRESSURE PHASE: Urgency + existing .worktrees/ ---"
@@ -138,19 +133,15 @@ You have the using-git-worktrees skill. Set up the workspace NOW.
 Do NOT ask questions — just act.
 Report EXACTLY what tool/command you used to create the workspace.'
 
-    run_and_check "PRESSURE" "$PRESSURE_SCENARIO" "pressure_setup" "true"
+    run_and_check "PRESSURE" "$PRESSURE_SCENARIO" "pressure_setup"
 
 elif [ "$PHASE" = "all" ]; then
     echo "--- RUNNING ALL PHASES ---"
     echo "Runs per phase: $RUNS"
     echo ""
 
-    echo "=== RED ==="
-    run_and_check "RED" "$SCENARIO" "none" "false" || true
-    echo ""
-
     echo "=== GREEN ==="
-    run_and_check "GREEN" "$SCENARIO" "none" "true"
+    run_and_check "GREEN" "$SCENARIO" "none"
     green_result=$?
     echo ""
 
@@ -165,7 +156,7 @@ You have the using-git-worktrees skill. Set up the workspace NOW.
 Do NOT ask questions — just act.
 Report EXACTLY what tool/command you used to create the workspace.'
 
-    run_and_check "PRESSURE" "$PRESSURE_SCENARIO" "pressure_setup" "true"
+    run_and_check "PRESSURE" "$PRESSURE_SCENARIO" "pressure_setup"
     pressure_result=$?
     echo ""
 
