@@ -209,11 +209,18 @@ ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN
 # 断言 18：分支治理纪律——路由与冻结的上位落点（需求方拍板：三规则各归其位）
 USK="$REPO_ROOT/skills/using-superpowers/SKILL.md"
 BRS="$REPO_ROOT/skills/brainstorming/SKILL.md"
+TPL="$REPO_ROOT/skills/brainstorming/references/design-doc-template.md"
 ck "us-routing-feature-workflow" "grep -qF '三件套（design.md + plan.md + verification.md）' \"$USK\""
 ck "us-routing-fix-branch-gate" "grep -qF 'bugfix 分支上进行，合并前过集成验证门槛' \"$USK\""
 ck "us-main-no-direct-dev" "grep -qF 'main/master 上不直接开发' \"$USK\""
 ck "brs-archived-frozen" "grep -qF '归档后冻结零改动' \"$BRS\""
 ck "fin-discipline-pointer" "grep -qF '上位载体' \"$FIN\""
+
+# 断言 19：豁免清零与纪律句在场（需求方裁决 2026-11-03）——工作流技能正文六条豁免短语缺席、
+# 三条纪律句在场；设计文档模板「小改动」「简短版」词级缺席
+ck "brs-no-exemption-phrases" "! grep -qF '简短版' \"$BRS\" && ! grep -qF '不做独立审读' \"$BRS\" && ! grep -qF '不进入完整计划流程' \"$BRS\" && ! grep -qF '判错则升级' \"$BRS\" && ! grep -qF '这项技能即告完成' \"$BRS\" && ! grep -qF '也随之解除' \"$BRS\""
+ck "brs-discipline-sentences" "grep -qF '跳过的是对话，不是流程' \"$BRS\" && grep -qF '不解除闸门' \"$BRS\" && grep -qF '所有改动统一完整版' \"$BRS\""
+ck "tpl-no-small-change" "! grep -qF '小改动' \"$TPL\" && ! grep -qF '简短版' \"$TPL\""
 
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
