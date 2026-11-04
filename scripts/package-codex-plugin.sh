@@ -296,7 +296,9 @@ case "$FORMAT" in
     (
       cd "$STAGE"
       rm -f "$OUTPUT"
-      COPYFILE_DISABLE=1 zip -X -q - -@ <"$ARCHIVE_LIST" >"$OUTPUT"
+      # TZ=UTC pins Info-ZIP's mtime→DOS conversion to UTC, so archive entry
+      # timestamps are reproducible regardless of the packager's local zone.
+      TZ=UTC COPYFILE_DISABLE=1 zip -X -q - -@ <"$ARCHIVE_LIST" >"$OUTPUT"
     )
     ;;
   tar.gz)
