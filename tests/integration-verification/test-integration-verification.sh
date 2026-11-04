@@ -295,6 +295,8 @@ ck "wdh-us-integration-actions" "grep -qF '分支合并、验证方案并入登�
 ck "wdh-fin-locate-base-tree" "grep -qF 'git worktree list' \"$FIN\" && grep -qF 'cd <基准分支所在工作树路径>' \"$FIN\""
 # Important-11：合并事件目录与验证方案文件写明作为一次提交落在吸收分支
 ck "wdh-fin-merge-event-committed" "grep -qF '作为一次提交落在吸收分支上' \"$FIN\""
+# 复审核得的新破坏：FIN 改动二分仍用旧定义，与 design §2.1「与收尾技能同口径」冲突
+ck "wdh-fin-bugfix-symptom" "grep -qF '报告为缺陷且需修改既有代码——宿主由归因判定' \"$FIN\" && ! grep -qF '修复 main/master 上已交付内容的缺陷' \"$FIN\""
 # 反向拦截：旧表述按真实字面缺席（UGW 偏好行与回退表行由「在原地工作」覆盖；
 # 沙箱回退正文不含该串，由 wdh-no-sandbox-inplace 的两串单独覆盖；
 # 「裁决只是暂定的」为 EP/SDD 两文件各自旧句的共有子串；「非软件项目到此停止」在 BRS 原为两处）

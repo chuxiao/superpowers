@@ -174,7 +174,7 @@ fi
 
 - **`docs/superpowers/archived/` 归档后冻结，零改动。** 今后的设计决策随新 feature 的 `docs/superpowers/specs/<date-feature>/design.md` 走完整工作流，不回写已归档文档。
 - **main/master 只承载集成动作，不直接开发。** 集成动作指分支合并、验证方案并入登记册、合并事件文件落盘、基线分支快进、规格目录归档移动。任何开发性改动不得直接在 main/master 上提交——先开特性分支再动手。
-- **改动二分。** 每一笔新改动要么是新 feature（新建 `docs/superpowers/specs/<date-feature>/` 目录，走 brainstorming → writing-plans → 收官把关 → 集成验证 → 收尾完整工作流），要么是 bugfix（修复 main/master 上已交付内容的缺陷——无新需求文档，合并前同样过收官把关与集成验证门槛）。不存在第三类。
+- **改动二分。** 每一笔新改动要么是新 feature（新建 `docs/superpowers/specs/<date-feature>/` 目录，走 brainstorming → writing-plans → 收官把关 → 集成验证 → 收尾完整工作流），要么是 bugfix（报告为缺陷且需修改既有代码——宿主由归因判定，无新需求文档，合并前同样过收官把关与集成验证门槛）。不存在第三类。
 
 三规则的上位载体：设计决策（存放位置与改动分类）归 brainstorming 技能；main/master 不直接开发由执行技能的工作区前置约束兜底——subagent-driven-development 与 executing-plans 均已含「实施只能在本需求分支上」。
 
