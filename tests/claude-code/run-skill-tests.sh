@@ -26,7 +26,6 @@ fi
 VERBOSE=false
 SPECIFIC_TEST=""
 TIMEOUT=900  # Per-test-file budget; must exceed the file's worst case
-             # (test-subagent-driven-development.sh: 9 prompts x 90s each)
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -52,7 +51,10 @@ while [[ $# -gt 0 ]]; do
             echo "  --help, -h           Show this help"
             echo ""
             echo "Tests:"
-            echo "  test-subagent-driven-development.sh  Test skill loading and requirements"
+            echo "  test-worktree-path-policy.sh        Static path-policy assertions"
+            echo "  test-sdd-workspace.sh               sdd-workspace script behavior"
+            echo "  test-executing-plans-scripts.sh     executing-plans helper scripts"
+            echo "  test-worktree-native-preference.sh  GREEN/PRESSURE behavior regression (~5 min)"
             exit 0
             ;;
         *)
@@ -68,7 +70,7 @@ tests=(
     "test-worktree-path-policy.sh"
     "test-sdd-workspace.sh"
     "test-executing-plans-scripts.sh"
-    "test-subagent-driven-development.sh"
+    "test-worktree-native-preference.sh"
 )
 
 # Filter to specific test if requested

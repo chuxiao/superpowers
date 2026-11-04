@@ -14,8 +14,7 @@ Superpowers 有两类不同的测试，各自位于独立目录：
 - `tests/codex-plugin-sync/` —— bash 同步验证。
 - `tests/kimi/` —— Kimi 插件清单（manifest）装配的 bash/Python 检查。
 - `tests/claude-code/test-helpers.sh`、`analyze-token-usage.py` —— 其余 bash 测试所用的工具脚本。
-- `tests/claude-code/test-subagent-driven-development.sh` —— 「agent 能否描述 SDD（subagent-driven-development，子代理驱动开发）」测试（没有对应的 quorum 版本；测的是能否复述技能描述，而非实际行为）。
-- `tests/claude-code/test-subagent-driven-development-integration.sh` 已删除（2026-11-04 需求方裁决）：扩展版 SDD 集成测试（10-30 分钟真实 CLI 会话），环境依赖重；其 YAGNI 子集由 quorum 覆盖，行为面由描述测试与 drill/eval 套件承接。
+- `tests/claude-code/` 两个 SDD 测试已删除（2026-11-04 需求方裁决）：`test-subagent-driven-development-integration.sh`（10-30 分钟真实 CLI 端到端，环境依赖重）与 `test-subagent-driven-development.sh`（描述复述测试，LLM 回答变异导致固有 flaky 且信号弱）；其行为覆盖由 quorum 与 drill/eval 套件承接，quorum 覆盖其中的 YAGNI 子集。
 - `tests/claude-code/test-worktree-native-preference.sh` —— worktree 技能的 GREEN/PRESSURE 行为回归验证（quorum 覆盖 PRESSURE 阶段；bash 还覆盖 GREEN 基线；RED 阶段已随 Step 1a 入正典而移除）。
 - `tests/explicit-skill-requests/` —— Haiku 专属、多轮对话、以技能名作提示词触发的测试，均不在 quorum 覆盖范围内。
 - `tests/diagnosing-superpowers/test-skill-structure.sh` —— diagnosing-superpowers 技能的结构检查（frontmatter、被引用文件、泄漏扫描、字数预算）；行为场景评测的记录由维护者保存在仓库之外。

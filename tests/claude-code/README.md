@@ -20,7 +20,7 @@ This test suite verifies that skills are loaded correctly and Claude follows the
 
 ### Run specific test:
 ```bash
-./run-skill-tests.sh --test test-subagent-driven-development.sh
+./run-skill-tests.sh --test test-sdd-workspace.sh
 ```
 
 ### Run with verbose output:
@@ -77,22 +77,21 @@ echo "=== All tests passed ==="
 
 ### Fast Tests (run by default)
 
-#### test-subagent-driven-development.sh
-Tests skill content and requirements (~2 minutes):
-- Skill loading and accessibility
-- Workflow ordering (spec compliance before code quality)
-- Self-review requirements documented
-- Plan reading efficiency documented
-- Spec compliance reviewer skepticism documented
-- Review loops documented
-- Task context provision documented
+- `test-worktree-path-policy.sh` — static path-policy assertions (no CLI session)
+- `test-sdd-workspace.sh` — sdd-workspace script behavior
+- `test-executing-plans-scripts.sh` — executing-plans helper scripts
+- `test-worktree-native-preference.sh` — GREEN/PRESSURE behavior regression (~5 min, real CLI session)
 
-### Removed: test-subagent-driven-development-integration.sh
+### Removed by decision (2026-11-04)
 
-The full-workflow CLI integration test (10-30 min, real `claude` sessions) was
-removed by decision — heavy environment dependency and its SDD behavior
-surface is already covered by test-subagent-driven-development.sh plus the
-drill/eval suites.
+- `test-subagent-driven-development-integration.sh` — full-workflow CLI
+  integration test (10-30 min, real `claude` sessions); heavy environment
+  dependency, behavior surface covered by the drill/eval suites.
+- `test-subagent-driven-development.sh` — SDD description-recall test
+  (9 prompts, keyword assertions); inherently flaky under LLM answer
+  variability (passed standalone, failed in suite runs), weak signal
+  (recall, not behavior), and its behavioral coverage lives in the
+  drill/eval suites.
 
 #### test-worktree-native-preference.sh
 GREEN/PRESSURE behavior regression for the using-git-worktrees skill (~5 minutes):
@@ -121,7 +120,7 @@ GREEN/PRESSURE behavior regression for the using-git-worktrees skill (~5 minutes
 
 With `--verbose`, you'll see full Claude output:
 ```bash
-./run-skill-tests.sh --verbose --test test-subagent-driven-development.sh
+./run-skill-tests.sh --verbose --test test-worktree-native-preference.sh
 ```
 
 Without verbose, only failures show output.
