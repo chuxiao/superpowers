@@ -18,11 +18,6 @@ This test suite verifies that skills are loaded correctly and Claude follows the
 ./run-skill-tests.sh
 ```
 
-### Run integration tests (slow, 10-30 minutes):
-```bash
-./run-skill-tests.sh --integration
-```
-
 ### Run specific test:
 ```bash
 ./run-skill-tests.sh --test test-subagent-driven-development.sh
@@ -35,7 +30,7 @@ This test suite verifies that skills are loaded correctly and Claude follows the
 
 ### Set custom timeout:
 ```bash
-./run-skill-tests.sh --timeout 1800  # 30 minutes for integration tests
+./run-skill-tests.sh --timeout 1800
 ```
 
 ## Test Structure
@@ -92,34 +87,19 @@ Tests skill content and requirements (~2 minutes):
 - Review loops documented
 - Task context provision documented
 
-### Integration Tests (use --integration flag)
+### Removed: test-subagent-driven-development-integration.sh
 
-#### test-subagent-driven-development-integration.sh
-Full workflow execution test (~10-30 minutes):
-- Creates real test project with Node.js setup
-- Creates implementation plan with 2 tasks
-- Executes plan using subagent-driven-development
-- Verifies actual behaviors:
-  - Plan read once at start (not per task)
-  - Full task text provided in subagent prompts
-  - Subagents perform self-review before reporting
-  - Spec compliance review happens before code quality
-  - Spec reviewer reads code independently
-  - Working implementation is produced
-  - Tests pass
-  - Proper git commits created
-
-**What it tests:**
-- The workflow actually works end-to-end
-- Our improvements are actually applied
-- Subagents follow the skill correctly
-- Final code is functional and tested
+The full-workflow CLI integration test (10-30 min, real `claude` sessions) was
+removed by decision — heavy environment dependency and its SDD behavior
+surface is already covered by test-subagent-driven-development.sh plus the
+drill/eval suites.
 
 #### test-worktree-native-preference.sh
-RED-GREEN-REFACTOR validation for the using-git-worktrees skill (~5 minutes):
-- RED: skill without Step 1a — agent should use `git worktree add`
+GREEN/PRESSURE behavior regression for the using-git-worktrees skill (~5 minutes):
 - GREEN: skill with Step 1a — agent should use the native EnterWorktree tool
 - PRESSURE: same as GREEN under urgency framing with pre-existing `.worktrees/`
+- The former RED phase was removed: its premise ("current skill has no Step 1a")
+  expired when Step 1a landed in the canonical (now Chinese) skill.
 - Drill scenario `worktree-creation-under-pressure.yaml` covers the PRESSURE phase only
 
 ## Adding New Tests
