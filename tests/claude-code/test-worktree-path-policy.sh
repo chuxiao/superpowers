@@ -9,8 +9,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 USING_SKILL="$REPO_ROOT/skills/using-git-worktrees/SKILL.md"
 FINISHING_SKILL="$REPO_ROOT/skills/finishing-a-development-branch/SKILL.md"
-ROTOTILL_SPEC="$REPO_ROOT/docs/superpowers/specs/2026-04-06-worktree-rototill/design.md"
-ROTOTILL_PLAN="$REPO_ROOT/docs/superpowers/specs/2026-04-06-worktree-rototill/plan.md"
+ROTOTILL_SPEC="$REPO_ROOT/docs/superpowers/archived/2026-04-06-worktree-rototill/design.md"
 
 failures=0
 
@@ -50,14 +49,12 @@ echo ""
 assert_not_contains "$USING_SKILL" "~/.config/superpowers/worktrees" "using-git-worktrees does not mention old global path"
 assert_not_contains "$USING_SKILL" "global legacy" "using-git-worktrees does not use unclear global legacy shorthand"
 assert_not_contains "$USING_SKILL" "Global path" "using-git-worktrees has no global path quick-reference row"
-assert_contains "$USING_SKILL" 'default to `.worktrees/` at the project root' "using-git-worktrees defaults new manual worktrees to .worktrees/"
+assert_contains "$USING_SKILL" '默认使用 `.worktrees/`' "using-git-worktrees defaults new manual worktrees to .worktrees/"
 
 assert_not_contains "$FINISHING_SKILL" "~/.config/superpowers/worktrees" "finishing-a-development-branch does not treat old global path as owned"
-assert_contains "$FINISHING_SKILL" '`.worktrees/` or `worktrees/`' "finishing-a-development-branch keeps project-local cleanup ownership"
+assert_contains "$FINISHING_SKILL" '`.worktrees/` 或 `worktrees/`' "finishing-a-development-branch keeps project-local cleanup ownership"
 
 assert_not_contains "$ROTOTILL_SPEC" "~/.config/superpowers/worktrees" "rototill spec does not preserve old global path policy"
-assert_not_contains "$ROTOTILL_PLAN" "~/.config/superpowers/worktrees" "rototill plan does not preserve old global path policy"
-assert_not_contains "$ROTOTILL_PLAN" "legacy path compat" "rototill plan does not advertise legacy path compatibility"
 
 echo ""
 

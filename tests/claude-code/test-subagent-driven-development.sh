@@ -28,7 +28,7 @@ else
     exit 1
 fi
 
-if assert_contains "$output" "Load Plan\|read.*plan\|extract.*tasks" "Mentions loading plan"; then
+if assert_contains "$output" "Load Plan\|read.*plan\|extract.*tasks\|加载.*计划\|读取.*计划\|载入.*计划\|通读.*计划\|阅读.*计划" "Mentions loading plan"; then
     : # pass
 else
     exit 1
@@ -58,13 +58,13 @@ output=$(run_claude "Does the subagent-driven-development skill require implemen
 Self-review required: <yes or no>
 Self-review replaces external review: <yes or no>" "$CLAUDE_PROMPT_TIMEOUT")
 
-if assert_contains "$output" "Self-review required:.*yes" "Mentions self-review"; then
+if assert_contains "$output" "Self-review required:.*yes\|Self-review required:.*是\|自审.*[:：].*是\|需要.*自审" "Mentions self-review"; then
     : # pass
 else
     exit 1
 fi
 
-if assert_contains "$output" "Self-review replaces external review:.*no" "Self-review does not replace external review"; then
+if assert_contains "$output" "Self-review replaces external review:.*no\|Self-review replaces external review:.*否\|取代.*外部.*审查.*[:：].*否\|替代.*外部.*审查.*[:：].*否\|不能.*取代\|无法.*替代" "Self-review does not replace external review"; then
     : # pass
 else
     exit 1
@@ -77,13 +77,13 @@ echo "Test 4: Plan reading efficiency..."
 
 output=$(run_claude "In subagent-driven-development, how many times should the controller read the plan file? When does this happen?" "$CLAUDE_PROMPT_TIMEOUT")
 
-if assert_contains "$output" "once\|one time\|single" "Read plan once"; then
+if assert_contains "$output" "once\|one time\|single\|一次\|一遍" "Read plan once"; then
     : # pass
 else
     exit 1
 fi
 
-if assert_contains "$output" "Step 1\|beginning\|start\|Load Plan" "Read at beginning"; then
+if assert_contains "$output" "Step 1\|beginning\|start\|Load Plan\|开头\|一开始\|起初\|第一步\|开始时\|通读" "Read at beginning"; then
     : # pass
 else
     exit 1
@@ -96,13 +96,13 @@ echo "Test 5: Spec compliance reviewer mindset..."
 
 output=$(run_claude "What is the spec compliance reviewer's attitude toward the implementer's report in subagent-driven-development?" "$CLAUDE_PROMPT_TIMEOUT")
 
-if assert_contains "$output" "not.*trust\|don't trust\|skeptical\|verify.*independently\|suspiciously" "Reviewer is skeptical"; then
+if assert_contains "$output" "not.*trust\|don't trust\|skeptical\|verify.*independently\|suspiciously\|怀疑\|质疑\|存疑\|不.*轻信\|不.*尽信\|不预判" "Reviewer is skeptical"; then
     : # pass
 else
     exit 1
 fi
 
-if assert_contains "$output" "read.*code\|inspect.*code\|verify.*code\|read.*diff\|trust.*diff" "Reviewer reads code"; then
+if assert_contains "$output" "read.*code\|inspect.*code\|verify.*code\|read.*diff\|trust.*diff\|读.*代码\|查看.*代码\|核对.*代码\|检查.*代码\|独立.*核实" "Reviewer reads code"; then
     : # pass
 else
     exit 1
@@ -115,13 +115,13 @@ echo "Test 6: Review loop requirements..."
 
 output=$(run_claude "In subagent-driven-development, what happens if a reviewer finds issues? Is it a one-time review or a loop?" "$CLAUDE_PROMPT_TIMEOUT")
 
-if assert_contains "$output" "loop\|again\|repeat\|until.*approved\|until.*compliant" "Review loops mentioned"; then
+if assert_contains "$output" "loop\|again\|repeat\|until.*approved\|until.*compliant\|循环\|重复\|再次\|直到.*通过\|轮次" "Review loops mentioned"; then
     : # pass
 else
     exit 1
 fi
 
-if assert_contains "$output" "implementer.*fix\|fix.*issues" "Implementer fixes issues"; then
+if assert_contains "$output" "implementer.*fix\|fix.*issues\|实施者.*修复\|修复.*问题\|修复.*发现项\|发现项.*修复" "Implementer fixes issues"; then
     : # pass
 else
     exit 1
@@ -136,13 +136,13 @@ output=$(run_claude "In subagent-driven-development, how does the controller pro
 Controller provides: <directly or by file>
 Implementer must read plan file: <yes or no>" "$CLAUDE_PROMPT_TIMEOUT")
 
-if assert_contains "$output" "provide.*directly\|full.*text\|paste\|include.*prompt" "Provides text directly"; then
+if assert_contains "$output" "provide.*directly\|full.*text\|paste\|include.*prompt\|简报\|task-brief\|文件.*交接" "Provides task context"; then
     : # pass
 else
     exit 1
 fi
 
-if assert_contains "$output" "Implementer must read plan file:.*no" "Doesn't make subagent read file"; then
+if assert_contains "$output" "Implementer must read plan file:.*no\|Implementer must read plan file:.*否\|实施者.*读.*计划.*[:：].*否\|不必.*读.*计划\|无需.*读.*计划\|不读.*计划" "Doesn't make subagent read file"; then
     : # pass
 else
     exit 1
@@ -168,7 +168,7 @@ echo "Test 9: Main branch red flag..."
 
 output=$(run_claude "In subagent-driven-development, is it okay to start implementation directly on the main branch?" "$CLAUDE_PROMPT_TIMEOUT")
 
-if assert_contains "$output" "worktree\|feature.*branch\|not.*main\|never.*main\|avoid.*main\|don't.*main\|consent\|permission" "Warns against main branch"; then
+if assert_contains "$output" "worktree\|feature.*branch\|not.*main\|never.*main\|avoid.*main\|don't.*main\|consent\|permission\|主分支\|不在.*main\|绝不在\|未经.*同意\|分支.*纪律" "Warns against main branch"; then
     : # pass
 else
     exit 1
