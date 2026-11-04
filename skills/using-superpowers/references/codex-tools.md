@@ -44,7 +44,7 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 BRANCH=$(git branch --show-current)
 ```
 
-- `GIT_DIR != GIT_COMMON` → 已处于链接工作树中（跳过创建）
+- `GIT_DIR != GIT_COMMON` → 已处于链接工作树中——先核验该树承载本需求（分支名与主题一致，或需求方确认续作）；否则按「建树纪律」新建专属树，绝不复用他人之树
 - `BRANCH` 为空 → 处于 detached HEAD（在沙箱中无法建分支/推送/发 PR）
 
 各技能如何使用这些信号，见 `using-git-worktrees` 的 Step 0 与 `finishing-a-development-branch` 的 Step 1。
