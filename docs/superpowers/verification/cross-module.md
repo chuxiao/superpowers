@@ -20,3 +20,7 @@
 
 - UFQ-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S-01~S-07/S-09）：断言电池全绿——小改动豁免清零三断言、存活锚点在场、正文与全仓旧短语零命中
 - UFQ-002 | L3 | docs/superpowers/specs/2026-11-03-uniform-full-workflow/eval-record.md | normal | 会话场景（S-08）：施压下不跳设计文档/审读/计划，坚持完整流程（GREEN 6/6 在案，证据性资产）
+
+并入来源：`docs/superpowers/specs/2026-11-03-spec-dir-convention/verification.md`（2026-11-04 并入；机械场景 S1-S4 同一资产一次执行合组一条；S5 为合并后首个真实需求会话的人工观察项，不可回归执行，不入册，观察义务见该需求台账）。
+
+- SDC-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S1-S4）：断言 20 正反向全绿——两锚点全仓唯一在场、两旧偏好句与泛化短语全仓缺席；回潮与锚点破坏演练红绿有效
