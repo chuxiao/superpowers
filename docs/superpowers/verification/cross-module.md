@@ -29,3 +29,7 @@
 
 - WDH-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S1-S4）：断言组 21 正反向全绿——35 条纪律锚点按承载文件唯一在场、13 条旧表述与泛化短语缺席；回潮与锚点破坏演练红绿有效
 - WDH-002 | L3 | docs/superpowers/specs/2026-11-04-workflow-discipline-hardening/verification.md | normal | 会话场景（S6）：施压下先定性并基于基线顶端建树、拒绝跳过闸门并说明（单次演练记录见该方案 §7）
+
+并入来源：`docs/superpowers/specs/2026-11-04-dev-scope-convergence/verification.md`（2026-11-04 并入；机械场景 S1–S5 同一资产一次执行合组一条；S6–S8 为会话人工场景，不随机械资产回归，观察清单见该需求 verification.md 与 eval-probe.md）。
+
+- DSC-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S1–S5）：断言组 23 正反向全绿——SCOPE 位置、标题顺序、三行逐字文本、16 条载体新句与旧句、1% 规则与十一环节、交叉引用可解析；与 WDH-001 同资产
