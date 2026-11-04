@@ -227,7 +227,7 @@ ck "tpl-no-small-change" "! grep -qF '小改动' \"$TPL\" && ! grep -qF '简短�
 # 断言 20：产物目录唯一约定（需求方裁决 2026-11-03，spec-dir-convention）——
 # 正向：两技能固定句锚点在场；反向：两旧偏好句整句缺席、泛化短语缺席
 # （泛化短语「偏好优先」「偏好覆盖」经全仓核实 2026-11-04 零命中后纳入）
-ck "spec-dir-fixed-convention" "grep -qF '不接受需求方另行指定' \"$BS\" && grep -qF '有软件仓库时计划一律落此处' \"$WP\""
+ck "spec-dir-fixed-convention" "grep -qF '设计文档一律落此处' \"$BS\" && grep -qF '有软件仓库时计划一律落此处' \"$WP\""
 ck "spec-dir-no-preference" "! grep -qF '需求方的偏好优先于以上两者' \"$BS\" && ! grep -qF '需求方对计划存放位置的偏好覆盖此默认值' \"$WP\" && ! grep -qF '偏好优先' \"$BS\" && ! grep -qF '偏好覆盖' \"$WP\" && ! grep -qF '偏好优先' \"$WP\" && ! grep -qF '偏好覆盖' \"$BS\""
 
 if [ "$fail" -ne 0 ]; then
