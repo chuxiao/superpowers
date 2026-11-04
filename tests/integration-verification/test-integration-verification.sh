@@ -281,7 +281,22 @@ ck "wdh-fin-source-zero-change" "grep -qF '源与目标的原方案文件零字�
 ck "wdh-fin-net-result" "grep -qF '规格目录下全部方案的净结果集' \"$FIN\""
 ck "wdh-fin-dirty-stop" "grep -qF '吸收分支工作树脏' \"$FIN\""
 ck "wdh-fin-pr-backfill" "grep -qF '外来规格目录无对应合并事件文件' \"$FIN\""
-# 反向拦截：旧表述按真实字面缺席（UGW「在原地工作」原覆盖偏好口子、沙箱回退正文、回退表行三处；
+# 终审修复项新增断言（Critical-1、Important-2/3/5/10/11）
+# Critical-1：建后校验改为严格相等（合并基 = 同步后的基线顶端），字面整串在场
+ck "wdh-ugw-post-create-strict" "grep -qF '\"\$(git rev-parse HEAD)\" = \"\$(git rev-parse <同步后的基线分支顶端>)\"' \"$UGW\""
+# Important-2：沙箱回退正文两串缺席（原「在原地工作」不覆盖该正文）
+ck "wdh-no-sandbox-inplace" "! grep -qF '在当前目录中工作' \"$UGW\" && ! grep -qF '在原地完成环境配置' \"$UGW\""
+# Important-3：bugfix 定性改为症状口径，宿主由归因判定
+ck "wdh-us-bugfix-symptom" "grep -qF '报告为缺陷且需要修改既有代码' \"$USK\" && grep -qF '宿主（基线/当前需求/他需求）由归因判定' \"$USK\""
+ck "wdh-no-bugfix-delivered-only" "! grep -qF '修复基线分支上已交付内容的缺陷' \"$USK\""
+# Important-5：入口技能集成动作枚举与 FIN/UGW/术语表对齐为五项
+ck "wdh-us-integration-actions" "grep -qF '分支合并、验证方案并入登记册、合并事件文件落盘、基线分支快进、规格目录归档移动' \"$USK\""
+# Important-10：FIN 本地合并前先定位基准分支所在工作树
+ck "wdh-fin-locate-base-tree" "grep -qF 'git worktree list' \"$FIN\" && grep -qF 'cd <基准分支所在工作树路径>' \"$FIN\""
+# Important-11：合并事件目录与验证方案文件写明作为一次提交落在吸收分支
+ck "wdh-fin-merge-event-committed" "grep -qF '作为一次提交落在吸收分支上' \"$FIN\""
+# 反向拦截：旧表述按真实字面缺席（UGW 偏好行与回退表行由「在原地工作」覆盖；
+# 沙箱回退正文不含该串，由 wdh-no-sandbox-inplace 的两串单独覆盖；
 # 「裁决只是暂定的」为 EP/SDD 两文件各自旧句的共有子串；「非软件项目到此停止」在 BRS 原为两处）
 ck "wdh-no-inplace-work" "! grep -qF '在原地工作' \"$UGW\""
 ck "wdh-no-tentative-ruling-ep" "! grep -qF '裁决只是暂定的' \"$EP\""

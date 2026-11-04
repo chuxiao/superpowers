@@ -60,7 +60,7 @@ git rev-parse --show-superproject-working-tree 2>/dev/null
 
 原生工具会自动处理目录位置选择、分支创建和清理。在你已有原生工具的情况下还去用 `git worktree add`，会制造出 harness 看不到也无法管理的幽灵状态。
 
-**建后校验：** 原生工具建树后核验合并基——`git merge-base --is-ancestor <同步后的基线分支顶端> HEAD` 必须成立；不符则删除该树，以 git 显式起点重建。原生工具的便利让位于基点保证。
+**建后校验：** 原生工具建树后核验合并基——`[ "$(git rev-parse HEAD)" = "$(git rev-parse <同步后的基线分支顶端>)" ]` 必须成立（严格相等，不是 `--is-ancestor`）；不符则删除该树，以 git 显式起点重建。原生工具的便利让位于基点保证。
 
 只有当你没有可用的原生工作树工具时，才进入 Step 1b。
 
