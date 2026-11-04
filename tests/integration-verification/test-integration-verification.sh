@@ -320,7 +320,7 @@ ck "wdh-no-skip-create-term" "! grep -qF '跳过创建' \"$UGW\""
 # 缺陷：计划已裁决接受的弱验证残余在收尾被再次请求裁决；文档保留待裁决标注
 ck "sdr-us-no-reask" "grep -qF '不得再次请求确认' \"$USK\" && grep -qF '已裁决（日期 + 结论）' \"$USK\""
 ck "sdr-us-status-sync" "grep -qF '不得保留「待裁决」「待追认」等与事实不符的标记' \"$USK\""
-ck "sdr-brs-status-sync" "grep -qF '回写设计文档中全部「待裁决」「待追认」标注为已裁决' \"$BRS\""
+ck "sdr-brs-status-sync" "grep -qF '回写设计文档中全部「待裁决」「待追认」「待需求方裁决」标注为已裁决' \"$BRS\""
 ck "sdr-wp-status-sync" "grep -qF '把全部「待需求方裁决」占位更新为裁决落定记录' \"$WP\""
 
 if [ "$fail" -ne 0 ]; then
