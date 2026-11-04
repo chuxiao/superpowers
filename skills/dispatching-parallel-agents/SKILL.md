@@ -1,6 +1,6 @@
 ---
 name: dispatching-parallel-agents
-description: 当面对 2 个以上相互独立、可在没有共享状态或顺序依赖的情况下处理的任务时使用
+description: 当面对 2 个以上相互独立、可在没有共享状态或顺序依赖的情况下处理的软件开发任务时使用
 ---
 
 # 并行派发 Agent

@@ -82,9 +82,9 @@ if not any(entry.get("path") == ".antigravity-plugin/plugin.json"
 skill_md = (root / "skills" / "using-superpowers" / "SKILL.md").read_text(encoding="utf-8")
 frontmatter = re.match(r"---\n(.*?)\n---\n", skill_md, re.DOTALL)
 description = frontmatter and re.search(r"^description:(.*)$", frontmatter.group(1), re.MULTILINE)
-if not description or "在开始任何对话时使用" not in description.group(1):
-    fail("using-superpowers description no longer says '在开始任何对话时使用' "
-         "(Use when starting any conversation); Antigravity relies on it to bootstrap")
+if not description or "在开始任何软件开发类任务时使用" not in description.group(1):
+    fail("using-superpowers description no longer says '在开始任何软件开发类任务时使用' "
+         "(Use when starting a software development task); Antigravity relies on it to bootstrap")
 
 # --- Layout agy depends on -------------------------------------------------
 # A root plugin.json would be read instead of .antigravity-plugin/plugin.json,

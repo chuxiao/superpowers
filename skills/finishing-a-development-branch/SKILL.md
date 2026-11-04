@@ -178,7 +178,7 @@ fi
 
 三规则的上位载体：设计决策（存放位置与改动分类）归 brainstorming 技能；main/master 不直接开发由执行技能的工作区前置约束兜底——subagent-driven-development 与 executing-plans 均已含「实施只能在本需求分支上」。
 
-上位载体：改动分类与两路径路由见 superpowers:using-superpowers 技能优先级；archived 冻结的存放策略见 superpowers:brainstorming 存放位置。
+上位载体：改动分类与两路径路由见 superpowers:using-superpowers 的「第二部分：开发工作流」；archived 冻结的存放策略见 superpowers:brainstorming 存放位置。
 
 ### 如果需求方要求丢弃工作成果
 

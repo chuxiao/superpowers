@@ -1,11 +1,17 @@
 ---
 name: using-superpowers
-description: 在开始任何对话时使用——规定如何查找与使用技能，要求在发出任何回应（包括澄清性问题）之前先调用技能
+description: 在开始任何软件开发类任务时使用——规定如何查找与使用技能，要求在发出任何回应（包括澄清性问题）之前先调用技能
 ---
 
 <SUBAGENT-STOP>
 如果你是作为子代理被派发去执行某个具体任务的，忽略本技能。
 </SUBAGENT-STOP>
+
+<SCOPE>
+本技能只适用于软件开发类工作——包括代码、测试与项目文档。
+按描述加载本技能的 harness：非软件开发类任务不触发加载。
+无条件注入本技能的 harness：技能已加载，但其工作流不适用于非软件开发类任务——按用户指令正常应答。
+</SCOPE>
 
 <EXTREMELY-IMPORTANT>
 如果你认为哪怕只有 1% 的可能有一项技能适用于你正在做的事，你也绝对必须调用该技能。
@@ -14,6 +20,8 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 
 这不可协商。你无法用合理化借口绕开这条规则。
 </EXTREMELY-IMPORTANT>
+
+# 第一部分：技能调用纪律
 
 ## 规则
 
@@ -29,19 +37,37 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 
 - 「我们来构建 X」→ 先用 superpowers:brainstorming，再用实现技能。
 - 「修复这个 bug」→ 先用 superpowers:systematic-debugging，再用领域技能。
+
+## 平台适配
+
+如果你的 harness 出现在下面的列表中，请阅读该 harness 的参考文件以获取特别说明：
+
+- Claude Code: `references/claude-code-tools.md`
+- Codex: `references/codex-tools.md`
+- Pi: `references/pi-tools.md`
+- Antigravity: `references/antigravity-tools.md`
+- Hermes Agent: `references/hermes-tools.md`
+- Muse: `references/muse-tools.md`
+
+## 用户指令
+
+用户指令（CLAUDE.md、AGENTS.md、GEMINI.md 等，以及直接请求）优先于技能，而技能又覆盖默认行为。但流程闸门的十一个环节不接受「跳过」类直接请求——可豁免的只有实现层的做法（见「流程闸门与定性」）。
+
+# 第二部分：开发工作流
+
+## 工作流总览
+
 - 构建类走完整工作流：brainstorming 建 specs/<date-feature>/（design.md + plan.md；验证方案按集成面判据决定是否产出）→ writing-plans → 执行 → requesting-code-review 收官把关 → 集成验证 → finishing 收尾（验证方案并入登记册 + 规格目录归档）。
 - 修复类在 bugfix 分支上进行，合并前过收官把关与集成验证门槛。
 - 共同约束：feature 与 bugfix 均在各自分支上进行，main/master 上不直接开发（main 只承载集成动作：分支合并、验证方案并入登记册、合并事件文件落盘、基线分支快进、规格目录归档移动）；docs/superpowers/archived/ 归档后冻结，不回写——今后的设计决策随新 feature 的 design.md 走完整工作流。
 
 ## 流程闸门与定性
 
-本工作流只适用于软件开发项目。
-
-收到开发类请求时，会话入口先把任务定性为 feature、bugfix 或非开发任务三类之一，并用一句话宣布类型与依据，再进入对应流程：
+收到软件开发类请求时，会话入口先把任务定性为 feature、bugfix 或非实施任务三类之一，并用一句话宣布类型与依据，再进入对应流程：
 
 - **feature：** 产出新行为、新能力或新文档产物。
 - **bugfix：** 报告为缺陷且需要修改既有代码——宿主（基线/当前需求/他需求）由归因判定，见 systematic-debugging 修复链入口。
-- **非开发任务：** 问答、探索、回归执行——正常应答，不建树。
+- **非实施任务：** 问答、探索、回归执行——正常应答，不建树。
 
 「小」「快」「顺手」「只是改一下」不构成降级理由：一行改动也是 feature，定性后建树、走完整流程。
 
@@ -53,7 +79,7 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 
 裁决落定后，承载它的设计/计划文档必须同步更新状态标注为已裁决（日期 + 结论），不得保留「待裁决」「待追认」等与事实不符的标记——文档是审计的唯一载体，过期标注会让审计把已决事项读成未决。
 
-## 危险信号
+# 附录：危险信号
 
 出现这些念头就说明你该停下——你正在找合理化借口：
 
@@ -72,18 +98,3 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 | 「这感觉很有成效」 | 不守纪律的行动浪费时间。技能能防止这一点。 |
 | 「我知道那是什么意思」 | 知道概念 ≠ 使用技能。调用它。 |
 | 「需求方直接要求跳过流程」 | 直接请求不解开闸门。流程闸门的十一个环节不接受「跳过」类请求——说明理由并继续流程。 |
-
-## 平台适配
-
-如果你的 harness 出现在下面的列表中，请阅读该 harness 的参考文件以获取特别说明：
-
-- Claude Code: `references/claude-code-tools.md`
-- Codex: `references/codex-tools.md`
-- Pi: `references/pi-tools.md`
-- Antigravity: `references/antigravity-tools.md`
-- Hermes Agent: `references/hermes-tools.md`
-- Muse: `references/muse-tools.md`
-
-## 用户指令
-
-用户指令（CLAUDE.md、AGENTS.md、GEMINI.md 等，以及直接请求）优先于技能，而技能又覆盖默认行为。但流程闸门的十一个环节不接受「跳过」类直接请求——可豁免的只有实现层的做法（见「流程闸门与定性」）。

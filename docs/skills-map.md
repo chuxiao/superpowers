@@ -53,8 +53,8 @@ flowchart TD
 ## ① 构思与设计
 
 **brainstorming** —— 通过逐轮提问弄清需求方真正想要什么，先复述、再定稿，避免把理解偏差直接建成代码。
-- 触发：任何创造性工作开始之前——功能、组件、计划，软件内外都算。
-- 输出：需求（feature）类软件改动产出三件套 `docs/superpowers/specs/<date-feature>/`（design.md + plan.md + verification.md，写完过机械检查再交付），无规模豁免；缺陷修复走 bugfix 路径（合并前过收官把关与集成验证门槛）；非软件项目止于设计文档。
+- 触发：任何软件开发类创造性工作开始之前——功能、组件、计划。
+- 输出：需求（feature）类软件改动产出三件套 `docs/superpowers/specs/<date-feature>/`（design.md + plan.md + verification.md，写完过机械检查再交付），无规模豁免；缺陷修复走 bugfix 路径（合并前过收官把关与集成验证门槛）。
 
 ## ② 计划
 
