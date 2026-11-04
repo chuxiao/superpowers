@@ -29,8 +29,8 @@ description: 在开始任何对话时使用——规定如何查找与使用技�
 
 - 「我们来构建 X」→ 先用 superpowers:brainstorming，再用实现技能。
 - 「修复这个 bug」→ 先用 superpowers:systematic-debugging，再用领域技能。
-- 构建类走完整工作流：brainstorming 建 specs/<date-feature>/ 三件套（design.md + plan.md + verification.md）→ writing-plans → 执行 → 集成验证 → finishing 收尾（验证方案并入登记册 + 规格目录归档）。
-- 修复类在 bugfix 分支上进行，合并前过集成验证门槛。
+- 构建类走完整工作流：brainstorming 建 specs/<date-feature>/ 三件套（design.md + plan.md + verification.md）→ writing-plans → 执行 → requesting-code-review 收官把关 → 集成验证 → finishing 收尾（验证方案并入登记册 + 规格目录归档）。
+- 修复类在 bugfix 分支上进行，合并前过收官把关与集成验证门槛。
 - 共同约束：feature 与 bugfix 均在各自分支上进行，main/master 上不直接开发（main 只承载集成动作：分支合并、验证方案并入登记册、规格目录归档移动）；docs/superpowers/archived/ 归档后冻结，不回写——今后的设计决策随新 feature 的 design.md 走完整工作流。
 
 ## 危险信号

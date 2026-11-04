@@ -195,10 +195,10 @@ ck "rs-gate-covers-both-modes" "grep -qF '基线模式与 feature 分支模式�
 ck "rs-gate-before-mode-judgment" "awk '/## 执行前置/{p=NR} /## 双模式判定/{m=NR} END{if (p && m && p < m) exit 0; exit 1}' \"$RS\""
 
 # 断言 16：分支纪律三条规则——archived 冻结与设计决策走向、main/master 集成动作限定、
-# 改动二分（新 feature 完整工作流 / bugfix 过集成验证门槛）
+# 改动二分（新 feature 完整工作流 / bugfix 过收官把关与集成验证门槛）
 ck "fin-discipline-archived-frozen" "grep -qF '归档后冻结，零改动' \"$FIN\" && grep -qF '随新 feature 的 \`docs/superpowers/specs/<date-feature>/design.md\` 走完整工作流' \"$FIN\""
 ck "fin-discipline-main-integration-only" "grep -qF 'main/master 只承载集成动作，不直接开发' \"$FIN\" && grep -qF '分支合并、验证方案并入登记册、规格目录归档移动' \"$FIN\" && grep -qF '任何开发性改动不得直接在 main/master 上提交' \"$FIN\""
-ck "fin-discipline-binary-classification" "grep -qF '改动二分' \"$FIN\" && grep -qF '走 brainstorming → writing-plans → 集成验证 → 收尾完整工作流' \"$FIN\" && grep -qF '无新需求文档，合并前同样过集成验证门槛' \"$FIN\""
+ck "fin-discipline-binary-classification" "grep -qF '改动二分' \"$FIN\" && grep -qF '走 brainstorming → writing-plans → 收官把关 → 集成验证 → 收尾完整工作流' \"$FIN\" && grep -qF '无新需求文档，合并前同样过收官把关与集成验证门槛' \"$FIN\""
 
 # 断言 17：分支纪律上移（需求方裁决 2026-11-03）——brainstorming 含 archived 冻结句与
 # 改动分类句；FIN 分支纪律小节段尾含上位载体指向句
@@ -211,9 +211,11 @@ USK="$REPO_ROOT/skills/using-superpowers/SKILL.md"
 BRS="$REPO_ROOT/skills/brainstorming/SKILL.md"
 TPL="$REPO_ROOT/skills/brainstorming/references/design-doc-template.md"
 ck "us-routing-feature-workflow" "grep -qF '三件套（design.md + plan.md + verification.md）' \"$USK\""
-ck "us-routing-fix-branch-gate" "grep -qF 'bugfix 分支上进行，合并前过集成验证门槛' \"$USK\""
+ck "us-routing-feature-closeout-relay" "grep -qF 'requesting-code-review 收官把关' \"$USK\""
+ck "us-routing-fix-branch-gate" "grep -qF 'bugfix 分支上进行，合并前过收官把关与集成验证门槛' \"$USK\""
 ck "us-main-no-direct-dev" "grep -qF 'main/master 上不直接开发' \"$USK\""
 ck "brs-archived-frozen" "grep -qF '归档后冻结零改动' \"$BRS\""
+ck "brs-bugfix-closeout-gate" "grep -qF '合并前过收官把关与集成验证门槛' \"$BRS\""
 ck "fin-discipline-pointer" "grep -qF '上位载体' \"$FIN\""
 
 # 断言 19：豁免清零与纪律句在场（需求方裁决 2026-11-03）——工作流技能正文六条豁免短语缺席、
