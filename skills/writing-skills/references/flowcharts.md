@@ -48,7 +48,7 @@ flowchart TD
 
 ## 语法红线（机械可查）
 
-违反任意一条都会导致渲染失败或退化到不可移植写法。提交前运行 `bash scripts/check-mermaid.sh <文件.md>`（brainstorming 与 writing-plans 两个技能的 scripts/ 目录各有一份）。
+违反任意一条都会导致渲染失败或退化到不可移植写法。提交前运行 `bash scripts/check-mermaid.sh <文件.md>`（design-and-plan 技能的 scripts/ 目录有一份）。
 
 - subgraph 标题一律 `subgraph id["标题"]` 形态——裸标题位置的文法不接受 HTML 标记，换行 `<br/>` 写在引号内（实例：`<br>` 写在裸标题里触发 TAGSTART 解析错误）
 - 节点文本与含空格或特殊字符的边标签放进双引号；`<br/>` 换行只出现在引号内

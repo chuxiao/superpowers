@@ -10,7 +10,8 @@
 
 ## 环境受限
 
-- `tests/codex/test-package-codex-plugin.sh` 要求 `.git` 为目录；链接工作树中 `.git` 为文件。该测试在普通检出通过、在工作树失败。重跑条件：在普通检出运行，或调整打包脚本接受 `.git` 文件。
+- `tests/codex/test-package-codex-plugin.sh` 已随 2026-11-05 design-and-plan 合并改造删除（9fe12e9），本行保留为历史环境记录。
+- `tests/explicit-skill-requests/` 五场景与 `tests/run-skill-tests.sh` 为会话层（L3），不在 Step 1 机械口径内，需真实会话执行（2026-11-05 补记：前者另受 CLI --verbose 环境限制）。
 - `tests/explicit-skill-requests/` 的 5 个脚本调用 `claude -p --output-format stream-json`；当前 CLI 版本要求同时提供 `--verbose`。重跑条件：CLI 升级或测试脚本补 `--verbose`。
 
 ## 工具链

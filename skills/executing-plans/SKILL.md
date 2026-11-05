@@ -21,7 +21,7 @@ description: 在当前会话中由你亲自以实施者身份执行实施计划�
 
 ## 何时使用
 
-- 你有一份来自 superpowers:writing-plans 的计划，且需求方在交接时选择了会话内执行。
+- 你有一份来自 superpowers:design-and-plan 的计划，且需求方在交接时选择了会话内执行。
 - 你的 harness 没有子代理工具（见 `../using-superpowers/references/` 中的各平台参考）。绝不伪造派发；就在这里执行计划。
 - 任务大体相互独立——与 superpowers:subagent-driven-development 的前提条件相同。
 

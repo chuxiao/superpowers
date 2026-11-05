@@ -11,8 +11,8 @@
   "capabilities": {
     "skills": [
       {
-        "id": "brainstorming",
-        "path": "skills/brainstorming/SKILL.md"
+        "id": "design-and-plan",
+        "path": "skills/design-and-plan/SKILL.md"
       },
       {
         "id": "diagnosing-superpowers",
@@ -57,10 +57,6 @@
       {
         "id": "verification-before-completion",
         "path": "skills/verification-before-completion/SKILL.md"
-      },
-      {
-        "id": "writing-plans",
-        "path": "skills/writing-plans/SKILL.md"
       },
       {
         "id": "writing-skills",

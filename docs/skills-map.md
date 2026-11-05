@@ -8,27 +8,23 @@
 ```mermaid
 flowchart TD
     US["using-superpowers<br/>（会话入口，规则贯穿全程）"]
-    IDEA([需求 / 想法]) --> BS
-    US -.-> BS
+    IDEA([需求 / 想法]) --> DP
+    US -.-> DP
 
-    BS["① brainstorming<br/>头脑风暴，把想法聊成设计"] --> SPEC[/"设计文档<br/>docs/superpowers/specs/"/]
-    SPEC --> G1{"人工确认门 1<br/>设计文档"}
-    G1 -- "修订" --> BS
-    G1 -- "确认" --> WP["② writing-plans<br/>写实施计划 + 自审 + 独立审读"]
-    WP --> PLAN[/"实施计划<br/>docs/superpowers/specs/<date-feature>/"/]
-    PLAN --> G2{"人工确认门 2<br/>计划 + 选执行方式"}
-    G2 -- "修订" --> WP
+    DP["① design-and-plan<br/>需求对话：把想法聊成设计<br/>→ 全套规格四件套成稿 + 统一审读"] --> SPEC[/"全套规格<br/>docs/superpowers/specs/<date-feature>/"/]
+    SPEC --> G1{"人工确认门<br/>全套规格 + 执行交接"}
+    G1 -- "修订" --> DP
 
-    G2 -- "隔离工作区" --> WT["③ using-git-worktrees"]
-    WT -- "会话内执行" --> EP["④a executing-plans<br/>一个上下文做完所有任务"]
-    WT -- "子代理驱动" --> SDD["④b subagent-driven-development<br/>每任务：实施者子代理 → 任务审查<br/>→ 修复循环（轮数上限 + 熔断）"]
+    G1 -- "隔离工作区" --> WT["② using-git-worktrees"]
+    WT -- "会话内执行" --> EP["③a executing-plans<br/>一个上下文做完所有任务"]
+    WT -- "子代理驱动" --> SDD["③b subagent-driven-development<br/>每任务：实施者子代理 → 任务审查<br/>→ 修复循环（轮数上限 + 熔断）"]
 
     EP --> LOOP["逐任务（TDD 是闸门）：<br/>test-driven-development 批量红绿 → 提交<br/>出 bug → systematic-debugging<br/>独立失败 → dispatching-parallel-agents<br/>声称完成前 → verification-before-completion"]
     LOOP --> CR
 
     SDD --> CR["requesting-code-review 接力：整分支终审<br/>→ 恰好一轮集中修复 → 限定复审<br/>→ 安全门（五面判据，所有分支必过）<br/>→ 收尾：穷尽裁决清单 + 删工作区"]
     CR --> IV["integration-verification<br/>Step 1 全量测试套件（失败即停）<br/>Step 2 分层验证（按需求级验证方案）<br/>稳定失败一遍跑完集中呈现 → 需求方定性裁决"]
-    IV --> FIN["⑤ finishing-a-development-branch<br/>Step 1 条件免跑：集成验证出口凭据<br/>+ HEAD 一致 + 工作区干净；合并或 PR 后并入场景登记册"]
+    IV --> FIN["④ finishing-a-development-branch<br/>Step 1 条件免跑：集成验证出口凭据<br/>+ HEAD 一致 + 工作区干净；合并或 PR 后并入场景登记册"]
     FIN --> DEC{"需求方选择"}
     DEC -- "本地合并" --> M([合并回基准分支])
     DEC -- "推送建 PR" --> P([Pull Request])
@@ -38,9 +34,9 @@ flowchart TD
     DS["diagnosing-superpowers<br/>（会话出问题时，旁路）"]
 ```
 
-两条人工确认门是链路上仅有的强制停顿点：设计文档确认（意图）、计划确认（规格）。其余环节任务之间都不停顿——例外是集成验证存在稳定失败：一遍跑完后集中呈现，待需求方逐项定性才继续。
+人工确认门是链路上仅有的强制停顿点：全套规格一次确认（意图与规格一并定案）。其余环节任务之间都不停顿——例外是集成验证存在稳定失败：一遍跑完后集中呈现，待需求方逐项定性才继续。
 
-产物链：设计文档 → 实施计划 → 台账与审查包（`.superpowers/sdd/`，git 忽略，随工作区删除）→ 提交 → 审查报告 → Rulings / Deferred minors 清单 → 合并或 PR。
+产物链：全套规格（design.md + implementation.md + plan.md + verification.md + decisions.md）→ 台账与审查包（`.superpowers/sdd/`，git 忽略，随工作区删除）→ 提交 → 审查报告 → Rulings / Deferred minors 清单 → 合并或 PR。
 
 ---
 
@@ -50,25 +46,19 @@ flowchart TD
 - 触发：每次会话开始（由 harness 注入，不是被调用）。
 - 输出：无独立产物；它约束的是后续一切行为。
 
-## ① 构思与设计
+## ① 设计与计划
 
-**brainstorming** —— 通过逐轮提问弄清需求方真正想要什么，先复述、再定稿，避免把理解偏差直接建成代码。
-- 触发：任何软件开发类创造性工作开始之前——功能、组件、计划。
-- 输出：需求（feature）类软件改动产出三件套 `docs/superpowers/specs/<date-feature>/`（design.md + plan.md + verification.md，写完过机械检查再交付），无规模豁免；缺陷修复走 bugfix 路径（合并前过收官把关与集成验证门槛）。
+**design-and-plan** —— 通过逐轮提问弄清需求方真正想要什么，先复述、再定稿，避免把理解偏差直接建成代码；再把理解转成「可判真伪」的全套规格：任务写到 Files / Interfaces / 边界条件 / 验收标准为止，红绿循环不预写。四件套成稿后统一审读，呈报一次确认（单确认门），携获批规格交接执行。
+- 触发：任何软件开发类创造性工作开始之前——功能、组件、计划。已有设计文档或需求、多步骤任务、动代码之前同样适用。
+- 输出：需求（feature）类软件改动产出五件套 `docs/superpowers/specs/<date-feature>/`（design.md + implementation.md + plan.md + verification.md + decisions.md，写完过机械检查再交付），无规模豁免；缺陷修复走 bugfix 路径（合并前过收官把关与集成验证门槛）。
 
-## ② 计划
-
-**writing-plans** —— 把设计文档转成「可判真伪」的实施计划：任务写到 Files / Interfaces / 边界条件 / 验收标准为止，红绿循环不预写；写完自审八项，再派未参与的子代理独立审读。
-- 触发：已有设计文档或需求、多步骤任务、动代码之前。
-- 输出：实施计划 `docs/superpowers/specs/<date-feature>/plan.md`（与设计文档同目录；固定五章 + 执行交接）+ 独立审读处置记录 + 执行方式建议（子代理驱动 / 会话内）。
-
-## ③ 执行准备
+## ② 执行准备
 
 **using-git-worktrees** —— 确保实施发生在隔离工作区：先检测既有隔离，优先平台原生工具，没有才回退手动 `git worktree`。
 - 触发：开始需要隔离的功能开发之前、执行计划之前——实际由执行技能在准备阶段调用。
 - 输出：隔离工作树（或「已在隔离区」的确认）+ 依赖安装 + 干净的基线测试。
 
-## ④ 执行（二选一）
+## ③ 执行（二选一）
 
 | | executing-plans（会话内） | subagent-driven-development（子代理驱动） |
 |---|---|---|
@@ -126,7 +116,7 @@ flowchart TD
 - 触发：审查收官（requesting-code-review）收尾段移交；或需求方单独调用（开发中途验证分支集成状态、失败修复后复查）。
 - 输出：链路接力出口 = 移交 finishing-a-development-branch（全绿或带残留继续，残留随移交呈现）+ 台账出口凭据（收尾技能免跑判据的输入）；单独调用出口 = 验证报告。
 
-## ⑤ 收尾集成
+## ④ 收尾集成
 
 **finishing-a-development-branch** —— 测试全绿后（集成验证出口凭据 + HEAD 一致 + 工作区干净三判据满足则免跑套件）把集成决定交还需求方：菜单逐字呈现（本地合并 / 推送建 PR / 保留），绝不自作主张合并或丢弃；合并后在合并结果上重跑测试；选择合并或 PR 后把本次验证方案并入场景登记册。
 - 触发：实现完成、完整测试套件通过、需要决定如何集成。
@@ -150,7 +140,7 @@ flowchart TD
 
 ## 自己搭工作流时，这条链上可调的旋钮
 
-1. **确认门数量**——这里是两道（设计 + 计划）；小工作流可并成一道或只留计划门。
+1. **确认门数量**——这里是一道（全套规格一次确认）；需要更细粒度时可拆回设计门 + 计划门两道。
 2. **执行方式**——会话内 vs 子代理驱动，本质是「每任务一双独立的眼睛」花不花得起。
 3. **审查深度与时机**——每任务审 + 终审 / 只终审 / 加独立安全审查；审查模板（双层基准 + 理性之人预期 + Declined to judge）可整体复用。
 4. **台账与可恢复性**——上下文压缩后靠台账和 git log 续命；任何长流程都值得抄这一层。

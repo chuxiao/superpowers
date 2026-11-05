@@ -142,7 +142,7 @@ ${toolMapping}
 
 // --- Task-subagent (child session) detection --------------------------------
 //
-// #2160: the bootstrap drives controller workflows (brainstorming, planning,
+// #2160: the bootstrap drives controller workflows (design-and-plan, planning,
 // approval cycles). Injecting it into task subagent sessions makes workers
 // restart design/approval cycles for work the parent already authorised; the
 // <SUBAGENT-STOP> note inside the bootstrap relies on model compliance, which

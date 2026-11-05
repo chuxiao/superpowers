@@ -85,11 +85,11 @@ assert_contains "$output" "PROJECT_SKILL_MARKER_67890" "native skill tool loaded
 # Test 3: Test bundled superpowers skill loading
 echo ""
 echo "Test 3: Testing native skill tool with a superpowers skill..."
-echo "  Running opencode with brainstorming skill..."
+echo "  Running opencode with design-and-plan skill..."
 
-run_opencode output "$TEST_HOME/test-project" "Call the skill tool with name \"brainstorming\". Then tell me the loaded skill title."
-assert_contains "$output" '"name":"brainstorming"' "native skill tool loaded bundled brainstorming skill"
-assert_contains "$output" "Brainstorming Ideas Into Designs" "brainstorming skill content was returned"
+run_opencode output "$TEST_HOME/test-project" "Call the skill tool with name \"design-and-plan\". Then tell me the loaded skill title."
+assert_contains "$output" '"name":"design-and-plan"' "native skill tool loaded bundled design-and-plan skill"
+assert_contains "$output" "设计与计划" "design-and-plan skill content was returned"
 
 echo ""
 echo "=== All native skill tool tests passed ==="

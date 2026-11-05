@@ -318,27 +318,25 @@ Superpowers 作为 Muse 原生插件提供——同一仓库、同一套技能�
   muse plugins update superpowers
   ```
 
-安装后重启所有活跃的 Muse 会话，让 `SessionStart` 钩子生效——技能立即生效，钩子在首次安装时需要批准。验证方法：新开会话并发送 `Let's make a react todo list`——完好的安装会在写任何代码之前自动触发 `brainstorming`。版本号记录在 `.version-bump.json`，由 `scripts/bump-version.sh` 保持同步。
+安装后重启所有活跃的 Muse 会话，让 `SessionStart` 钩子生效——技能立即生效，钩子在首次安装时需要批准。验证方法：新开会话并发送 `Let's make a react todo list`——完好的安装会在写任何代码之前自动触发 `design-and-plan`。版本号记录在 `.version-bump.json`，由 `scripts/bump-version.sh` 保持同步。
 
 ## 基本工作流
 
-1. **brainstorming** - 在开始软件开发类构建之前激活。通过提问引出你真正想要什么、为什么——让你自己把它描述出来，然后复述它的理解供你纠正。所有需求类改动都会得到一份书面设计文档与实施计划，写清楚到执行者能直接据此施工；流程不因改动小而省略——记录与审计靠的就是这份文档；缺陷修复走修复分支与集成验证门槛。
+1. **design-and-plan** - 在开始软件开发类构建之前激活。通过提问引出你真正想要什么、为什么——让你自己把它描述出来，然后复述它的理解供你纠正；再把理解落成全套规格（design.md、implementation.md、plan.md、verification.md 四件套与 decisions.md 裁决日志），统一审读后呈报一次确认，携获批规格交接执行。所有需求类改动都按这套规格施工，写清楚到执行者能直接据此施工；流程不因改动小而省略——记录与审计靠的就是这套文档；缺陷修复走修复分支与集成验证门槛。
 
 2. **using-git-worktrees** - 在设计获批后激活。在新分支上创建隔离工作区，执行项目初始化，验证测试基线干净。
 
-3. **writing-plans** - 携获批设计激活。把工作拆成小块任务（每个 2-5 分钟）。每个任务都有确切的文件路径、完整代码与验证步骤。
+3. **subagent-driven-development** 或 **executing-plans** - 携计划激活。要么每个任务派发一个全新子代理、每个之后都做审查（最彻底），要么在当前会话内逐任务实现、最后对整分支做一次全新审查（最省）。
 
-4. **subagent-driven-development** 或 **executing-plans** - 携计划激活。要么每个任务派发一个全新子代理、每个之后都做审查（最彻底），要么在当前会话内逐任务实现、最后对整分支做一次全新审查（最省）。
+4. **test-driven-development** - 在实现期间激活。强制 RED-GREEN-REFACTOR：写失败测试、眼看它失败、写最少量的代码、眼看它通过、提交。删除先于测试写出的代码。
 
-5. **test-driven-development** - 在实现期间激活。强制 RED-GREEN-REFACTOR：写失败测试、眼看它失败、写最少量的代码、眼看它通过、提交。删除先于测试写出的代码。
+5. **requesting-code-review** - 在请求代码审查、全部计划任务完成之后（整分支终审、安全门与收官把关）、以及收到审查反馈时激活。
 
-6. **requesting-code-review** - 在请求代码审查、全部计划任务完成之后（整分支终审、安全门与收官把关）、以及收到审查反馈时激活。
+6. **integration-verification** - 在审查收官之后、收尾之前激活。先跑全量测试套件，再做分层集成检查（模块组装、API 兼容、构建产物可运行、端到端冒烟路径）；稳定失败集中呈现，交需求方逐项裁定。
 
-7. **integration-verification** - 在审查收官之后、收尾之前激活。先跑全量测试套件，再做分层集成检查（模块组装、API 兼容、构建产物可运行、端到端冒烟路径）；稳定失败集中呈现，交需求方逐项裁定。
+7. **finishing-a-development-branch** - 在任务完成时激活。验证测试，呈现选项（合并/创建 PR/保留/丢弃），清理工作区。
 
-8. **finishing-a-development-branch** - 在任务完成时激活。验证测试，呈现选项（合并/创建 PR/保留/丢弃），清理工作区。
-
-9. **regression-sweep** - 仅在显式触发时激活（由需求方或外部调度器触发）。基线工作区按场景登记册全量重跑（基线模式）；feature 分支上显式触发则登记册 ∪ specs 双源执行（feature 分支模式），产出留痕报告。
+8. **regression-sweep** - 仅在显式触发时激活（由需求方或外部调度器触发）。基线工作区按场景登记册全量重跑（基线模式）；feature 分支上显式触发则登记册 ∪ specs 双源执行（feature 分支模式），产出留痕报告。
 
 **agent 在做任何软件开发任务之前都会检查有无相关技能。**这是强制工作流，不是建议。
 
@@ -353,7 +351,7 @@ Superpowers 作为 Muse 原生插件提供——同一仓库、同一套技能�
 
 **在被验证项目上（运行时——由项目自身提供；插件不安装任何东西）：**
 
-- 计划级：含跨任务组装点或外部接口的需求，`writing-plans` 在计划同目录产出需求级验证方案文件 `verification.md`（specs/<date-feature>/ 三件套）；`integration-verification` 遍历 specs 下全部验证用例执行。计划中缺失的层会被标注「未声明」并呈现，绝不静默跳过。
+- 计划级：含跨任务组装点或外部接口的需求，`design-and-plan` 在规格同目录产出需求级验证方案文件 `verification.md`（specs/<date-feature>/ 五件套：design.md + implementation.md + plan.md + verification.md + decisions.md）；`integration-verification` 遍历 specs 下全部验证用例执行。计划中缺失的层会被标注「未声明」并呈现，绝不静默跳过。
 - 项目级资产位于 `docs/superpowers/verification/`：`environment.md`（各层怎么跑）、`modules/<module>.md` + `cross-module.md`（场景登记册），以及 `docs/superpowers/verification/reports/` 下的报告。登记册行格式被 `integration-verification`、`regression-sweep`、`finishing-a-development-branch` 三者逐字共享——后者在合并时写入条目并初始化登记册。
 - 按形态的工具链：backend——pytest/Jest + testcontainers；web——docker-compose + Playwright；mobile——Appium + Android 模拟器。工具由被验证的项目安装，绝不由本插件安装；工具缺失时降级为明确的环境外移交项，而不是自动安装。
 - 这些耦合关系由 `tests/integration-verification/test-integration-verification.sh` 的静态断言锁定。
@@ -385,8 +383,7 @@ Superpowers 由 [Jesse Vincent](https://blog.fsck.com) 与 [Prime Radiant](https
 - **diagnosing-superpowers** - 查明会话里哪里出了问题，带证据；可导出脱敏材料或提交 issue
 
 **协作**
-- **brainstorming** - 构建之前先引出意图
-- **writing-plans** - 详尽的实施计划
+- **design-and-plan** - 构建之前先引出意图，再落成全套规格与实施计划
 - **executing-plans** - 会话内执行计划：单一上下文，一次终审
 - **dispatching-parallel-agents** - 并发子代理工作流
 - **requesting-code-review** - 代码审查：整分支终审、安全门、反馈接收
@@ -433,4 +430,4 @@ MIT 许可证——详见 LICENSE 文件
 
 ## 视觉伴侣遥测
 
-由于技能和插件不会向创作者回传任何反馈，我们无从得知有多少人在使用 Superpowers。默认情况下，brainstorming 可选的视觉伴侣功能会从我们的网站加载 Prime Radiant 标志，其中包含正在使用的 Superpowers 版本号；不包含你的项目、提示词或编码 agent 的任何细节。我们看不到你的点击，也看不到你在构建什么。这帮助我们大致了解有多少人在用 Superpowers、各自用的是哪个版本。此功能完全可选。要停用它，把环境变量 `SUPERPOWERS_DISABLE_TELEMETRY` 设为任意真值即可。Superpowers 同样遵守 Claude Code 的 `DISABLE_TELEMETRY` 与 `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` 关闭项。
+由于技能和插件不会向创作者回传任何反馈，我们无从得知有多少人在使用 Superpowers。默认情况下，design-and-plan 可选的视觉伴侣功能会从我们的网站加载 Prime Radiant 标志，其中包含正在使用的 Superpowers 版本号；不包含你的项目、提示词或编码 agent 的任何细节。我们看不到你的点击，也看不到你在构建什么。这帮助我们大致了解有多少人在用 Superpowers、各自用的是哪个版本。此功能完全可选。要停用它，把环境变量 `SUPERPOWERS_DISABLE_TELEMETRY` 设为任意真值即可。Superpowers 同样遵守 Claude Code 的 `DISABLE_TELEMETRY` 与 `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` 关闭项。

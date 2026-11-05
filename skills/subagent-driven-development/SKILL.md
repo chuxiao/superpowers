@@ -28,7 +28,7 @@ flowchart TD
     in_session_or_no_subagents{"需求方选择会话内执行，或没有子代理工具？"}
     sdd["subagent-driven-development"]
     executing_plans["executing-plans"]
-    manual_or_brainstorm["手动执行，或先做头脑风暴"]
+    manual_or_brainstorm["手动执行，或先走设计阶段"]
 
     has_plan -->|是| tasks_independent
     has_plan -->|否| manual_or_brainstorm

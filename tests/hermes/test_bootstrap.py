@@ -66,7 +66,7 @@ class TestBootstrapContent:
         # A distinctive line from the skill body proves the real SKILL.md was
         # embedded, not a stub.
         assert "You have superpowers" in content
-        assert "## The Rule" in content
+        assert "如果你认为哪怕只有 1% 的可能有一项技能适用于你正在做的事" in content
 
     def test_frontmatter_stripped(self):
         content = _bootstrap()
@@ -87,7 +87,7 @@ class TestBootstrapContent:
 
     def test_skill_view_guidance_present(self):
         content = _bootstrap()
-        assert 'skill_view("superpowers:brainstorming")' in content
+        assert 'skill_view("design-and-plan")' in content
 
     def test_under_hermes_context_spill_limit(self):
         content = _bootstrap()

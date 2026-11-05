@@ -27,7 +27,7 @@
 Hermes Agent 提供一个 `skills` 工具集，内含 `skill_view` 与 `skills_list` 工具。要调用 superpowers 技能，使用：
 
 ```
-skill_view("brainstorming")
+skill_view("design-and-plan")
 skill_view("test-driven-development")
 ```
 

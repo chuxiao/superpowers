@@ -19,10 +19,13 @@ MB="$REPO_ROOT/skills/integration-verification/references/mobile.md"
 CR="$REPO_ROOT/skills/requesting-code-review/SKILL.md"
 CO="$REPO_ROOT/skills/requesting-code-review/references/closeout.md"
 FIN="$REPO_ROOT/skills/finishing-a-development-branch/SKILL.md"
-BS="$REPO_ROOT/skills/brainstorming/SKILL.md"
-WP="$REPO_ROOT/skills/writing-plans/SKILL.md"
-PT="$REPO_ROOT/skills/writing-plans/references/plan-template.md"
-MERMAID="$REPO_ROOT/skills/brainstorming/scripts/check-mermaid.sh"
+BS="$REPO_ROOT/skills/design-and-plan/SKILL.md"
+WP="$REPO_ROOT/skills/design-and-plan/SKILL.md"
+PT="$REPO_ROOT/skills/design-and-plan/references/plan-template.md"
+PSR="$REPO_ROOT/skills/design-and-plan/references/plan-self-review.md"
+MERMAID="$REPO_ROOT/skills/design-and-plan/scripts/check-mermaid.sh"
+VT="$REPO_ROOT/skills/design-and-plan/references/verification-template.md"
+DD="$REPO_ROOT/skills/design-and-plan/references/dialogue-discipline.md"
 SIZE="$REPO_ROOT/tests/skill-size/test-skill-size.sh"
 
 fail=0
@@ -78,20 +81,20 @@ ck "fin-no-merge-non-main" "grep -qF '基准分支不是 main/master' \"$FIN\""
 ck "fin-verification-source" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$FIN\""
 ck "fin-no-merge-on-keep" "grep -qF '「保持分支原样」不并入' \"$FIN\""
 
-# 断言 7：writing-plans 验证方案指针句 + 触发判据句 + 三件套保存句 + 自审第十项（核查对象 verification.md）
-ck "wp-plan-requirement" "grep -qF '计划存在跨任务组装点或触及外部接口 → 同目录另产出验证方案文件 \`verification.md\`' \"$WP\""
-ck "wp-verification-pointer" "grep -qF '见 \`references/plan-template.md\`「验证方案文件」段' \"$WP\""
-ck "wp-saves-verification" "grep -qF '同目录同时产出 \`verification.md\`' \"$WP\""
-ck "wp-self-review-item-10" "grep -qF '**10. 验证方案专项：**' \"$WP\""
-ck "wp-self-review-target" "grep -qF '计划产出 verification.md 时逐项核对' \"$WP\""
-ck "wp-no-plan-no-requirement" "grep -qF '纯单模块无接口的计划不加' \"$WP\""
+# 断言 7：计划侧验证方案指针句 + 触发判据句 + 三件套保存句 + 自审第十项（核查对象 verification.md）
+ck "wp-plan-requirement" "grep -qF '计划存在跨任务组装点或触及外部接口时产出（触发判据见 \`references/plan-template.md\`「验证方案文件」段）' \"$WP\""
+ck "wp-verification-pointer" "grep -qF '模板见 \`references/verification-template.md\`' \"$WP\""
+ck "wp-saves-verification" "grep -qF '计划存在跨任务组装点或触及外部接口 → 同目录另产出 verification.md' \"$PT\""
+ck "wp-self-review-item-10" "grep -qF '**10. 验证方案专项：**' \"$PSR\""
+ck "wp-self-review-target" "grep -qF '计划产出 verification.md 时逐项核对' \"$PSR\""
+ck "wp-no-plan-no-requirement" "grep -qF '纯单模块无接口时不产出该文件' \"$WP\""
 
 # 断言 8：plan-template「验证方案文件」说明段——存在性、指向 verification.md、出处标注、双向映射、内容要求句
 ck "pt-verification-file-section" "grep -qF '## 验证方案文件' \"$PT\""
 ck "pt-points-to-verification" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$PT\""
-ck "pt-provenance" "grep -qF '每条期望标注设计出处（设计文档章节或需求条目），无出处不得入方案' \"$PT\""
-ck "pt-bidirectional-map" "grep -qF '集成面与场景清单的双向映射表' \"$PT\""
-ck "pt-content-requirements" "grep -qF '内容要求六项逐项落实——确定性固定策略、保真度声明、副作用隔离、场景自包含、既有登记册查重、失败证据采集' \"$PT\""
+ck "pt-provenance" "grep -qF '期望以表格呈现并附出处标注列——无出处不得入方案' \"$VT\""
+ck "pt-bidirectional-map" "grep -qF '集成面与场景清单的双向映射表' \"$VT\""
+ck "pt-content-requirements" "grep -qF '内容要求六项逐项落实——确定性固定策略、保真度声明、副作用隔离、场景自包含、既有登记册查重、失败证据采集' \"$VT\""
 
 # 断言 9：T1 承重句——免责句、增量重跑、Step 1 失败阻断 Step 2、单独调用、
 # 重跑一次/偶发机制、期望修改铁律
@@ -198,19 +201,19 @@ ck "rs-gate-before-mode-judgment" "awk '/## 执行前置/{p=NR} /## 双模式判
 # 改动二分（新 feature 完整工作流 / bugfix 过收官把关与集成验证门槛）
 ck "fin-discipline-archived-frozen" "grep -qF '归档后冻结，零改动' \"$FIN\" && grep -qF '随新 feature 的 \`docs/superpowers/specs/<date-feature>/design.md\` 走完整工作流' \"$FIN\""
 ck "fin-discipline-main-integration-only" "grep -qF 'main/master 只承载集成动作，不直接开发' \"$FIN\" && grep -qF '分支合并、验证方案并入登记册、合并事件文件落盘、基线分支快进、规格目录归档移动' \"$FIN\" && grep -qF '任何开发性改动不得直接在 main/master 上提交' \"$FIN\""
-ck "fin-discipline-binary-classification" "grep -qF '改动二分' \"$FIN\" && grep -qF '走 brainstorming → writing-plans → 收官把关 → 集成验证 → 收尾完整工作流' \"$FIN\" && grep -qF '无新需求文档，合并前同样过收官把关与集成验证门槛' \"$FIN\""
+ck "fin-discipline-binary-classification" "grep -qF '改动二分' \"$FIN\" && grep -qF '走 design-and-plan → 收官把关 → 集成验证 → 收尾完整工作流' \"$FIN\" && grep -qF '无新需求文档，合并前同样过收官把关与集成验证门槛' \"$FIN\""
 
-# 断言 17：分支纪律上移（需求方裁决 2026-11-03）——brainstorming 含 archived 冻结句与
+# 断言 17：分支纪律上移（需求方裁决 2026-11-03）——design-and-plan 含 archived 冻结句与
 # 改动分类句；FIN 分支纪律小节段尾含上位载体指向句
 ck "bs-archived-frozen" "grep -qF '归档后冻结零改动' \"$BS\" && grep -qF '不回写已归档文档' \"$BS\""
 ck "bs-change-classification" "grep -qF '收到新问题时先分类' \"$BS\" && grep -qF 'bugfix 路径' \"$BS\""
-ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN\" && grep -qF '实施只能在本需求分支上' \"$FIN\" && grep -qF '设计决策（存放位置与改动分类）归 brainstorming' \"$FIN\""
+ck "fin-discipline-upstream-pointer" "grep -qF '三规则的上位载体' \"$FIN\" && grep -qF '实施只能在本需求分支上' \"$FIN\" && grep -qF '设计决策（存放位置与改动分类）归 design-and-plan' \"$FIN\""
 
 # 断言 18：分支治理纪律——路由与冻结的上位落点（需求方拍板：三规则各归其位）
 USK="$REPO_ROOT/skills/using-superpowers/SKILL.md"
-BRS="$REPO_ROOT/skills/brainstorming/SKILL.md"
-TPL="$REPO_ROOT/skills/brainstorming/references/design-doc-template.md"
-ck "us-routing-feature-workflow" "grep -qF '验证方案按集成面判据决定是否产出' \"$USK\""
+BRS="$REPO_ROOT/skills/design-and-plan/SKILL.md"
+TPL="$REPO_ROOT/skills/design-and-plan/references/design-doc-template.md"
+ck "us-routing-feature-workflow" "grep -qF 'design.md + implementation.md + plan.md + verification.md + decisions.md' \"$USK\""
 ck "us-routing-feature-closeout-relay" "grep -qF 'requesting-code-review 收官把关' \"$USK\""
 ck "us-routing-fix-branch-gate" "grep -qF 'bugfix 分支上进行，合并前过收官把关与集成验证门槛' \"$USK\""
 ck "us-main-no-direct-dev" "grep -qF 'main/master 上不直接开发' \"$USK\""
@@ -227,7 +230,7 @@ ck "tpl-no-small-change" "! grep -qF '小改动' \"$TPL\" && ! grep -qF '简短�
 # 断言 20：产物目录唯一约定（需求方裁决 2026-11-03，spec-dir-convention）——
 # 正向：两技能固定句锚点在场；反向：两旧偏好句整句缺席、泛化短语缺席
 # （泛化短语「偏好优先」「偏好覆盖」经全仓核实 2026-11-04 零命中后纳入）
-ck "spec-dir-fixed-convention" "grep -qF '设计文档一律落此处' \"$BS\" && grep -qF '有软件仓库时计划一律落此处' \"$WP\""
+ck "spec-dir-fixed-convention" "grep -qF '设计文档一律落此处' \"$BS\" && grep -qF '全部居住在 \`docs/superpowers/specs/<date-feature>/\`' \"$WP\""
 ck "spec-dir-no-preference" "! grep -qF '需求方的偏好优先于以上两者' \"$BS\" && ! grep -qF '需求方对计划存放位置的偏好覆盖此默认值' \"$WP\" && ! grep -qF '偏好优先' \"$BS\" && ! grep -qF '偏好覆盖' \"$WP\" && ! grep -qF '偏好优先' \"$WP\" && ! grep -qF '偏好覆盖' \"$BS\""
 
 # 断言 21：流程纪律加固（workflow-discipline-hardening，2026-11-04）——
@@ -239,14 +242,14 @@ SDG="$REPO_ROOT/skills/systematic-debugging/SKILL.md"
 EP="$REPO_ROOT/skills/executing-plans/SKILL.md"
 SDD="$REPO_ROOT/skills/subagent-driven-development/SKILL.md"
 # using-superpowers——流程闸门与定性（Task 1）
-ck "wdh-us-routing-conditional" "grep -qF '验证方案按集成面判据决定是否产出' \"$USK\""
+ck "wdh-us-routing-conditional" "grep -qF 'design.md + implementation.md + plan.md + verification.md + decisions.md' \"$USK\""
 ck "wdh-us-scope-software" "grep -qF '只适用于软件开发类工作' \"$USK\""
 ck "wdh-us-announce-type" "grep -qF '用一句话宣布类型与依据' \"$USK\""
 ck "wdh-us-no-downgrade" "grep -qF '不构成降级理由' \"$USK\""
-ck "wdh-us-eleven-gates" "grep -qF '流程闸门的全部十一个环节' \"$USK\""
+ck "wdh-us-eleven-gates" "grep -qF '流程闸门的全部十个环节' \"$USK\""
 ck "wdh-us-exempt-impl-only" "grep -qF '可豁免的只有实现层的做法' \"$USK\""
-# writing-plans——无集成面的推导依据（Task 1）
-ck "wdh-wp-derivation" "grep -qF '把推导依据写进计划' \"$WP\""
+# 计划模板——无集成面的推导依据（Task 1）
+ck "wdh-wp-derivation" "grep -qF '把推导依据写进计划' \"$PT\""
 # using-git-worktrees——建树纪律（Task 2）
 ck "wdh-ugw-mandatory-tree" "grep -qF '一律建立专属工作树' \"$UGW\""
 ck "wdh-ugw-branch-prefix" "grep -qF '分支名带类型前缀' \"$UGW\""
@@ -257,8 +260,8 @@ ck "wdh-ugw-post-create-verify" "grep -qF '建树后核验合并基' \"$UGW\""
 ck "wdh-ugw-refuse-in-place" "grep -qF '说明隔离工作区与流程闸门的必要性' \"$UGW\""
 ck "wdh-ugw-env-failure-gate" "grep -qF '环境故障不解开闸门' \"$UGW\""
 ck "wdh-ugw-never-reuse" "grep -qF '绝不复用他人之树' \"$UGW\""
-# brainstorming——定性即建树（Task 2）
-ck "wdh-brs-no-bypass" "grep -qF '来绕开三件套' \"$BS\""
+# design-and-plan——定性即建树（Task 2）
+ck "wdh-brs-no-bypass" "grep -qF '来绕开五件套' \"$BS\""
 ck "wdh-brs-reclassify-defect" "grep -qF '设计期发现实为缺陷修复' \"$BS\""
 # systematic-debugging——修复链入口四态（Task 3）
 ck "wdh-sdg-tree-default" "grep -qF '定性即建默认工作树' \"$SDG\""
@@ -320,8 +323,8 @@ ck "wdh-no-skip-create-term" "! grep -qF '跳过创建' \"$UGW\""
 # 缺陷：计划已裁决接受的弱验证残余在收尾被再次请求裁决；文档保留待裁决标注
 ck "sdr-us-no-reask" "grep -qF '不得再次请求确认' \"$USK\" && grep -qF '已裁决（日期 + 结论）' \"$USK\""
 ck "sdr-us-status-sync" "grep -qF '不得保留「待裁决」「待追认」等与事实不符的标记' \"$USK\""
-ck "sdr-brs-status-sync" "grep -qF '回写设计文档中全部「待裁决」「待追认」「待需求方裁决」标注为已裁决' \"$BRS\""
-ck "sdr-wp-status-sync" "grep -qF '把全部「待需求方裁决」占位更新为裁决落定记录' \"$WP\""
+ck "sdr-brs-status-sync" "grep -qF '文档必须同步更新状态标注为已裁决' \"$BRS\""
+ck "sdr-wp-status-sync" "grep -qF '文档只留「待需求方裁决」占位' \"$WP\""
 
 # 断言组 23（dsc-）：技能库适用范围收敛（dev-scope-convergence，2026-11-04）
 MAP="$REPO_ROOT/docs/skills-map.md"
@@ -339,7 +342,7 @@ ck "dsc-us-scope-inside" "s=\$(grep -nF '<SCOPE>' \"$USK\" | cut -d: -f1); e=\$(
 ck "dsc-us-scope-text" "grep -qF '本技能只适用于软件开发类工作——包括代码、测试与项目文档。' \"$USK\" && grep -qF '按描述加载本技能的 harness：非软件开发类任务不触发加载。' \"$USK\" && grep -qF '无条件注入本技能的 harness：技能已加载，但其工作流不适用于非软件开发类任务——按用户指令正常应答。' \"$USK\""
 ck "dsc-us-part2" "grep -qF '# 开发工作流' \"$USK\""
 ck "dsc-us-1pct-text" "grep -qF '如果你认为哪怕只有 1% 的可能有一项技能适用于你正在做的事' \"$USK\""
-ck "dsc-us-eleven-gates" "grep -qF '流程闸门的全部十一个环节' \"$USK\""
+ck "dsc-us-eleven-gates" "grep -qF '流程闸门的全部十个环节' \"$USK\""
 ck "dsc-us-new-desc" "grep -qF '在开始任何软件开发类任务时使用' \"$USK\""
 ck "dsc-us-no-old-scope" "! grep -qF '只适用于软件开发项目' \"$USK\""
 ck "dsc-us-no-old-desc" "! grep -qF '在开始任何对话时使用' \"$USK\""
@@ -347,23 +350,23 @@ ck "dsc-us-no-old-request" "! grep -qF '收到开发类请求时' \"$USK\""
 ck "dsc-us-no-old-category" "! grep -qF '非开发任务' \"$USK\""
 
 # 正向：计划、头脑风暴、分派、调试、技能地图、项目说明、分支收尾
-ck "dsc-wp-new-scope" "grep -qF '计划只适用于软件开发类工作（含代码与项目文档）' \"$WP\" && grep -qF '计划只适用于软件开发类工作（含代码与项目文档）' \"$PT\""
+ck "dsc-wp-new-scope" "grep -qF '当你即将开始任何软件开发类的创造性工作' \"$WP\" && grep -qF '计划只适用于软件开发类工作（含代码与项目文档）' \"$PT\""
 ck "dsc-wp-no-old-scope" "! grep -qF '计划只适用于软件项目' \"$WP\" && ! grep -qF '计划只适用于软件项目' \"$PT\""
-ck "dsc-bs-new-desc" "grep -qF '在开始软件开发类的创造性工作之前' \"$BS\""
+ck "dsc-bs-new-desc" "grep -qF '软件开发类的创造性工作' \"$BS\""
 ck "dsc-bs-no-old-desc" "! grep -qF '在做任何创造性工作之前' \"$BS\""
 ck "dsc-bs-new-l8" "grep -qF '在任何软件开发产物被构建出来之前' \"$BS\""
 ck "dsc-bs-no-old-l8" "! grep -qF '在任何东西被构建出来之前' \"$BS\""
 ck "dsc-bs-no-art" "! grep -qF '一件艺术品的媒介' \"$BS\""
 ck "dsc-bs-no-software-project" "! grep -qF '软件项目' \"$BS\""
-ck "dsc-bs-new-visual1" "grep -qF '一个屏幕、一个页面、一个弹窗、一份报表' \"$BS\""
+ck "dsc-bs-new-visual1" "grep -qF '一个屏幕、一个页面、一个弹窗、一份报表' \"$DD\""
 ck "dsc-bs-old-visual1" "! grep -qF '一个屏幕、一个页面、一份打印件、一块标牌' \"$BS\""
-ck "dsc-bs-new-visual2" "grep -qF '页面的、面板的、流程的' \"$BS\""
+ck "dsc-bs-new-visual2" "grep -qF '页面的、面板的、流程的' \"$DD\""
 ck "dsc-bs-old-visual2" "! grep -qF '屏幕的、房间的、日程的' \"$BS\""
-ck "dsc-bs-new-visual3" "grep -qF '一张架构图、一条时间线、一张关系图' \"$BS\""
+ck "dsc-bs-new-visual3" "grep -qF '一张架构图、一条时间线、一张关系图' \"$DD\""
 ck "dsc-bs-old-visual3" "! grep -qF '一张图、一条时间线、一幅地图' \"$BS\""
-ck "dsc-bs-new-visual4" "grep -qF '比如一个页面、一个屏幕、一份报表或一个弹窗？' \"$BS\""
+ck "dsc-bs-new-visual4" "grep -qF '比如一个页面、一个屏幕、一份报表或一个弹窗？' \"$DD\""
 ck "dsc-bs-old-visual4" "! grep -qF '比如一个页面、一个屏幕、一份日程或一份打印件？' \"$BS\""
-ck "dsc-bs-retained-artifact" "grep -qF '一个应用的平台、编程语言和库。' \"$BS\""
+ck "dsc-bs-retained-artifact" "grep -qF '一个应用的平台、编程语言和库。' \"$DD\""
 ck "dsc-bs-ref-flow-gate" "grep -qF '流程闸门与定性' \"$BS\" && grep -qF '## 流程闸门与定性' \"$USK\""
 ck "dsc-dpa-new" "grep -qF '处理的软件开发任务时使用' \"$DPA\""
 ck "dsc-dpa-old" "! grep -qF '当面对 2 个以上相互独立、可在没有共享状态或顺序依赖的情况下处理的任务时使用' \"$DPA\""
@@ -371,7 +374,7 @@ ck "dsc-sd-new" "grep -qF '适用于任何软件开发技术问题：' \"$SDB\""
 ck "dsc-sd-old" "! grep -qF '适用于任何技术问题：' \"$SDB\""
 ck "dsc-map-new" "grep -qF '任何软件开发类创造性工作开始之前——功能、组件、计划。' \"$MAP\""
 ck "dsc-map-old" "! grep -qF '任何创造性工作开始之前——功能、组件、计划，软件内外都算。' \"$MAP\" && ! grep -qF '软件内外' \"$MAP\" && ! grep -qF '非软件项目' \"$MAP\""
-ck "dsc-map-retained" "grep -qF '三件套' \"$MAP\" && grep -qF 'bugfix 路径' \"$MAP\""
+ck "dsc-map-retained" "grep -qF '五件套' \"$MAP\" && grep -qF 'bugfix 路径' \"$MAP\""
 ck "dsc-readme-new" "grep -qF '在开始软件开发类构建之前激活' \"$README\" && grep -qF 'agent 在做任何软件开发任务之前都会检查有无相关技能。' \"$README\""
 ck "dsc-readme-old" "! grep -qF '在做任何任务之前' \"$README\" && ! grep -qF '在构建任何东西之前激活' \"$README\""
 ck "dsc-fin-new" "grep -qF '开发工作流' \"$FIN\" && grep -qF 'archived 冻结的存放策略' \"$FIN\" && grep -qF '# 开发工作流' \"$USK\""
@@ -382,10 +385,10 @@ ck "dsc-fin-old" "! grep -qF '技能优先级' \"$FIN\""
 # 落点级：容量池引导须落在 IV 初始化描述句内（文件级 grep 无法区分初始化句与执行规则句两处落点）；
 # 回潮：三条旧串对技能文档全库反向断言（反向模式同断言 12e，全库口径不排除任何 skills/ 子路径；
 # 匹配模式为精确串，除递归 -r 与固定串 -F 外不加其他参数）
-for f in "$WP" "$PT" "$BK" "$WB" "$MB"; do
+for f in "$VT" "$PSR" "$BK" "$WB" "$MB"; do
   ck "scene-self-contained:$(basename "$(dirname "$f")")/$(basename "$f")" "grep -qF '场景自包含' \"$f\""
 done
-for f in "$PT" "$BK" "$WB" "$MB"; do
+for f in "$VT" "$BK" "$WB" "$MB"; do
   ck "anchor-parallel-safety:$(basename "$(dirname "$f")")/$(basename "$f")" "grep -qF '并行安全' \"$f\""
 done
 ck "iv-default-capacity" "grep -qF '默认容量 1' \"$IV\""
@@ -399,6 +402,90 @@ ck "rs-serial-reason-annotation" "grep -qF '标注串行原因' \"$RS\""
 for s in '顺序依赖显式化' '标注可并行' '顺序依赖链'; do
   ck "no-resurgence:$s" "! grep -rqF '$s' \"$REPO_ROOT/skills/\""
 done
+
+# 断言组 25（dap-，design-and-plan 合并收尾，2026-11-05 Task 7）——旧技能目录删除后的
+# 收尾机械验证（对应 verification.md S1/S3/S6/S7）。
+# S1：旧名零残留（-i 口径）；豁免 scripts/server.cjs 品牌 URL 行与 frame-template.html
+# 品牌标题行（字节一致约束，Task 7 裁决 2），豁免在断言实现中内置（排除模式）
+ck "dap-no-legacy-refs" "! { grep -rniE 'brainstorming|writing-plans' \"$REPO_ROOT/skills/\" \"$REPO_ROOT/hooks/\" \"$REPO_ROOT/.claude-plugin/\" || true; } | grep -vE 'superpowers-visual-brainstorming-logo\\.png|<title>Superpowers Brainstorming</title>'"
+# S7：新技能在位——frontmatter name、五触发词（头脑风暴/设计讨论/我们来构建/实施计划/写计划）
+# 锚定在 description 行、以「当……时使用」开头、长度 ≤1024 字符（字节口径从严）
+ck "dap-frontmatter-name" "grep -q '^name: design-and-plan' \"$BS\""
+for w in 头脑风暴 设计讨论 我们来构建 实施计划 写计划; do
+  ck "dap-trigger-word:$w" "grep '^description: ' \"$BS\" | grep -qF '$w'"
+done
+ck "dap-desc-opens-when-use" "grep -q '^description: 当' \"$BS\" && grep '^description: ' \"$BS\" | grep -qF '时使用'"
+ck "dap-desc-length-le-1024" "[ \"\$(sed -n 's/^description: //p' \"$BS\" | wc -c)\" -le 1024 ]"
+# S6：hook 注入链——session-start 语法检查 + 真实运行注入产物含 design-and-plan、不含旧名
+ck "dap-hook-bash-n" "bash -n \"$REPO_ROOT/hooks/session-start\""
+ck "dap-hook-inject-contains-dap" "CLAUDE_PLUGIN_ROOT=\"$REPO_ROOT\" bash \"$REPO_ROOT/hooks/session-start\" | grep -qF 'design-and-plan'"
+ck "dap-hook-inject-no-legacy" "! CLAUDE_PLUGIN_ROOT=\"$REPO_ROOT\" bash \"$REPO_ROOT/hooks/session-start\" | grep -qiF 'superpowers:brainstorming'"
+# S3：新槽位检查红绿演练——样例内联构造于临时目录（缺形态声明样例报红且报在形态声明项、
+# 含槽位样例通过）；演练毕清理临时目录
+DAPS="$REPO_ROOT/skills/design-and-plan/scripts/check-doc-structure.sh"
+DAPTMP="$(mktemp -d)"
+cat > "$DAPTMP/design-slot-good.md" <<'EOF'
+# 设计文档样例
+
+## 0. 形态声明
+
+新建 `docs/superpowers/specs/<date-feature>/` 五件套。
+
+## 背景
+
+样例背景。
+EOF
+cat > "$DAPTMP/design-slot-missing.md" <<'EOF'
+# 设计文档样例
+
+## 背景
+
+样例背景。
+EOF
+cat > "$DAPTMP/plan-slot-good.md" <<'EOF'
+# 实施计划样例
+
+实现设计见同目录 implementation.md。
+
+## 任务依赖图
+
+Task 1 → Task 2（顺序依赖）。
+
+### Task 1: 样例任务
+
+职责：完成样例改动。
+EOF
+cat > "$DAPTMP/plan-slot-depgraph-missing.md" <<'EOF'
+# 实施计划样例
+
+实现设计见同目录 implementation.md。
+
+### Task 1: 样例任务
+
+职责：完成样例改动。
+EOF
+cat > "$DAPTMP/plan-slot-ptr-missing.md" <<'EOF'
+# 实施计划样例
+
+## 任务依赖图
+
+Task 1（单任务，无依赖）。
+
+### Task 1: 样例任务
+
+职责：完成样例改动。
+EOF
+ck "dap-slot-good-sample-passes" "bash \"$DAPS\" \"$DAPTMP/design-slot-good.md\" >/dev/null"
+ck "dap-slot-missing-sample-fails" "! bash \"$DAPS\" \"$DAPTMP/design-slot-missing.md\" >/dev/null"
+ck "dap-slot-missing-reports-form-decl" "{ bash \"$DAPS\" \"$DAPTMP/design-slot-missing.md\" || true; } 2>&1 | grep -qF '缺形态声明槽位'"
+# 任务依赖图槽位红绿（plan 文档含 Task 小节必须有含该字样的标题行）
+ck "dap-slot-plan-good-sample-passes" "bash \"$DAPS\" \"$DAPTMP/plan-slot-good.md\" >/dev/null"
+ck "dap-slot-depgraph-missing-fails" "! bash \"$DAPS\" \"$DAPTMP/plan-slot-depgraph-missing.md\" >/dev/null"
+ck "dap-slot-depgraph-missing-reports-depgraph" "{ bash \"$DAPS\" \"$DAPTMP/plan-slot-depgraph-missing.md\" || true; } 2>&1 | grep -qF '「任务依赖图」槽位'"
+# 文首指针句槽位红绿（plan 文档指针句须出现在首个 Task 小节之前）
+ck "dap-slot-ptr-missing-fails" "! bash \"$DAPS\" \"$DAPTMP/plan-slot-ptr-missing.md\" >/dev/null"
+ck "dap-slot-ptr-missing-reports-ptr" "{ bash \"$DAPS\" \"$DAPTMP/plan-slot-ptr-missing.md\" || true; } 2>&1 | grep -qF '缺文首指针句'"
+rm -rf "$DAPTMP"
 
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2

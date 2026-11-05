@@ -279,6 +279,16 @@ frame 模板为你的内容提供以下 CSS 类：
 - 迭代时追加版本后缀，如 `layout-v2.html`、`layout-v3.html`
 - 服务器按修改时间提供最新的文件
 
+## 定稿冻结
+
+需求方每确认一块视觉稿，立即将它的 HTML 落盘到 `specs/<date-feature>/mockups/<界面名>.html` 并随仓库提交——不要攒到会话结束才补。截图可用无头浏览器生成：
+
+```bash
+chrome --headless --screenshot=<输出.png> --window-size=<宽>,<高> <file://路径>
+```
+
+design.md 的界面规格章只允许引用已冻结文件，禁止引用 `.superpowers/brainstorm/` 会话临时目录——临时目录不随仓库走，指向它的效果图是「无锚引用」，工程师读文档时看不到被指的视觉稿。
+
 ## 清理
 
 ```bash

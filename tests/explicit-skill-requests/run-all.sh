@@ -36,9 +36,10 @@ else
 fi
 echo ""
 
-# Test: please use brainstorming
+# Test: please use brainstorming — 旧触发词输入保留（触发词兼容验证点）：
+# 用户点名 brainstorming 时应路由到合并后的设计技能 design-and-plan
 echo ">>> Test 3: please-use-brainstorming"
-if "$SCRIPT_DIR/run-test.sh" "brainstorming" "$PROMPTS_DIR/please-use-brainstorming.txt"; then
+if "$SCRIPT_DIR/run-test.sh" "design-and-plan" "$PROMPTS_DIR/please-use-brainstorming.txt"; then
     PASSED=$((PASSED + 1))
     RESULTS="$RESULTS\nPASS: please-use-brainstorming"
 else
