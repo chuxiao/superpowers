@@ -91,7 +91,7 @@ ck "pt-verification-file-section" "grep -qF '## 验证方案文件' \"$PT\""
 ck "pt-points-to-verification" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$PT\""
 ck "pt-provenance" "grep -qF '每条期望标注设计出处（设计文档章节或需求条目），无出处不得入方案' \"$PT\""
 ck "pt-bidirectional-map" "grep -qF '集成面与场景清单的双向映射表' \"$PT\""
-ck "pt-content-requirements" "grep -qF '内容要求六项逐项落实——确定性固定策略、保真度声明、副作用隔离、顺序依赖显式化、既有登记册查重、失败证据采集' \"$PT\""
+ck "pt-content-requirements" "grep -qF '内容要求六项逐项落实——确定性固定策略、保真度声明、副作用隔离、场景自包含、既有登记册查重、失败证据采集' \"$PT\""
 
 # 断言 9：T1 承重句——免责句、增量重跑、Step 1 失败阻断 Step 2、单独调用、
 # 重跑一次/偶发机制、期望修改铁律
@@ -114,7 +114,7 @@ for w in 集成层 接口兼容层 可运行层 端到端层 单测层; do
 done
 
 # 断言 11：T1 方案质量十项引用（四性判据 + 内容要求六项）+ 快速放行判据句
-for w in 出处锚定 双向映射 粒度判据 可操作性判据 确定性固定策略 保真度声明 副作用隔离 顺序依赖显式化 既有登记册查重 失败证据采集; do
+for w in 出处锚定 双向映射 粒度判据 可操作性判据 确定性固定策略 保真度声明 副作用隔离 场景自包含 既有登记册查重 失败证据采集; do
   ck "iv-quality-term:$w" "grep -qF '$w' \"$IV\""
 done
 ck "iv-fast-release-source" "grep -qF '真值来源是控制者对分支改动面的推导' \"$IV\""
@@ -376,6 +376,26 @@ ck "dsc-readme-new" "grep -qF '在开始软件开发类构建之前激活' \"$RE
 ck "dsc-readme-old" "! grep -qF '在做任何任务之前' \"$README\" && ! grep -qF '在构建任何东西之前激活' \"$README\""
 ck "dsc-fin-new" "grep -qF '开发工作流' \"$FIN\" && grep -qF 'archived 冻结的存放策略' \"$FIN\" && grep -qF '# 开发工作流' \"$USK\""
 ck "dsc-fin-old" "! grep -qF '技能优先级' \"$FIN\""
+
+# 断言组 24（场景自包含，2026-11-05）：验证场景自包含判据与并行安全/容量池语义锚——
+# 正向：判据名与新语义锚在场（Task 2 改 PT/BK/WB/MB、Task 3 改 IV/RS、Task 4 改 WP 后转绿）；
+# 落点级：容量池引导须落在 IV 初始化描述句内（文件级 grep 无法区分初始化句与执行规则句两处落点）；
+# 回潮：三条旧串对技能文档全库反向断言（反向模式同断言 12e，全库口径不排除任何 skills/ 子路径；
+# 匹配模式为精确串，除递归 -r 与固定串 -F 外不加其他参数）
+for f in "$WP" "$PT" "$BK" "$WB" "$MB"; do
+  ck "scene-self-contained:$(basename "$(dirname "$f")")/$(basename "$f")" "grep -qF '场景自包含' \"$f\""
+done
+for f in "$PT" "$BK" "$WB" "$MB"; do
+  ck "anchor-parallel-safety:$(basename "$(dirname "$f")")/$(basename "$f")" "grep -qF '并行安全' \"$f\""
+done
+ck "iv-default-capacity" "grep -qF '默认容量 1' \"$IV\""
+ck "rs-default-capacity" "grep -qF '默认容量 1' \"$RS\""
+ck "iv-capacity-pool" "grep -qF '容量池' \"$IV\""
+ck "rs-capacity-pool" "grep -qF '容量池' \"$RS\""
+ck "iv-init-line-capacity-pool" "grep '各层一行怎么跑' \"$IV\" | grep -qF '容量池'"
+for s in '顺序依赖显式化' '标注可并行' '顺序依赖链'; do
+  ck "no-resurgence:$s" "! grep -rqF '$s' \"$REPO_ROOT/skills/\""
+done
 
 if [ "$fail" -ne 0 ]; then
   echo "Integration gate or regression sweep drifted from the design. See FAIL lines above." >&2
