@@ -378,7 +378,7 @@ ck "dsc-fin-new" "grep -qF '开发工作流' \"$FIN\" && grep -qF 'archived 冻�
 ck "dsc-fin-old" "! grep -qF '技能优先级' \"$FIN\""
 
 # 断言组 24（场景自包含，2026-11-05）：验证场景自包含判据与并行安全/容量池语义锚——
-# 正向：判据名与新语义锚在场（Task 2 改 PT/BK/WB/MB、Task 3 改 IV/RS、Task 4 改 WP 后转绿）；
+# 正向：判据名与新语义锚在场（Task 2 改 WP/PT、Task 3 改 IV/RS、Task 4 改 BK/WB/MB 后转绿）；
 # 落点级：容量池引导须落在 IV 初始化描述句内（文件级 grep 无法区分初始化句与执行规则句两处落点）；
 # 回潮：三条旧串对技能文档全库反向断言（反向模式同断言 12e，全库口径不排除任何 skills/ 子路径；
 # 匹配模式为精确串，除递归 -r 与固定串 -F 外不加其他参数）
@@ -393,6 +393,9 @@ ck "rs-default-capacity" "grep -qF '默认容量 1' \"$RS\""
 ck "iv-capacity-pool" "grep -qF '容量池' \"$IV\""
 ck "rs-capacity-pool" "grep -qF '容量池' \"$RS\""
 ck "iv-init-line-capacity-pool" "grep '各层一行怎么跑' \"$IV\" | grep -qF '容量池'"
+# 无并行能力降级语义锚（2026-11-05 修复轮）：执行规则句须含串行降级与串行原因标注
+ck "iv-serial-reason-annotation" "grep -qF '标注串行原因' \"$IV\""
+ck "rs-serial-reason-annotation" "grep -qF '标注串行原因' \"$RS\""
 for s in '顺序依赖显式化' '标注可并行' '顺序依赖链'; do
   ck "no-resurgence:$s" "! grep -rqF '$s' \"$REPO_ROOT/skills/\""
 done
