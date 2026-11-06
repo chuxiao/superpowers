@@ -295,6 +295,8 @@ design.md 的界面规格章只允许引用已冻结文件，禁止引用 `.supe
 bash scripts/stop-server.sh $SESSION_DIR
 ```
 
+`$SESSION_DIR` 是 `screen_dir` 的父目录（启动返回 JSON 中 `screen_dir` 去掉末尾的 `/content` 即得）。
+
 如果会话使用了 `--project-dir`，视觉稿文件会持久保存在 `.superpowers/brainstorm/` 中以供日后参考。只有 `/tmp` 会话在停止时会被删除。
 
 ## 参考
