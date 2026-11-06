@@ -22,7 +22,6 @@ FIN="$REPO_ROOT/skills/finishing-a-development-branch/SKILL.md"
 BS="$REPO_ROOT/skills/design-and-plan/SKILL.md"
 WP="$REPO_ROOT/skills/design-and-plan/SKILL.md"
 PT="$REPO_ROOT/skills/design-and-plan/references/plan-template.md"
-PSR="$REPO_ROOT/skills/design-and-plan/references/plan-self-review.md"
 MERMAID="$REPO_ROOT/skills/design-and-plan/scripts/check-mermaid.sh"
 VT="$REPO_ROOT/skills/design-and-plan/references/verification-template.md"
 DD="$REPO_ROOT/skills/design-and-plan/references/dialogue-discipline.md"
@@ -82,11 +81,13 @@ ck "fin-verification-source" "grep -qF 'docs/superpowers/specs/<date-feature>/ve
 ck "fin-no-merge-on-keep" "grep -qF '「保持分支原样」不并入' \"$FIN\""
 
 # 断言 7：计划侧验证方案指针句 + 触发判据句 + 三件套保存句 + 自审第十项（核查对象 verification.md）
-ck "wp-plan-requirement" "grep -qF '计划存在跨任务组装点或触及外部接口时产出（触发判据见 \`references/plan-template.md\`「验证方案文件」段）' \"$WP\""
-ck "wp-verification-pointer" "grep -qF '模板见 \`references/verification-template.md\`' \"$WP\""
+# （2026-11-06 活动节重组：verification 小节散归后，触发判据句锚随内容走改指「验证用例」开场行；
+# 验证模板指针句同口径改指其「全文与骨架见」句；自审第十项随独立自审清单文件并回 plan-template 改指 PT）
+ck "wp-plan-requirement" "grep -qF '产出：verification.md（触发判据见 references/plan-template.md「验证方案文件」段）' \"$WP\""
+ck "wp-verification-pointer" "grep -qF '全文与骨架见 \`references/verification-template.md\`' \"$WP\""
 ck "wp-saves-verification" "grep -qF '计划存在跨任务组装点或触及外部接口 → 同目录另产出 verification.md' \"$PT\""
-ck "wp-self-review-item-10" "grep -qF '**10. 验证方案专项：**' \"$PSR\""
-ck "wp-self-review-target" "grep -qF '计划产出 verification.md 时逐项核对' \"$PSR\""
+ck "wp-self-review-item-10" "grep -qF '**10. 验证方案专项：**' \"$PT\""
+ck "wp-self-review-target" "grep -qF '计划产出 verification.md 时逐项核对' \"$PT\""
 ck "wp-no-plan-no-requirement" "grep -qF '纯单模块无接口时不产出该文件' \"$WP\""
 
 # 断言 8：plan-template「验证方案文件」说明段——存在性、指向 verification.md、出处标注、双向映射、内容要求句
@@ -385,7 +386,7 @@ ck "dsc-fin-old" "! grep -qF '技能优先级' \"$FIN\""
 # 落点级：容量池引导须落在 IV 初始化描述句内（文件级 grep 无法区分初始化句与执行规则句两处落点）；
 # 回潮：三条旧串对技能文档全库反向断言（反向模式同断言 12e，全库口径不排除任何 skills/ 子路径；
 # 匹配模式为精确串，除递归 -r 与固定串 -F 外不加其他参数）
-for f in "$VT" "$PSR" "$BK" "$WB" "$MB"; do
+for f in "$VT" "$PT" "$BK" "$WB" "$MB"; do
   ck "scene-self-contained:$(basename "$(dirname "$f")")/$(basename "$f")" "grep -qF '场景自包含' \"$f\""
 done
 for f in "$VT" "$BK" "$WB" "$MB"; do
