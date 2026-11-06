@@ -224,7 +224,7 @@ ck "fin-discipline-pointer" "grep -qF '上位载体' \"$FIN\""
 # 断言 19：豁免清零与纪律句在场（需求方裁决 2026-11-03）——工作流技能正文六条豁免短语缺席、
 # 三条纪律句在场；设计文档模板「小改动」「简短版」词级缺席
 ck "brs-no-exemption-phrases" "! grep -qF '简短版' \"$BRS\" && ! grep -qF '不做独立审读' \"$BRS\" && ! grep -qF '不进入完整计划流程' \"$BRS\" && ! grep -qF '判错则升级' \"$BRS\" && ! grep -qF '这项技能即告完成' \"$BRS\" && ! grep -qF '也随之解除' \"$BRS\""
-ck "brs-discipline-sentences" "grep -qF '跳过的是对话，不是流程' \"$BRS\" && grep -qF '不解除闸门' \"$BRS\" && grep -qF '所有改动统一完整版' \"$BRS\""
+ck "brs-discipline-sentences" "grep -qF '跳过的是对话，不是流程' \"$DD\" && grep -qF '不解除闸门' \"$BRS\" && grep -qF '所有改动统一完整版' \"$BRS\""
 ck "tpl-no-small-change" "! grep -qF '小改动' \"$TPL\" && ! grep -qF '简短版' \"$TPL\""
 
 # 断言 20：产物目录唯一约定（需求方裁决 2026-11-03，spec-dir-convention）——

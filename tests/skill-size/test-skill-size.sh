@@ -9,11 +9,14 @@
 #
 # Measures bytes, which is stricter than characters for files with non-ASCII
 # text. Usage: tests/skill-size/test-skill-size.sh
+#
+# 门值依据：design-and-plan 为三合一合并技能（对话纪律 + 计划原则 + 实现设计规则），
+# 2026-11-06 经需求方确认上调至 24000；references 外置纪律不变。
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-LIMIT=20000
+LIMIT=24000
 
 failed=0
 for skill in "$REPO_ROOT"/skills/*/SKILL.md; do
