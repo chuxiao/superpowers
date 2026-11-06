@@ -11,7 +11,7 @@ description: 当你即将开始任何软件开发类的创造性工作（创建�
 
 ## 收到新问题时先分类
 
-分类判据见 superpowers:using-superpowers 的「流程闸门与定性」，结论用一句话宣布（类型 + 依据）。新 feature 或新设计 → 走本技能完整流程（建新 `docs/superpowers/specs/<date-feature>/` 五件套）；缺陷修复 → bugfix 路径（修复分支修复 + 合并前过收官把关与集成验证门槛，不建需求目录）。小 feature 不得说成 bugfix 来绕开五件套；设计期发现实为缺陷修复 → 重定性为 bugfix，转修复链，工作树保留改名。
+分类判据见 superpowers:using-superpowers 的「流程闸门与定性」，结论用一句话宣布（类型 + 依据）。新 feature 或新设计 → 走本技能完整流程（建新 `docs/superpowers/specs/<date-feature>/` 五件套）；**定性即建树：基于 main 建分支（git checkout -b feature/<主题>）并调 superpowers:using-git-worktrees 建隔离工作树——全部需求产物只落在本需求分支，基线检出（main/master）禁止落盘任何需求产物；**缺陷修复 → bugfix 路径（修复分支修复 + 合并前过收官把关与集成验证门槛，不建需求目录）。小 feature 不得说成 bugfix 来绕开五件套；设计期发现实为缺陷修复 → 重定性为 bugfix，转修复链，工作树保留改名。
 
 ## 实施顺序
 
@@ -113,7 +113,7 @@ verification.md 用场景证明做成的东西就是 design.md 承诺的。写�
 
 **所有改动统一完整版：** 无论规模大小，一律写全套五件：各模板槽位齐备，自查、审读、呈报确认、执行交接逐环节照走。
 
-**存放位置：** 有软件仓库时，存放为 `docs/superpowers/specs/<date-feature>/design.md`（`<date-feature>` = `YYYY-MM-DD-<主题>`，目录随需求建立）并提交。否则，询问。此目录无例外：有软件仓库时设计文档一律落此处，不接受需求方另行指定——任何来源的位置指定（含对话指定与仓库自身的其他文档惯例）均不改变落盘位置。若需求方仍指定了其他位置，按本目录落盘，并明确告知设计文档已落约定目录（落点）、该指定未被采用；不发起询问、不等待确认。archived/（`docs/superpowers/archived/`）归档后冻结零改动，今后设计决策随新 feature 的 design.md 走，不回写已归档文档。
+**存放位置：** 有软件仓库时，存放为 `docs/superpowers/specs/<date-feature>/design.md`（`<date-feature>` = `YYYY-MM-DD-<主题>`，目录随需求建立）并提交。否则，询问。落盘前置核验：git branch --show-current 必须是本需求分支——基线检出（main/master）落盘即违规，先建树再落盘。此目录无例外：有软件仓库时设计文档一律落此处，不接受需求方另行指定——任何来源的位置指定（含对话指定与仓库自身的其他文档惯例）均不改变落盘位置。若需求方仍指定了其他位置，按本目录落盘，并明确告知设计文档已落约定目录（落点）、该指定未被采用；不发起询问、不等待确认。archived/（`docs/superpowers/archived/`）归档后冻结零改动，今后设计决策随新 feature 的 design.md 走，不回写已归档文档。
 
 ## 规格的自查与审读
 
