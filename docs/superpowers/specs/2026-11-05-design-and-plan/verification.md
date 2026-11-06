@@ -37,7 +37,7 @@
 
 | 期望 | 出处 |
 |------|------|
-| skills/ 下零命中（skills/design-and-plan/** 内亦不得出现两个旧技能名——迁移与改造后的全部新文件含 references/ 均无例外） | plan.md Task 6 验收、Task 7 边界条件 |
+| skills/ 下零命中（skills/design-and-plan/** 内亦不得出现两个旧技能名）——**裁决记录（2026-11-05）**：scripts/server.cjs:106 品牌 URL 与 scripts/frame-template.html:5 品牌 title 两行豁免（字节迁移约束优先，原样迁移的必然携带；dap- 断言按行级豁免内置） | plan.md Task 6 验收、Task 7 边界条件 |
 | hooks/ 与 .claude-plugin/ 零命中 | plan.md Task 7 边界条件 |
 | RELEASE-NOTES.md / archived/ / docs/plans/ 不在扫描口径（历史不改写，plan.md 约束章） | 方案 §7 迁移注意 |
 

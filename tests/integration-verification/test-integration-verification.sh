@@ -80,19 +80,24 @@ ck "fin-no-merge-non-main" "grep -qF '基准分支不是 main/master' \"$FIN\""
 ck "fin-verification-source" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$FIN\""
 ck "fin-no-merge-on-keep" "grep -qF '「保持分支原样」不并入' \"$FIN\""
 
-# 断言 7：计划侧验证方案指针句 + 触发判据句 + 三件套保存句 + 自审第十项（核查对象 verification.md）
+# 断言 7：计划侧验证方案指针句 + 触发判据句 + 三件套保存句（核查对象 verification.md）
 # （2026-11-06 活动节重组：verification 小节散归后，触发判据句锚随内容走改指「验证用例」开场行；
-# 验证模板指针句同口径改指其「全文与骨架见」句；自审第十项随独立自审清单文件并回 plan-template 改指 PT）
-ck "wp-plan-requirement" "grep -qF '产出：verification.md（触发判据见 references/plan-template.md「验证方案文件」段）' \"$WP\""
+# 验证模板指针句同口径改指其「全文与骨架见」句。
+# 2026-11-06 最终对账：plan-template 经需求方定稿收缩（无验证方案文件段、无自审节），触发判据与
+# 同目录保存落点权威归 verification-template——wp-plan-requirement / wp-saves-verification 锚改指 VT；
+# wp-self-review-item-10 / wp-self-review-target 退役删除：13 项自审清单不再以清单形态承载
+# （plan-self-review.md 已删、PT 自审节已移除），守护对象不存在）
+ck "wp-plan-requirement" "grep -qF '计划存在跨任务组装点或触及外部接口 → 产出 verification.md' \"$VT\""
 ck "wp-verification-pointer" "grep -qF '全文与骨架见 \`references/verification-template.md\`' \"$WP\""
-ck "wp-saves-verification" "grep -qF '计划存在跨任务组装点或触及外部接口 → 同目录另产出 verification.md' \"$PT\""
-ck "wp-self-review-item-10" "grep -qF '**10. 验证方案专项：**' \"$PT\""
-ck "wp-self-review-target" "grep -qF '计划产出 verification.md 时逐项核对' \"$PT\""
+ck "wp-saves-verification" "grep -qF '与 design.md、plan.md 同目录' \"$VT\""
 ck "wp-no-plan-no-requirement" "grep -qF '纯单模块无接口时不产出该文件' \"$WP\""
 
-# 断言 8：plan-template「验证方案文件」说明段——存在性、指向 verification.md、出处标注、双向映射、内容要求句
-ck "pt-verification-file-section" "grep -qF '## 验证方案文件' \"$PT\""
-ck "pt-points-to-verification" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$PT\""
+# 断言 8：验证方案触发判据、路径与内容要求句——出处标注、双向映射、内容要求句锚 $VT 不变；
+# pt-verification-file-section（PT「## 验证方案文件」段存在性）经需求方定稿移除该段而退役，
+# 触发判据权威落点 VT，新建 vt-trigger-criteria-section 保证「触发判据有锚」语义不断（2026-11-06 最终对账）；
+# pt-points-to-verification 句锚不变、锚文件随权威落点改指 VT
+ck "vt-trigger-criteria-section" "grep -qF '## 产出判据' \"$VT\""
+ck "pt-points-to-verification" "grep -qF 'docs/superpowers/specs/<date-feature>/verification.md' \"$VT\""
 ck "pt-provenance" "grep -qF '期望以表格呈现并附出处标注列——无出处不得入方案' \"$VT\""
 ck "pt-bidirectional-map" "grep -qF '集成面与场景清单的双向映射表' \"$VT\""
 ck "pt-content-requirements" "grep -qF '内容要求六项逐项落实——确定性固定策略、保真度声明、副作用隔离、场景自包含、既有登记册查重、失败证据采集' \"$VT\""
@@ -249,8 +254,8 @@ ck "wdh-us-announce-type" "grep -qF '用一句话宣布类型与依据' \"$USK\"
 ck "wdh-us-no-downgrade" "grep -qF '不构成降级理由' \"$USK\""
 ck "wdh-us-eleven-gates" "grep -qF '流程闸门的全部十个环节' \"$USK\""
 ck "wdh-us-exempt-impl-only" "grep -qF '可豁免的只有实现层的做法' \"$USK\""
-# 计划模板——无集成面的推导依据（Task 1）
-ck "wdh-wp-derivation" "grep -qF '把推导依据写进计划' \"$PT\""
+# 计划模板——无集成面的推导依据（Task 1；2026-11-06 最终对账：推导依据句权威落点 VT，锚随内容改指，句面不变）
+ck "wdh-wp-derivation" "grep -qF '把推导依据写进计划' \"$VT\""
 # using-git-worktrees——建树纪律（Task 2）
 ck "wdh-ugw-mandatory-tree" "grep -qF '一律建立专属工作树' \"$UGW\""
 ck "wdh-ugw-branch-prefix" "grep -qF '分支名带类型前缀' \"$UGW\""
@@ -386,7 +391,8 @@ ck "dsc-fin-old" "! grep -qF '技能优先级' \"$FIN\""
 # 落点级：容量池引导须落在 IV 初始化描述句内（文件级 grep 无法区分初始化句与执行规则句两处落点）；
 # 回潮：三条旧串对技能文档全库反向断言（反向模式同断言 12e，全库口径不排除任何 skills/ 子路径；
 # 匹配模式为精确串，除递归 -r 与固定串 -F 外不加其他参数）
-for f in "$VT" "$PT" "$BK" "$WB" "$MB"; do
+# （2026-11-06 最终对账：「场景自包含」判据权威落点 VT，plan-template 定稿后不再承载该句面——PT 移出本圈）
+for f in "$VT" "$BK" "$WB" "$MB"; do
   ck "scene-self-contained:$(basename "$(dirname "$f")")/$(basename "$f")" "grep -qF '场景自包含' \"$f\""
 done
 for f in "$VT" "$BK" "$WB" "$MB"; do

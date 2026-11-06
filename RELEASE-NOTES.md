@@ -1,5 +1,24 @@
 # Superpowers Release Notes
 
+## v7.1.0 (2026-11-06)
+
+本版本将 brainstorming 与 writing-plans 合并为单一技能 **design-and-plan**，并引入四件套规格产物与单确认门。（来源：cc-model 项目全流程复盘；需求方与 Claude 逐条讨论定案。）
+
+### design-and-plan（新技能，替代 brainstorming + writing-plans）
+
+- **四件套规格：** design.md（共识文档）/ implementation.md（技术权威，接口六段式）/ plan.md（执行契约）/ verification.md（验证方案），外加 decisions.md（裁决日志，追加式）。
+- **单确认门：** 全套规格一次确认，确认前不得实施；裁决与确认分两条消息呈报——先裁决，需求方回复后单独发确认请求。
+- **统一审读：** 四件齐审 + 影响阈值三级 + 条目预算 ≤15 + 复读收敛上限 3 + 建议替换文本。
+- **按活动组织主线：** 弄清他们要什么 → 实现设计 → 任务拆分 → 验证用例 → 成文；原则住 SKILL.md，成文纪律归模板。
+- **触发词兼容：** 头脑风暴、设计讨论、我们来构建、写计划均命中 design-and-plan。
+
+### 其他
+
+- 引用同步 8 个在役文件；断言资产锚点随内容同步 + 新增 dap- 断言组；tests/ 五套件锚改。
+- SKILL.md 字节门 20000 → 24000（三合一合并技能，脚本注明依据）。
+- 用户侧文档同步：README / docs/skills-map / opencode INSTALL / muse 注册 / codex 注释。
+- 需求三件套归档于 docs/superpowers/specs/2026-11-05-design-and-plan/。
+
 ## v7.0.1 (2026-10-21)
 
 This release retunes brainstorming after its rebuild in v7.0.0. Many of you told us, rightly, that the new default questions got annoying fast and felt formulaic. Brainstorming now digs for context before it asks anything, and tries to ask better questions. We expect to keep tuning it, but we think it's better than it was.

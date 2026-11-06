@@ -33,3 +33,8 @@
 并入来源：`docs/superpowers/specs/2026-11-04-dev-scope-convergence/verification.md`（2026-11-04 并入；机械场景 S1–S5 同一资产一次执行合组一条；S6–S8 为会话人工场景，不随机械资产回归，观察清单见该需求 verification.md 与 eval-probe.md）。
 
 - DSC-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（S1–S5）：断言组 23 正反向全绿——SCOPE 位置、标题顺序、三行逐字文本、16 条载体新句与旧句、1% 规则与十个环节、交叉引用可解析；与 WDH-001 同资产
+
+并入来源：`docs/superpowers/specs/2026-11-05-design-and-plan/verification.md`（2026-11-06 并入；机械场景 S1/S3/S6/S7 + 槽位补强随 dap- 断言组承接 test-integration-verification.sh；S2/S4 一次性执行不入册；S5 触发测试为合并后首个真实会话的人工观察项，不可回归执行，不入册，观察义务见该需求 verification.md；S8 由 Step 1 全量口径承接）。
+
+- DAP-001 | 兼容 | tests/integration-verification/test-integration-verification.sh | normal | 机械场景（dap- 断言组）：旧技能名零残留（品牌豁免内置）、design-and-plan 五触发词与 frontmatter、hook 注入链真实运行、槽位检查红绿演练；引擎 DSL 方向已止损移除
+- DAP-002 | L3 | docs/superpowers/specs/2026-11-05-design-and-plan/verification.md | normal | 会话场景（S5a/S5b/S5c）：全新会话「我们来构建 X」/「头脑风暴一下」/既有设计文档写计划三场景均触发 design-and-plan；S5d 呈报分离观察点随附（单次演练记录，不可回归执行）

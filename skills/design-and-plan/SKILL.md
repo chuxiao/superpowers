@@ -19,9 +19,9 @@ description: 当你即将开始任何软件开发类的创造性工作（创建�
 
 1. **判断需求的范围 → 需求对话**：复述与提问交替进行；视觉伴侣在第一次复述 UI 相关内容前即提议，不等到聊完。
 2. **四件套成稿**：design → implementation → plan → verification，decisions.md 随每条对话裁决落定追加。
-3. **自查与排版**：自审清单逐项过，再运行 `bash scripts/check-tables.sh <四件路径>`、`bash scripts/check-mermaid.sh <四件路径>` 与 `bash scripts/check-doc-structure.sh <四件路径>`（design.md / implementation.md / plan.md / verification.md 依次传入），按输出修复问题（无该脚本环境时，由审读提示词中的排版核对兜底）。
+3. **自查与排版**：按 `references/review-prompt.md` 清单 A 的核对项自查，再运行 `bash scripts/check-tables.sh <四件路径>`、`bash scripts/check-mermaid.sh <四件路径>` 与 `bash scripts/check-doc-structure.sh <四件路径>`（design.md / implementation.md / plan.md / verification.md 依次传入），按输出修复问题（无该脚本环境时，由审读提示词中的排版核对兜底）。
 4. **一个审读子代理审全套**：四件齐审 + decisions.md 标注一致核对，批量修订后收敛复读。
-5. **结构化呈报**：裁决项独立成段，确认请求独立成段；确认后执行交接。
+5. **结构化呈报**：裁决呈报与确认请求分两条消息（先裁决，需求方回复后单独发确认）；确认后执行交接。
 
 细则在各步小节。每一步的问题在当前步解决：设计未定就不写计划。全套产物被修订时，只有影响范围、功能或决策的修订才触发重审与重新确认；纯文字修订走轻量修订通道（见 `references/reporting-rules.md`）；判断有疑义时按影响处理。
 
@@ -93,9 +93,9 @@ TDD 的红绿循环——写失败测试、运行确认失败、实现最小代�
 
 为 design 的每条承诺立可判真伪的验证场景——目的：证明做成的东西就是承诺的；产出：verification.md。纯单模块无接口时不产出该文件，plan.md 骨架不变。
 
-verification.md 用场景证明做成的东西就是 design.md 承诺的。写它的原则：断言优先用可观测缝（环境变量、调试日志、可查询状态），人工条目诚实标注不伪装自动化；场景出处锚定（`§N` 指 design.md、`Task N` 指 plan.md、`I-N` 指 implementation.md）；确定性固定策略——每条期望可判真伪、可重复执行。
+verification.md 用场景证明做成的东西就是 design.md 承诺的。写它的原则：断言优先用可观测缝（环境变量、调试日志、可查询状态），人工条目诚实标注不伪装自动化；场景出处锚定（`§N` 指 design.md、`Task N` 指 plan.md、`I-N` 指 implementation.md）；确定性固定策略——每条期望可判真伪、可重复执行。场景间无依赖、可并行调度——并行安全即无全局资源依赖（无固定端口、固定容器名、共享临时路径等）。
 
-全文与骨架见 `references/verification-template.md`；触发判据见 `references/plan-template.md`「验证方案文件」段。
+全文与骨架见 `references/verification-template.md`；触发判据见其「产出判据」节。
 
 ## 产物通用约定
 
@@ -103,11 +103,11 @@ verification.md 用场景证明做成的东西就是 design.md 承诺的。写�
 
 ### plan.md——执行契约
 
-把切好的任务落成可执行规格；下游执行技能零改动消费它。结构与格式见 references/plan-template.md；自审清单见其「自审」节。
+把切好的任务落成可执行规格；下游执行技能零改动消费它。结构与格式见 references/plan-template.md。
 
 ### decisions.md——裁决日志
 
-追加式：每条对话裁决落定即追加一条（日期 | 项目 | 主题 | 裁决 | 依据 | 影响）。design / implementation / plan 回写「已裁决」标注时引用本日志条目；审读核对文档标注与日志一致。
+需求对话的第一条裁决落定即创建，此后追加式增长：每条裁决落定追加一条（日期 | 项目 | 主题 | 裁决 | 依据 | 影响）。条目只增不改——裁决被推翻时追加新条目并注明取代关系，不修改历史条目。design / implementation / plan 回写「已裁决」标注时引用本日志条目；审读核对标注与日志一致；轻量修订通道的纯文字修订亦在此登记。
 
 **写作规则：** 写作与排版规范（每段一个论点、mermaid 画法与红线、标题层级 ≤3、交叉引用格式等）见 `references/writing-rules.md`，适用于全部五件产物；design.md 全文零实现词汇（功能清单用「最终用户」；第三方依赖的取舍可提依赖名，其余实现词汇禁止）。
 
@@ -192,5 +192,5 @@ verification.md 用场景证明做成的东西就是 design.md 承诺的。写�
 | “一次派发就是一张清单” | 三张清单必须分别输出：完备性查还缺什么决策，方案合理性查方案站不站得住，可读性查读者能不能判断。 |
 | “方案是需求方选的，不用审” | 需求方选的是方向；候选是否真实、依据是否成立、代价是否被低估，仍要评估。 |
 | “审读过了就等于需求方确认了” | 审读只查完备性、可读性与方案合理性；确认门仍由需求方把守。 |
-| “我把裁决项和确认请求写进了同一条消息” | 裁决与确认强制分离：裁决项独立成段，确认请求独立成段（见 `references/reporting-rules.md`）。 |
+| “我把裁决项和确认请求写进了同一条消息” | 裁决与确认强制分离：裁决呈报与确认请求分两条消息——先裁决，需求方回复后单独发确认（见 `references/reporting-rules.md`）。 |
 | “我用复合问题让『同意』承担多个语义” | 一个「同意」只回答一件事；对裁决项的任何回应都不是确认，确认门只认对显式对象的「确认」。 |
